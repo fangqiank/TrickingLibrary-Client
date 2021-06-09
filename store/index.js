@@ -26,5 +26,6 @@ export const actions = {
         // console.log(message)
         // commit('setMessage', message)
         await dispatch('tricks/fetchTricks')
+        await dispatch('submissions/fetchSubmissions')
     }
 }

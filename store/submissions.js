@@ -5,16 +5,16 @@ const agent = new https.Agent({
 })
 
 const initState = () => ({
-    tricks:[]
+    submissions:[]
 })
 
 export const state = initState
 
 export const mutations = {
-    setTricks(state, payload){
+    setSubmissions(state, payload){
         //console.log('payload',payload)
-        const {tricks} = payload
-        state.tricks = tricks
+        const {submissions} = payload
+        state.submissions = submissions
     },
 
     reset(state){
@@ -23,9 +23,9 @@ export const mutations = {
 }
 
 export const actions = {
-    async fetchTricks({$axios,commit}){
-        const tricks = await this.$axios.$get('/api/tricks',{httpsAgent: agent })
+    async fetchSubmissions({$axios,commit}){
+        const submissions = await this.$axios.$get('/api/submissions',{httpsAgent: agent })
         //console.log('tricks',tricks)
-        commit('setTricks', {tricks})
+        commit('setSubmissions', {submissions})
     },
 }
