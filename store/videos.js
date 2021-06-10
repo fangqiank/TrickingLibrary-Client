@@ -34,6 +34,7 @@ export const mutations = {
         //console.log('payload',payload)
         const {type} = payload
         state.type = type
+        console.log("state.type:",type)
         if(type === UPLOAD_TYPE.TRICK){
             state.step++
         }else if(type === UPLOAD_TYPE.SUBMISSION){
@@ -59,15 +60,16 @@ export const actions = {
 
     async createTrick({$axios,state,dispatch},{trick,submission}){
         if(state.type === UPLOAD_TYPE.TRICK){
+            console.log(123)
             const createdTrick = await this.$axios.$post('/api/tricks',trick,{httpsAgent: agent })
-            //console.log(createdTrick)
+            console.log(createdTrick)
             submission.trickId =createdTrick.id
         }
         
     
-        const createdSubmission = await this.$axios.$post('/api/submissions',submission,{httpsAgent: agent })
+        await this.$axios.$post('/api/submissions',submission,{httpsAgent: agent })
         
-        await dispatch('tricks/fetchTricks',null,{root:true})
-        await dispatch('submissions/fetchSubmissions',null,{root:true})
+        //await dispatch('tricks/fetchTricks',null,{root:true})
+        //await dispatch('submissions/fetchSubmissions',null,{root:true})
     }
 }

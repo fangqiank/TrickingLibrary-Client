@@ -51,8 +51,10 @@
           <v-stepper-items>
             <v-stepper-content step="1">
               <div class='d-flex flex-column align-center'>
-                <v-btn class='my-2' @click='setUploadType({type:uploadType.TRICK})'>Trick</v-btn>
-                <v-btn class='my-2'  @click='setUploadType({type:uploadType.SUBMISSION})'>Submission</v-btn>
+                <v-btn class='my-2' @click='setUploadType(
+                  {type:uploadType.TRICK})'>Trick</v-btn>
+                <v-btn class='my-2'  @click='setUploadType(
+                  {type:uploadType.SUBMISSION})'>Submission</v-btn>
               </div>
             </v-stepper-content>
 
