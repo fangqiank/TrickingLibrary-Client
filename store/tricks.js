@@ -8,6 +8,15 @@ const initState = () => ({
     tricks:[]
 })
 
+export const getters = {
+    trickItems: state =>state.tricks.map(trick =>(
+      {
+         text:trick.name,
+         value:trick.id
+      }
+    ))
+}
+
 export const state = initState
 
 export const mutations = {
@@ -28,4 +37,8 @@ export const actions = {
         //console.log('tricks',tricks)
         commit('setTricks', {tricks})
     },
+
+    createTrick({$axios},{form}){
+        return this.$axios.$post('/api/tricks',form,{httpsAgent: agent })
+    }
 }

@@ -21,11 +21,13 @@ export const mutations = {
 }
 
 export const actions = {
-    async nuxtServerInit({$axios,commit,dispatch}){
+    //async nuxtServerInit({$axios,commit,dispatch}){
+    async nuxtServerInit({dispatch}){
         // const message = await this.$axios.$get('https://localhost:5001/api/home',{httpsAgent: agent })
         // // console.log(message)
         // // commit('setMessage', message)
         // await dispatch('tricks/fetchTricks')
         // await dispatch('submissions/fetchSubmissions')
+        dispatch('tricks/fetchTricks')
     }
 }

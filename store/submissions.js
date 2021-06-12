@@ -28,4 +28,8 @@ export const actions = {
         //console.log('tricks',tricks)
         commit('setSubmissions', {submissions})
     },
+
+    createOneSubmission({$axios,/*state,dispatch*/},{form}){
+        return this.$axios.$post('/api/submissions',form,{httpsAgent: agent })
+    }
 }

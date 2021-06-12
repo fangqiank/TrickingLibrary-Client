@@ -17,7 +17,8 @@
       >
         Upload
       </v-btn> -->
-      <Upload/>
+      <!-- <Upload/> -->
+       <ContentCreationDialog></ContentCreationDialog>
     </v-app-bar>
     <v-main>
       <nuxt />
@@ -26,12 +27,14 @@
 </template>
 
 <script>
-import {mapMutations} from 'vuex'
-import Upload from '../components/Upload.vue'
+//import {mapMutations} from 'vuex'
+//import Upload from '../components/Upload.vue'
+import ContentCreationDialog from '../components/content-creation/ContentCreationDialog.vue'
 
 export default {
   components:{
-    Upload
+    //Upload,
+    ContentCreationDialog
   },
 
   data () {
