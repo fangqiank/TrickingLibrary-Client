@@ -87,7 +87,7 @@ export const actions = {
 
         form.video = await state.uploadPromise
 
-        await this.createSubmission({form: this.form})
+        //await this.createOneSubmission({form: this.form})
 
         await dispatch('submissions/createOneSubmission',{form},{root:true})
 

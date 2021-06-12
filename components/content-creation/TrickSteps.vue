@@ -17,7 +17,7 @@
         <v-stepper-items>
             <v-stepper-content step="1">
                 <div>
-                <v-text-field label="Tricking Name" v-model='form.trickName'></v-text-field>
+                <v-text-field label="Tricking Name" v-model='form.name'></v-text-field>
                 <v-btn @click="step++">Next</v-btn>
                 </div>
             </v-stepper-content>
@@ -37,7 +37,7 @@ import {mapState,mapActions,mapMutations} from 'vuex';
 const initState = () =>({
     step: 1,
     form: {
-      trickName:''
+      name:''
     }
 })
 
