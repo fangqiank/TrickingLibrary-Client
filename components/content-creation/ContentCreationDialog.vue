@@ -40,10 +40,12 @@
 import {mapState,mapMutations} from 'vuex';
 import TrickSteps from './TrickSteps.vue'
 import SubmissionSteps  from './SubmissionSteps.vue'
+import CategoryForm from './CategoryForm.vue';
+import DifficultyForm from './DifficultyForm.vue';
 
 export default {
    name:'ContentCreationDialog',
-   components:{TrickSteps,SubmissionSteps},
+   components:{TrickSteps,SubmissionSteps,CategoryForm,DifficultyForm},
    data() {
       return {
        
@@ -56,6 +58,8 @@ export default {
         return  [
             {component: TrickSteps, title:'Trick'},
             {component: SubmissionSteps, title:'Submission'},
+            {component: CategoryForm, title:'Category'},
+            {component: DifficultyForm, title:'Difficulty'},
         ]
     }
    },
