@@ -55,7 +55,7 @@ export const actions = {
         const tricks = await this.$axios.$get('/api/tricks',{httpsAgent: agent })
         const categories = await this.$axios.$get('/api/categories',{httpsAgent: agent })
         const difficulties = await this.$axios.$get('/api/difficulty',{httpsAgent: agent })
-        console.log(tricks,categories,difficulties)
+        console.log(tricks)
         commit('setTricks', {tricks,difficulties,categories})
     },
 
@@ -67,15 +67,17 @@ export const actions = {
         //     },
         //     body: JSON.stringify(form)
         //   }
-
         // return fetch('https://localhost:5001/api/tricks', requestOptions)
         //     .then(response => response.json())
         //     .then(data => console.log(data))
 
         
-        this.$axios.setHeader('Content-Type', 'application/json')
+        this.$axios.setHeader('Content-Type', 'application/json', [
+            'post'
+        ])
 
-        return this.$axios.$post('/api/tricks',
+        return this.$axios.$post(
+           '/api/tricks',
            form,
           {httpsAgent: agent }
         )

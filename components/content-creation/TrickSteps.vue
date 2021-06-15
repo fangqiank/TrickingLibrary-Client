@@ -87,6 +87,8 @@ export default {
 
     handleSave(){
     
+      this.form = {"name":"Test","description":"","difficulty":"ae911c8c-2f72-4a5d-b1d2-51379714dafb","prerequisites":[],"progressions":[],"categories":["43378c81-1e00-4c6c-8083-2ade44d72610","d7c1b799-60d8-404c-a425-c5c725932fa9"]}
+
       console.log(JSON.stringify(this.form))   
       this.createTrick(
         {
