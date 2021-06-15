@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+
 const initState = () =>(
     {
         form: {
@@ -29,6 +31,8 @@ export default {
     name:'CategoryForm',
 
     data:initState,
+
+    computed:mapGetters('tricks',['categoryItems','difficultyItems']),
 
     methods:{
         handleSave(){

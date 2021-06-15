@@ -1,4 +1,5 @@
 import https from 'https'
+import axios from 'axios'
 
 const agent = new https.Agent({  
     rejectUnauthorized: false
@@ -11,12 +12,26 @@ const initState = () => ({
 })
 
 export const getters = {
-    trickItems: state =>state.tricks.map(trick =>(
+    trickItems: state =>state.tricks.map(x =>(
       {
-         text:trick.name,
-         value:trick.id
+         text:x.name,
+         value:x.id
       }
-    ))
+    )),
+
+    categoryItems: state =>state.categories.map(x =>(
+        {
+           text:x.name,
+           value:x.id
+        }
+    )),
+
+    difficultyItems: state =>state.difficulties.map(x =>(
+        {
+           text:x.name,
+           value:x.id
+        }
+    )),
 }
 
 export const state = initState
@@ -36,15 +51,33 @@ export const mutations = {
 }
 
 export const actions = {
-    async fetchTricks({$axios,commit}){
+    async fetchTricks({commit}){
         const tricks = await this.$axios.$get('/api/tricks',{httpsAgent: agent })
         const categories = await this.$axios.$get('/api/categories',{httpsAgent: agent })
         const difficulties = await this.$axios.$get('/api/difficulty',{httpsAgent: agent })
-        //console.log('tricks',tricks)
+        console.log(tricks,categories,difficulties)
         commit('setTricks', {tricks,difficulties,categories})
     },
 
-    createTrick({$axios},{form}){
-        return this.$axios.$post('/api/tricks',form,{httpsAgent: agent })
+    createTrick({form}){
+        // const requestOptions = {
+        //     method: 'POST',
+        //     headers: { 
+        //        'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(form)
+        //   }
+
+        // return fetch('https://localhost:5001/api/tricks', requestOptions)
+        //     .then(response => response.json())
+        //     .then(data => console.log(data))
+
+        
+        this.$axios.setHeader('Content-Type', 'application/json')
+
+        return this.$axios.$post('/api/tricks',
+           form,
+          {httpsAgent: agent }
+        )
     }
 }

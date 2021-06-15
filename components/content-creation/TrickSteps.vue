@@ -1,5 +1,6 @@
 <template>
     <v-stepper v-model="step">
+        <span></span>
         <v-stepper-header>
             <v-stepper-step
                 :complete="step > 1"
@@ -17,20 +18,21 @@
         <v-stepper-items>
             <v-stepper-content step="1">
                 <div>
-                <v-text-field label="Name" v-model='form.name'></v-text-field>
-                <v-text-field label="Description" v-model='form.description'></v-text-field>
-                <v-select :items="testData" v-model="form.difficulty" label="Difficulty">
-                </v-select>
-                <v-select :items="testData" v-model="form.prerequisites" label="Prerequisites" 
-                multiple small-chips chips deletable-chips>
-                </v-select>
-                <v-select :items="testData" v-model="form.progressions" label="Progressions" 
-                multiple small-chips chips deletable-chips>
-                </v-select>
-                <v-select :items="testData" v-model="form.categories" label="Categories" 
-                multiple small-chips chips deletable-chips>
-                </v-select>
-                <v-btn @click="step++">Next</v-btn>
+                    <v-text-field label="Name" v-model='form.name'></v-text-field>
+
+                    <v-text-field label="Description" v-model='form.description'></v-text-field>
+                    
+                    <v-select :items="difficultyItems" v-model="form.difficulty" label="Difficulty"></v-select>
+                
+                    <v-select :items="trickItems" v-model="form.prerequisites" label="Prerequisites" 
+                    multiple small-chips chips deletable-chips></v-select>
+
+                    <v-select :items="trickItems" v-model="form.progressions" label="Progressions" 
+                    multiple small-chips chips deletable-chips></v-select>
+                    <v-select :items="categoryItems" v-model="form.categories" label="Categories" 
+                    multiple small-chips chips deletable-chips></v-select>
+                
+                    <v-btn @click="step++">Next</v-btn>
                 </div>
             </v-stepper-content>
 
@@ -44,7 +46,7 @@
 </template>
 
 <script>
-import {mapState,mapActions,mapMutations} from 'vuex';
+import {mapGetters,mapState,mapActions,mapMutations} from 'vuex';
 
 const initState = () =>({
     step: 1,
@@ -56,11 +58,7 @@ const initState = () =>({
       progressions:[],
       categories:[]
     },
-    testData:[
-        {text:'Foo',value:1},
-        {text:'Bar',value:2},
-        {text:'Baz',value:3},
-    ]
+    // testdata:['aaa','bbb','ccc']
 })
 
 export default {
@@ -68,7 +66,11 @@ export default {
 
    data: initState,
 
-   computed:mapState('videos',['active']),
+   computed:{
+       ...mapState('videos',['active']),
+
+       ...mapGetters('tricks',['categoryItems','difficultyItems','trickItems']),
+   },
 
    watch:{
        'active':function(newValue){
@@ -83,8 +85,10 @@ export default {
 
     ...mapActions('tricks',['createTrick']),
 
-    async handleSave(){
-      await this.createTrick(
+    handleSave(){
+    
+      console.log(JSON.stringify(this.form))   
+      this.createTrick(
         {
           form: this.form
         }
