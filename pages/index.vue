@@ -2,7 +2,7 @@
   <div>
       <div v-if="tricks">
         <div v-for="item in tricks" :key=item.Id>
-          <v-btn :to="`tricks/${item.id}`">{{item.name}}</v-btn>
+          <v-btn :to="`trick/${item.id}`">{{item.name}}</v-btn>
         </div>
       </div>  
   </div>
@@ -17,10 +17,8 @@ export default {
     
   },
 
-  computed:{
-    ...mapState('tricks',['tricks']),
-    //...mapState('submissions',['submissions']),
-  },
+  computed:mapState('tricks',['tricks']),
+  //...mapState('submissions',['submissions']),
 
   async fetch(){
      await this.$store.dispatch('tricks/fetchTricks',null,{root:true})

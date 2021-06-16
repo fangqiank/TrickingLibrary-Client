@@ -1,5 +1,4 @@
 import https from 'https'
-import axios from 'axios'
 
 const agent = new https.Agent({  
     rejectUnauthorized: false
@@ -12,6 +11,8 @@ const initState = () => ({
 })
 
 export const getters = {
+    trickById : state => id =>state.tricks.find(x=>x.id == id),
+
     trickItems: state =>state.tricks.map(x =>(
       {
          text:x.name,
@@ -19,14 +20,14 @@ export const getters = {
       }
     )),
 
-    categoryItems: state =>state.categories.map(x =>(
+    categoryItems: state => state.categories.map(x =>(
         {
            text:x.name,
            value:x.id
         }
     )),
 
-    difficultyItems: state =>state.difficulties.map(x =>(
+    difficultyItems: state => state.difficulties.map(x =>(
         {
            text:x.name,
            value:x.id
