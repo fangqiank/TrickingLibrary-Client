@@ -74,7 +74,7 @@
                         title:"Categories", 
                         data:this.categories.filter(x=> this.getOneTrick.categories.indexOf(x.name) >= 0),
                         idFactory: c => `category-${c.id}`,
-                        routeFactory :c => '/'
+                        routeFactory :c => `/category/${c.id}`
                     },
                     {
                         title:"Prerequisites", 
