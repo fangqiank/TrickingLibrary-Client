@@ -12,18 +12,18 @@
              </v-text-field>
             <div v-for="item in filteredTricks" :key=item.id>
                 <p>
-                    Trick Name: <span style="color:red"><strong>{{item.name}}</strong></span>
+                    Trick Name: <span style="color:blue"><strong>{{item.name}}</strong></span>
                 </p>
             </div>
         </div> -->
 
-        <v-sheet class="pa-3 mt-2" v-if="category">
+        <v-sheet class="pa-3 mt-2" v-if="difficulty">
             <div class="text-h6 text-center">
-                {{this.category.name}}
+                {{difficulty.name}}
             </div>
             <v-divider class="my-1"></v-divider>
             <div class="text-body-2">
-                {{this.category.description}}
+                {{difficulty.description}}
             </div>
         </v-sheet>
     </div>  
@@ -31,62 +31,51 @@
 
 <script>
     import {mapGetters} from 'vuex'
-    import https from 'https'
+    // import trickList from '../../mixins/trickList'
     import TrickList from '../../components/content-creation/TrickList.vue'
+    import https from 'https'
 
     const agent = new https.Agent({  
         rejectUnauthorized: false
     })
 
     export default {
+        //mixins:[trickList],
         components:{TrickList},
-
+         
         data:()=>(
             {
-                category:null,
+                difficulty:null,
                 tricks:[],
-                filter:'',
             }
         ),
 
-        computed:{
-            ...mapGetters('tricks',['categoryById']),
-
-            filteredTricks(){
-                if(!this.filter) 
-                    return null
-                    
-                const searchItem = this.filter.trim().toLowerCase()
-
-                return this.tricks.filter(x=>x.name.toLowerCase().includes(searchItem) ||
-                x.description.toLowerCase().includes(searchItem))
-            }
-        },
+        computed:mapGetters('tricks',['difficultyById']),
 
         async fetch(){
             //console.log(this.$route.params.category)
 
-            const categoryId = this.$route.params.category
+            const difficultyId = this.$route.params.difficulty
 
-            this.category = this.categoryById(categoryId)
+            this.difficulty = this.difficultyById(difficultyId)
 
-            this.tricks = await this.$axios.$get(`/api/categories/${categoryId}/tricks`
+            this.tricks = await this.$axios.$get(`/api/difficulty/${difficultyId}/tricks`
             ,{httpsAgent: agent })
         },
 
         head() {
-            if(!this.category) 
+            if(!this.difficulty) 
                 return {}
 
             //console.log(this.category)
             return {
-                title: this.category.name,
+                title: this.difficulty.name,
                 meta: [
                 // hid is used as unique identifier. Do not use `vmid` for it as it will not work
                     {
                         hid: 'description',
                         name: 'description',
-                        content: this.category.description 
+                        content: this.difficulty.description 
                     }
                 ]
             }

@@ -15,6 +15,8 @@ export const getters = {
     
     categoryById : state => id =>state.categories.find(x=>x.id == id),
 
+    difficultyById : state => id =>state.difficulties.find(x=>x.id == id),
+
     trickItems: state =>state.tricks.map(x =>(
       {
          text:x.name,
