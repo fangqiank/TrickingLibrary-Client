@@ -7,8 +7,15 @@
       dark
     >
       <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
+      <nuxt-link 
+         to="/" 
+         style="text-decoration:none;" 
+         class="text-h5 text--primary"
+      >
+         Tricking Library
+      </nuxt-link>
 
-      <v-toolbar-title>Tricking Library</v-toolbar-title>
+      <v-toolbar-title></v-toolbar-title>
 
       <v-spacer></v-spacer>
       <!-- <v-btn
