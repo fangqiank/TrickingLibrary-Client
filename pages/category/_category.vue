@@ -45,24 +45,21 @@
             {
                 category:null,
                 tricks:[],
-                filter:'',
             }
         ),
 
-        computed:{
-            ...mapGetters('tricks',['categoryById']),
+        computed:mapGetters('tricks',['categoryById']),
 
-            filteredTricks(){
-                if(!this.filter) 
-                    return null
+            // filteredTricks(){
+            //     if(!this.filter) 
+            //         return null
                     
-                const searchItem = this.filter.trim().toLowerCase()
+            //     const searchItem = this.filter.trim().toLowerCase()
 
-                return this.tricks.filter(x=>x.name.toLowerCase().includes(searchItem) ||
-                x.description.toLowerCase().includes(searchItem))
-            }
-        },
-
+            //     return this.tricks.filter(x=>x.name.toLowerCase().includes(searchItem) ||
+            //     x.description.toLowerCase().includes(searchItem))
+            // }
+        
         async fetch(){
             //console.log(this.$route.params.category)
 
