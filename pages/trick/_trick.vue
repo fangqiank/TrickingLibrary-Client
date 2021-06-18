@@ -1,29 +1,29 @@
 <template>
     <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
 
-    <div class='d-flex justify-center'>
-        <div v-if="submissions">
-            <div v-for="item in submissions" :key=item.Id>
-            <p>Submission Id: <span style="color:red"><strong style="font">{{item.id}}</strong></span></p>
-            <p>Trick Id: <span style="color:red"><strong>{{item.trickId}}</strong></span></p>
-            <div>
-                <video controls
-                    :src='`https://localhost:5001/api/videos/${item.video}`'
-                    width="300"
-                    height="200"
-                ></video>
-            </div>
-            </div>
+    <div class='d-flex mt-3 justify-center align-start'>
+        <div v-if="submissions" class="mx-3">
+            <v-card v-for="item in submissions" :key=item.Id class="mb-3">
+                <!-- <p>Submission Id: <span style="color:red"><strong style="font">{{item.id}}</strong></span></p>
+                <p>Trick Id: <span style="color:red"><strong>{{item.trickId}}</strong></span></p> -->
+                <!-- <div>
+                    <video controls
+                        :src='`https://localhost:5001/api/videos/${item.video}`'
+                        width="300"
+                        height="200"
+                    ></video>
+                </div> -->
+                <VideoPlayer :video="item.video"/>
+                <v-card-text>{{item.description}}</v-card-text>
+            </v-card>
         </div>
-
-        <div class="mx-2">
-            <v-sheet class="pa-3 mt-2">
+            <v-sheet class="pa-3 sticky">
                 <div class="text-h6 text-center">
                     {{getOneTrick.name}}
                 </div>
                 <v-alert
-                  outlined
-                  color="purple"
+                    outlined
+                    color="purple"
                 >
                     <div>Description: <strong style="color:#fff">{{getOneTrick.description}}</strong></div>
                     <div>Difficulty: 
@@ -48,11 +48,11 @@
                 </div>
             </v-sheet>
         </div>
-    </div>  
 </template>
 
 <script>
     import {mapState,mapGetters} from 'vuex'
+    import VideoPlayer from '../../components/content-creation/VideoPlayer.vue'
 
     export default {
         data: () =>(
@@ -61,6 +61,10 @@
                 difficulty:null
             }
         ),
+
+        components:{
+            VideoPlayer
+        },
 
         computed:{
             ...mapState('submissions',['submissions']),

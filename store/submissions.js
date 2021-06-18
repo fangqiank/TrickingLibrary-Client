@@ -26,6 +26,7 @@ export const actions = {
     async fetchSubmissionsForTrick({$axios,commit},{trickId}){
         const submissions = await this.$axios.$get(`https://localhost:5001/api/tricks/${trickId}/submissions`,{httpsAgent: agent })
         //console.log('tricks',tricks)
+        console.log(submissions)
         commit('setSubmissions', {submissions})
     },
 
