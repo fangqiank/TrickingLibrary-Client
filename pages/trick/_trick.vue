@@ -1,58 +1,54 @@
 <template>
     <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
+    <ItemLayout>
+        <template v-slot:content>
+            <div v-if="submissions" class="mx-3">
+                <v-card v-for="item in submissions" :key=item.Id class="mb-3">
+                    <VideoPlayer :video="item.video"/>
+                    <v-card-text>{{item.description}}</v-card-text>
+                </v-card>
+            </div>
+        </template>
 
-    <div class='d-flex mt-3 justify-center align-start'>
-        <div v-if="submissions" class="mx-3">
-            <v-card v-for="item in submissions" :key=item.Id class="mb-3">
-                <!-- <p>Submission Id: <span style="color:red"><strong style="font">{{item.id}}</strong></span></p>
-                <p>Trick Id: <span style="color:red"><strong>{{item.trickId}}</strong></span></p> -->
-                <!-- <div>
-                    <video controls
-                        :src='`https://localhost:5001/api/videos/${item.video}`'
-                        width="300"
-                        height="200"
-                    ></video>
-                </div> -->
-                <VideoPlayer :video="item.video"/>
-                <v-card-text>{{item.description}}</v-card-text>
-            </v-card>
-        </div>
-            <v-sheet class="pa-3 sticky">
-                <div class="text-h6 text-center">
-                    {{getOneTrick.name}}
+        <template v-slot:item>
+            <!-- <v-sheet class="pa-3 sticky"> -->
+            <div class="text-h6 text-center">
+                {{getOneTrick.name}}
+            </div>
+            <v-alert
+                outlined
+                color="purple"
+            >
+                <div>Description: <strong style="color:#fff">{{getOneTrick.description}}</strong></div>
+                <div>Difficulty: 
+                    <v-chip color="secondary" :to="`/difficulty/${difficulty.id}`">
+                        {{difficulty.name}}
+                    </v-chip>
                 </div>
-                <v-alert
-                    outlined
-                    color="purple"
-                >
-                    <div>Description: <strong style="color:#fff">{{getOneTrick.description}}</strong></div>
-                    <div>Difficulty: 
-                        <v-chip color="secondary" :to="`/difficulty/${difficulty.id}`">
-                            {{difficulty.name}}
-                        </v-chip>
-                    </div>
-                </v-alert>
-                <div v-for="(rd,index) in getRelatedData" :key="index" v-if="rd.data.length > 0">
-                    {{rd.title}}:
-                    <v-chip-group>
-                        <!-- {{rd.title}} -->
-                        <v-chip v-for="(c,index) in rd.data" 
-                                :key="index" 
-                                x-small 
-                                class="ma-2"
-                                color="primary"
-                                :to="rd.routeFactory(c)">
-                            {{c.name}}
-                        </v-chip>
-                    </v-chip-group>
-                </div>
-            </v-sheet>
-        </div>
+            </v-alert>
+            <div v-for="(rd,index) in getRelatedData" :key="index" v-if="rd.data.length > 0">
+                {{rd.title}}:
+                <v-chip-group>
+                    <!-- {{rd.title}} -->
+                    <v-chip v-for="(c,index) in rd.data" 
+                            :key="index" 
+                            x-small 
+                            class="ma-2"
+                            color="primary"
+                            :to="rd.routeFactory(c)">
+                        {{c.name}}
+                    </v-chip>
+                </v-chip-group>
+            </div>
+            <!-- </v-sheet> -->
+        </template>
+    </ItemLayout>
 </template>
 
 <script>
     import {mapState,mapGetters} from 'vuex'
     import VideoPlayer from '../../components/content-creation/VideoPlayer.vue'
+    import ItemLayout from '../../components/ItemLayout.vue'
 
     export default {
         data: () =>(
@@ -63,7 +59,8 @@
         ),
 
         components:{
-            VideoPlayer
+            VideoPlayer,
+            ItemLayout
         },
 
         computed:{

@@ -1,45 +1,35 @@
 <template>
     <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
-
-    <div class='d-flex mt-3 justify-center align-start'>
-        <TrickList :tricks='tricks' class="mx-2"/>
-        <!-- <div class="mx-2">
-            <v-text-field label="Search" 
-             v-model="filter"
-             outlined
-             prepend-inner-icon="mdi-magnify"
-             >
-             </v-text-field>
-            <div v-for="item in filteredTricks" :key=item.id>
-                <p>
-                    Trick Name: <span style="color:red"><strong>{{item.name}}</strong></span>
-                </p>
+    <ItemLayout>
+        <template v-slot:content>
+            <TrickList :tricks='tricks' class="mx-2"/>
+        </template>
+        <template v-slot:item>
+            <div v-if="category">
+                <div class="text-h6 text-center">
+                    {{category.name}}
+                </div>
+                <v-divider class="my-1"></v-divider>
+                <div class="text-body-2">
+                    {{category.description}}
+                </div>
             </div>
-        </div> -->
-
-        <v-sheet class="pa-3 mt-2" v-if="category">
-            <div class="text-h6 text-center">
-                {{this.category.name}}
-            </div>
-            <v-divider class="my-1"></v-divider>
-            <div class="text-body-2">
-                {{this.category.description}}
-            </div>
-        </v-sheet>
-    </div>  
+        </template>
+    </ItemLayout>
 </template>
 
 <script>
     import {mapGetters} from 'vuex'
     import https from 'https'
     import TrickList from '../../components/content-creation/TrickList.vue'
+    import ItemLayout from '../../components/ItemLayout.vue'
 
     const agent = new https.Agent({  
         rejectUnauthorized: false
     })
 
     export default {
-        components:{TrickList},
+        components:{TrickList,ItemLayout},
 
         data:()=>(
             {

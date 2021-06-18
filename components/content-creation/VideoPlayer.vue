@@ -45,7 +45,7 @@
 
 <style lang="scss" scoped>
  .video-container{
-     width:400px;
+     width:100%;
      position: relative;
      display: flex;
      
