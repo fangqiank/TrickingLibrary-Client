@@ -1,5 +1,8 @@
-### GET all items
+### GET all tricks
 GET https://localhost:5001/api/tricks HTTP/1.1
+
+### GET all submissions
+GET https://localhost:5001/api/submissions HTTP/1.1
 
 ### GET single item
 GET https://localhost:5001/api/tricks/test1 HTTP/1.1
