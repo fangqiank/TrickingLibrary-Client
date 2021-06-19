@@ -64,7 +64,7 @@ export const actions = {
         commit('setTricks', {tricks,difficulties,categories})
     },
 
-    createTrick({form}){
+    createTrick({$axios},{form}){
         // const requestOptions = {
         //     method: 'POST',
         //     headers: { 
@@ -76,10 +76,7 @@ export const actions = {
         //     .then(response => response.json())
         //     .then(data => console.log(data))
 
-        
-        this.$axios.setHeader('Content-Type', 'application/json', [
-            'post'
-        ])
+        this.$axios.setHeader('Content-Type', 'application/json', ['post','put'])
 
         return this.$axios.$post(
            '/api/tricks',

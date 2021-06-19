@@ -1,0 +1,28 @@
+### GET all items
+GET https://localhost:5001/api/tricks HTTP/1.1
+
+### GET single item
+GET https://localhost:5001/api/tricks/test1 HTTP/1.1
+
+### Add item
+POST https://localhost:5001/api/tricks HTTP/1.1
+Content-Type: application/json
+
+{
+    "name":"Test3",
+    "description":"This is test 3","difficulty":"medium",
+    "prerequisites":[],
+    "progressions":[],
+    "categories":["history","chemistry","physics"]
+}
+
+### Delete item
+DELETE  https://localhost:5001/api/tricks/test1 HTTP/1.1
+
+### Update item
+PUT https://localhost:5001/api/tricks/test1 HTTP/1.1
+Content-Type: application/json
+
+{
+    "name":"Updated Item"
+}
