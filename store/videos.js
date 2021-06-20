@@ -8,6 +8,8 @@ const initState = () => ({
     uploadPromise: null,
     active:false,
     component:null,
+    uploadCompleted:false,
+    uploadCancelSource: null,
     //type:'',
 })
 
@@ -34,8 +36,9 @@ export const mutations = {
 
     setTask(state, payload){
         //console.log('payload',payload)
-        const {uploadPromise} = payload
+        const {uploadPromise,source} = payload
         state.uploadPromise = uploadPromise
+        state.uploadCancelSource = source
         state.step++
     },
 
@@ -55,6 +58,10 @@ export const mutations = {
     //     state.step++
     // },
 
+    completeUpload(state){
+        state.uploadCompleted = true
+    },
+
     reset(state){
         Object.assign(state,initState())
     }
@@ -62,9 +69,25 @@ export const mutations = {
 
 export const actions = {
     startVideoUpload({$axios,commit,/*dispatch*/},{form}){
-        const uploadPromise = this.$axios.$post('/api/videos',form, {httpsAgent: agent })
+        const source = this.$axios.CancelToken.source()
 
-        commit('setTask',{uploadPromise})
+        const uploadPromise = this.$axios.post('/api/videos',form,
+         {progress:false, cancelToken:source.token},
+         {httpsAgent: agent })
+           .then(res =>{
+             //console.log('res: ',res)
+             const {data} = res
+             commit('completeUpload') 
+             return data
+           })
+           .catch(err=>{
+               if(this.$axios.isCancel(err)){
+                  //todo
+                }
+             
+           })
+
+        commit('setTask',{uploadPromise,source})
     },
 
     // async createTrick({$axios,state,dispatch},{trick,submission}){
@@ -79,7 +102,21 @@ export const actions = {
     //     await this.$axios.$post('/api/submissions',submission,{httpsAgent: agent })
     // }
 
-    async createSubmission({$axios,state,dispatch,commit},{form}){
+    async cancelUpload({$axios,state,commit}){
+        if(state.uploadPromise){
+            commit('hide')
+
+            if(state.uploadCompleted){
+                const video = await state.uploadPromise
+                await this.$axios.delete(`/api/videos/${video}`)
+            }else{
+                state.uploadCancelSource.cancel()
+            }
+        }
+        commit('reset')
+    },
+
+    async createSubmission({/*$axios,*/state,dispatch,commit},{form}){
         if(!state.uploadPromise){
             console.log("uploadPromise is null")
             return

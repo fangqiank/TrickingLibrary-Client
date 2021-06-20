@@ -67,22 +67,13 @@ export default {
    data: initState,
 
    computed:{
-       ...mapState('videos',['active']),
+       //...mapState('videos',['active']),
 
        ...mapGetters('tricks',['categoryItems','difficultyItems','trickItems']),
    },
 
-   watch:{
-       'active':function(newValue){
-           if(!newValue){
-               Object.assign(this.$data, initSate())
-           }
-       }
-   },
-   
    methods:{
     ...mapMutations('videos',['reset']),
-
     ...mapActions('tricks',['createTrick']),
 
     handleSave(){

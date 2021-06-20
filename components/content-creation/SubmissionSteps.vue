@@ -86,7 +86,7 @@ export default {
    computed: {
        ...mapGetters('tricks',['trickItems']),
        
-       ...mapState('videos',['active']),
+       //...mapState('videos',['active']),
    },
 
    methods:{

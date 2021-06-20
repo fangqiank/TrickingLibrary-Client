@@ -28,7 +28,7 @@
       </div>
 
       <div class="d-flex justify-center my-5">
-        <v-btn @click='reset'>
+        <v-btn @click='cancelUpload'>
           Close
         </v-btn>
       </div>
@@ -37,7 +37,7 @@
 
 <script>
 //import {UPLOAD_TYPE} from '../../data/enum'
-import {mapState,mapMutations} from 'vuex';
+import {mapState,mapMutations,mapActions} from 'vuex';
 import TrickSteps from './TrickSteps.vue'
 import SubmissionSteps  from './SubmissionSteps.vue'
 import CategoryForm from './CategoryForm.vue';
@@ -64,7 +64,10 @@ export default {
     }
    },
    
-   methods: mapMutations('videos',['reset','activate'])
+   methods: {
+     ...mapMutations('videos',['activate']),
+     ...mapActions('videos',['cancelUpload'])
+   }
 }
 </script>
 
