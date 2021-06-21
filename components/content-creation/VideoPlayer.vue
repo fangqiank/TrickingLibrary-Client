@@ -11,7 +11,9 @@
             ref="video"
             muted
             loop
-            :src='`https://localhost:5001/api/videos/${video}`'
+            :src='`https://localhost:5001/api/videos/${video.videoLink}`'
+            :poster='`https://localhost:5001/api/videos/${video.thumbnailLink}`'
+            preload="none"
         ></video>
     </div>
 </template>
@@ -37,7 +39,7 @@
         props:{
             video:{
                 required:true,
-                type: String
+                type: Object
             }
         }
     }
