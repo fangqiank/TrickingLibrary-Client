@@ -14,7 +14,7 @@
       </v-card-text>
 
       <v-card-actions class="d-flex justify-center">
-        <v-btn @click='handleSave'>Save</v-btn>
+        <v-btn @click='handleSave' color="teal accent-4">Save</v-btn>
       </v-card-actions>
   </v-card>
 </template>

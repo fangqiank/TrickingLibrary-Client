@@ -72,7 +72,7 @@
 
                 <v-stepper-content step="4">
                     <div class="d-flex justify-center">
-                        <v-btn @click='handleSave'>Save</v-btn>
+                        <v-btn @click='handleSave' color="teal accent-4">Save</v-btn>
                     </div>
                 </v-stepper-content>
             </v-stepper-items>

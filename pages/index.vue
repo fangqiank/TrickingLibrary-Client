@@ -1,10 +1,21 @@
 <template>
   <div>
-      <div v-if="tricks">
-        <div v-for="item in tricks" :key=item.Id>
-          <v-btn :to="`trick/${item.id}`">{{item.name}}</v-btn>
+    <div v-for="item in sections" :key="item.Id" >
+      <div class="d-flex flex-column align-center">
+        <p class='text-h5'>{{item.title}}</p>  
+        <div>
+          <v-btn 
+            v-for="(collectionItem,index) in item.collection"
+            :key = "index"
+            :to="item.routeFactory(collectionItem.id)" 
+            class='mx-1'
+          >
+          {{collectionItem.name}}
+          </v-btn>
         </div>
-      </div>  
+      </div>
+      <v-divider class='my-3'></v-divider>
+    </div>
   </div>
 </template>
 
@@ -17,11 +28,21 @@ export default {
     
   },
 
-  computed:mapState('tricks',['tricks']),
+  computed:{
+    ...mapState('tricks',['tricks','categories','difficulties']),
+
+    sections(){
+      return [
+        {collection:this.tricks, title: 'Tricks',routeFactory: id=>`/trick/${id}`},
+        {collection:this.categories, title: 'Categories',routeFactory: id=>`/category/${id}`},
+        {collection:this.difficulties, title: 'Difficulties',routeFactory: id=>`/difficulty/${id}`}
+      ]
+    },
+  },
   //...mapState('submissions',['submissions']),
 
-  async fetch(){
-     await this.$store.dispatch('tricks/fetchTricks',null,{root:true})
-  }
+  // async fetch(){
+  //    await this.$store.dispatch('tricks/fetchTricks',null,{root:true})
+  // }
 }
 </script>
