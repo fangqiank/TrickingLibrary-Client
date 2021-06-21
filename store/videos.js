@@ -68,7 +68,7 @@ export const mutations = {
 }
 
 export const actions = {
-    startVideoUpload({$axios,commit,/*dispatch*/},{form}){
+    startVideoUpload({$axios,commit},{form}){
         const source = this.$axios.CancelToken.source()
 
         const uploadPromise = this.$axios.post('/api/videos',form,

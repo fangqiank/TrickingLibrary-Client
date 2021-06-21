@@ -13,7 +13,7 @@
           <v-text-field label="Description" v-model='form.description'></v-text-field>
       </v-card-text>
 
-      <v-card-actions>
+      <v-card-actions class="d-flex justify-center">
         <v-btn @click='handleSave'>Save</v-btn>
       </v-card-actions>
   </v-card>
@@ -39,6 +39,7 @@
         methods:{
             handleSave(){
                 this.$axios.$post('/api/difficulty', this.form)
+                this.close()
             }
         }
 

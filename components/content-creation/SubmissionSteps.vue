@@ -55,20 +55,24 @@
                                 label="Slect Trick"
                                 v-model="form.trickId"
                         ></v-select>
-                        <v-btn @click="step++">Next</v-btn>
+                        <div class="d-flex justify-center">
+                            <v-btn @click="step++">Next</v-btn>
+                        </div>
                     </div>
                 </v-stepper-content>
 
                 <v-stepper-content step="3">
                     <div>
                         <v-text-field label="Description" v-model='form.description'/>
-                        <v-btn @click="step++">Next</v-btn>
+                        <div class="d-flex justify-center">
+                            <v-btn @click="step++">Next</v-btn>
+                        </div>
                     </div>
                 </v-stepper-content>
 
                 <v-stepper-content step="4">
-                    <div>
-                    <v-btn @click='handleSave'>Save</v-btn>
+                    <div class="d-flex justify-center">
+                        <v-btn @click='handleSave'>Save</v-btn>
                     </div>
                 </v-stepper-content>
             </v-stepper-items>

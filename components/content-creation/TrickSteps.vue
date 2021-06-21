@@ -38,13 +38,15 @@
                         multiple small-chips chips deletable-chips></v-select>
                         <v-select :items="categoryItems" v-model="form.categories" label="Categories" 
                         multiple small-chips chips deletable-chips></v-select>
-                    
+
+                       <div class="d-flex justify-center">
                         <v-btn @click="step++">Next</v-btn>
+                       </div>
                     </div>
                 </v-stepper-content>
 
                 <v-stepper-content step="2">
-                    <div>
+                    <div class="d-flex justify-center">
                     <v-btn @click='handleSave'>Save</v-btn>
                     </div>
                 </v-stepper-content>
@@ -54,7 +56,7 @@
 </template>
 
 <script>
-import {mapGetters/*mapState*/,mapActions,mapMutations} from 'vuex'
+import {mapGetters,mapActions,mapMutations} from 'vuex'
 import {close} from './_shared'
 
 export default {
@@ -81,7 +83,7 @@ export default {
    },
 
    methods:{
-    ...mapMutations('videos',['reset']),
+    //...mapMutations('videos',['reset']),
     ...mapActions('tricks',['createTrick']),
 
     handleSave(){
@@ -95,7 +97,7 @@ export default {
         }
       )
 
-      this.reset()
+      this.close()
 
       //Object.assign(this.$data,initState())
     },
