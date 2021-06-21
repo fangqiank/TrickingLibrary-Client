@@ -2,6 +2,10 @@
   <v-card>
       <v-card-title class="white--text">
           Create Category
+          <v-spacer/>
+          <v-btn icon @click="close">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
       </v-card-title>
 
       <v-card-text>
@@ -17,20 +21,21 @@
 
 <script>
 import {mapGetters} from 'vuex'
-
-const initState = () =>(
-    {
-        form: {
-            name:'',
-            description:'',
-        },
-    }
-)
+import {close} from './_shared'
 
 export default {
     name:'CategoryForm',
 
-    data:initState,
+    data:() =>(
+        {
+            form: {
+                name:'',
+                description:'',
+            },
+        }
+    ),
+
+    mixins:[close],
 
     computed:mapGetters('tricks',['categoryItems','difficultyItems']),
 

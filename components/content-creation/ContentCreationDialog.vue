@@ -27,17 +27,17 @@
         <component :is="component"></component>
       </div>
 
-      <div class="d-flex justify-center my-5">
+      <!-- <div class="d-flex justify-center my-5">
         <v-btn @click='cancelUpload'>
           Close
         </v-btn>
-      </div>
+      </div> -->
   </v-dialog>
 </template>
 
 <script>
 //import {UPLOAD_TYPE} from '../../data/enum'
-import {mapState,mapMutations,mapActions} from 'vuex';
+import {mapState,mapMutations} from 'vuex';
 import TrickSteps from './TrickSteps.vue'
 import SubmissionSteps  from './SubmissionSteps.vue'
 import CategoryForm from './CategoryForm.vue';
@@ -66,7 +66,6 @@ export default {
    
    methods: {
      ...mapMutations('videos',['activate']),
-     ...mapActions('videos',['cancelUpload'])
    }
 }
 </script>
