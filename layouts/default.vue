@@ -1,18 +1,13 @@
 <template>
   <v-app dark>
-    <v-app-bar
-      app
-      color="deep-purple accent-4"
-      dense
-      dark
-    >
+    <v-app-bar app color="deep-purple accent-4" dense dark>
       <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
-      <nuxt-link 
-         to="/" 
-         style="text-decoration:none;" 
-         class="text-h5 text--primary"
+      <nuxt-link
+        to="/"
+        style="text-decoration: none"
+        class="text-h5 text--primary"
       >
-         Tricking Library
+        Tricking Library
       </nuxt-link>
 
       <v-toolbar-title></v-toolbar-title>
@@ -25,7 +20,9 @@
         Upload
       </v-btn> -->
       <!-- <Upload/> -->
-       <ContentCreationDialog></ContentCreationDialog>
+      <v-btn to="/moderation" depressed>Moderation</v-btn>
+
+      <ContentCreationDialog></ContentCreationDialog>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -38,20 +35,18 @@
 <script>
 //import {mapMutations} from 'vuex'
 //import Upload from '../components/Upload.vue'
-import ContentCreationDialog from '../components/content-creation/ContentCreationDialog.vue'
+import ContentCreationDialog from "../components/content-creation/ContentCreationDialog.vue";
 
 export default {
-  components:{
+  components: {
     //Upload,
-    ContentCreationDialog
+    ContentCreationDialog,
   },
 
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
 
   //methods:mapMutations('videos',['toggleActive'])
-}
+};
 </script>
