@@ -1,135 +1,123 @@
 <template>
-    <v-card>
-        <v-card-title>
-            Create Submission
-            <v-spacer/>
-            <v-btn icon @click="close">
-                <v-icon>mdi-close</v-icon>
-            </v-btn>
-        </v-card-title> 
-            
-        <v-stepper v-model="step" class="rounded-0">
-            <v-stepper-header s="elevation-0">
-                <v-stepper-step 
-                    :complete="step > 1"
-                    step="1"
-                >
-                    Upload Video
-                </v-stepper-step>
+  <v-card>
+    <v-card-title>
+      Create Submission
+      <v-spacer />
+      <v-btn icon @click="close">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </v-card-title>
 
-                <v-divider></v-divider>
+    <v-stepper v-model="step" class="rounded-0">
+      <v-stepper-header s="elevation-0">
+        <v-stepper-step :complete="step > 1" step="1">
+          Upload Video
+        </v-stepper-step>
 
-                <v-stepper-step
-                    :complete="step > 2"
-                    step="2"
-                >
-                    Select Trick
-                </v-stepper-step>
+        <v-divider></v-divider>
 
-                <v-divider></v-divider>
+        <v-stepper-step :complete="step > 2" step="2">
+          Select Trick
+        </v-stepper-step>
 
-                <v-stepper-step
-                    :complete="step > 3"
-                    step="3"
-                >
-                    Submission
-                </v-stepper-step>
+        <v-divider></v-divider>
 
-                <v-divider></v-divider>
+        <v-stepper-step :complete="step > 3" step="3">
+          Submission
+        </v-stepper-step>
 
-                <v-stepper-step step = "4">
-                    Review
-                </v-stepper-step>
-            </v-stepper-header>
+        <v-divider></v-divider>
 
-            <v-stepper-items>
-                <v-stepper-content step="1" class="pt-0">
-                    <div>
-                    <v-file-input accept='vodeo/*' @change='handleFile'></v-file-input>
-                    </div>
-                </v-stepper-content>
-                
-                <v-stepper-content step="2">
-                    <div>
-                        <v-select :items="trickItems" 
-                                label="Slect Trick"
-                                v-model="form.trickId"
-                        ></v-select>
-                        <div class="d-flex justify-center">
-                            <v-btn @click="step++">Next</v-btn>
-                        </div>
-                    </div>
-                </v-stepper-content>
+        <v-stepper-step step="4"> Review </v-stepper-step>
+      </v-stepper-header>
 
-                <v-stepper-content step="3">
-                    <div>
-                        <v-text-field label="Description" v-model='form.description'/>
-                        <div class="d-flex justify-center">
-                            <v-btn @click="step++">Next</v-btn>
-                        </div>
-                    </div>
-                </v-stepper-content>
+      <v-stepper-items class="fpt-0">
+        <v-stepper-content step="1">
+          <div>
+            <v-file-input accept="vodeo/*" @change="handleFile"></v-file-input>
+          </div>
+        </v-stepper-content>
 
-                <v-stepper-content step="4">
-                    <div class="d-flex justify-center">
-                        <v-btn @click='handleSave' color="teal accent-4">Save</v-btn>
-                    </div>
-                </v-stepper-content>
-            </v-stepper-items>
-        </v-stepper>
-    </v-card>
+        <v-stepper-content step="2">
+          <div>
+            <v-select
+              :items="trickItems"
+              label="Slect Trick"
+              v-model="form.trickId"
+            ></v-select>
+            <div class="d-flex justify-center">
+              <v-btn @click="step++">Next</v-btn>
+            </div>
+          </div>
+        </v-stepper-content>
+
+        <v-stepper-content step="3">
+          <div>
+            <v-text-field label="Description" v-model="form.description" />
+            <div class="d-flex justify-center">
+              <v-btn @click="step++">Next</v-btn>
+            </div>
+          </div>
+        </v-stepper-content>
+
+        <v-stepper-content step="4">
+          <div class="d-flex justify-center">
+            <v-btn @click="handleSave" color="teal accent-4">Save</v-btn>
+          </div>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
+  </v-card>
 </template>
 
 <script>
-import {mapGetters,mapActions,mapMutations} from 'vuex'
-import {close} from './_shared'
+import { mapGetters, mapActions, mapMutations } from "vuex";
+import { close } from "./_shared";
 
 export default {
-   name:'SubmissionSteps',
+  name: "SubmissionSteps",
 
-   mixins:[close],
-   
-   data: () =>({
-    step:1,
-    form:{
-        trickId:'',
-        video:'',
-        description:'',
-    }
-   }),
+  mixins: [close],
 
-   computed: {
-       ...mapGetters('tricks',['trickItems']),
-       
-       //...mapState('videos',['active']),
-   },
+  data: () => ({
+    step: 1,
+    form: {
+      trickId: "",
+      video: "",
+      description: "",
+    },
+  }),
 
-   methods:{
-    ...mapMutations('videos',['hide']),
+  computed: {
+    ...mapGetters("tricks", ["trickItems"]),
 
-    ...mapActions('videos',['startVideoUpload','createSubmission']),
+    //...mapState('videos',['active']),
+  },
 
-    async handleFile(file){
-      if(!file)
-        return
-      
-      const form = new FormData()
-      form.append('video',file)
-      this.startVideoUpload({form})
-      this.step++
+  methods: {
+    ...mapMutations("videos", ["hide"]),
+
+    ...mapActions("videos", ["startVideoUpload", "createSubmission"]),
+
+    async handleFile(file) {
+      if (!file) return;
+
+      const form = new FormData();
+      form.append("video", file);
+      this.startVideoUpload({ form });
+      this.step++;
     },
 
-    handleSave(){
-      this.createSubmission({form:this.form})
-    
-      this.hide()
+    handleSave() {
+      this.createSubmission({ form: this.form });
+
+      this.hide();
 
       //Object.assign(this.$data,initState())
     },
-  }
-}
+  },
+};
 </script>
 
 <style>
-
 </style>
