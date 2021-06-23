@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div v-if="items">
     <v-btn
-      :to="`/moderation/${item.type}/${item.target}`"
+      :to="`/moderation/${item.id}/${item.type}/${item.target}`"
       v-for="(item, index) in items"
       :key="index"
     >
-      {{ item.target }}
+      {{ item.target}}
     </v-btn>
   </div>
 </template>
