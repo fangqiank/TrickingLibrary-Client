@@ -72,22 +72,7 @@ export default {
           this.comments.push(x)
           console.log('comments: ', this.comments)
         })
-      // if(this.replyId > 0){
-      //   this.$axios.$post(`/api/comments/${this.replyId}/replies`,
-      //     {content: this.comment},
-      //     {httpsAgent: agent}
-      //   )
-      //   .then(x => {
-      //     this.comments.find(x=>x.id === this.replyId).replies.push(x)
-      //   })
-        
-      //   this.comment = ''
-      //   console.log(this.comments)
-      // } 
-      // else{
-        
-      //   this.comment = ''
-      // }
+      
       
     }
   },
