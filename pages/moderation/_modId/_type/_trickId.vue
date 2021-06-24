@@ -3,29 +3,23 @@
     <div v-if="item">
       {{ item.description }}
     </div>
+   
+    <CommentSection :comments="comments" @send="handleSend"/>
 
-    <div v-if="replyId">
-         Replying to {{replyId}} <v-btn @click="replyId=0">Clear</v-btn>
-    </div>
-
-    <div>
-      <v-text-field label="Comment" v-model="comment"></v-text-field>
-      <v-btn @click="handleSend">Send</v-btn>
-    </div>
-
-    <div v-for="(c,index) in comments" :key="index" class="my-1">
+    <!-- <div v-for="(c,index) in comments" :key="index" class="my-1">
       <span v-html="c.htmlContent"></span>
       <v-btn small @click = "replyId=c.id">Reply</v-btn>
       <v-btn small @click = "handleLoadReplies(c)">Load Replies</v-btn>
       <div v-for="(r,idx) in c.replies" :key="idx">
         <span v-html="r.htmlContent"></span>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import https from "https";
+import CommentSection from '../../../../components/comments/CommentSection.vue';
 
 const agent = new https.Agent({
   rejectUnauthorized: false,
@@ -40,6 +34,7 @@ const endpointResolever = (type) => {
 };
 
 export default {
+  components: { CommentSection },
   data: () => ({
     item: null,
     comments:[],
@@ -69,30 +64,30 @@ export default {
       .then(comments=>this.$set(comment,'replies',comments))
     },
 
-    handleSend(){
+    handleSend(content){
       const { modId } = this.$route.params
-
-      if(this.replyId > 0){
-        this.$axios.$post(`/api/comments/${this.replyId}/replies`,
-          {content: this.comment},
-          {httpsAgent: agent}
-        )
+      
+      return this.$axios.$post(`/api/moderationitems/${modId}/comments`,{content},{httpsAgent: agent})
         .then(x => {
-          this.comments.find(x=>x.id === this.replyId).replies.push(x)
+          this.comments.push(x)
+          console.log('comments: ', this.comments)
         })
+      // if(this.replyId > 0){
+      //   this.$axios.$post(`/api/comments/${this.replyId}/replies`,
+      //     {content: this.comment},
+      //     {httpsAgent: agent}
+      //   )
+      //   .then(x => {
+      //     this.comments.find(x=>x.id === this.replyId).replies.push(x)
+      //   })
         
-        this.comment = ''
-        console.log(this.comments)
-      } 
-      else{
-        this.$axios.$post(`/api/moderationitems/${modId}/comments`,
-          {content: this.comment},
-          {httpsAgent: agent}
-        )
-        .then(x => this.comments.push(commentWithReplies(x)))
+      //   this.comment = ''
+      //   console.log(this.comments)
+      // } 
+      // else{
         
-        this.comment = ''
-      }
+      //   this.comment = ''
+      // }
       
     }
   },
