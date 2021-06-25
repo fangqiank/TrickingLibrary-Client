@@ -7,7 +7,10 @@
     />
     
     <div class='ml-5'>
-      <CommentBody v-for="(reply,idx) in replies" :key='idx' :comment="reply" @sendReply = "handleSend"/>
+      <CommentBody v-for="(reply,idx) in replies"
+      :key='idx' :comment="reply" 
+      @sendReply = "handleSend"
+    />
     </div>
   </div>
 </template>
