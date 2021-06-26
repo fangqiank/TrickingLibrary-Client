@@ -8,6 +8,9 @@
     <!-- <div>
       {{ $config.api }}  display the above
     </div> -->
+    <div>
+      <v-btn @click="handleLogin">Login</v-btn>
+    </div>
     <div v-for="item in sections" :key="item.Id">
       <div class="d-flex flex-column align-center">
         <p class="text-h5">{{ item.title }}</p>
@@ -28,10 +31,58 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "vuex"
+import {UserManager,WebStorageStateStore} from 'oidc-client'
 
 export default {
-  components: {},
+  //components: {},
+
+  data:()=>(
+    {
+      userManager:null
+    }
+  ),
+
+  created(){
+    if(!process.server){
+      this.userManager = new UserManager(
+        {
+          authority:'https://localhost:5001',
+          client_id: 'nuxt-client',
+          redirect_uri: 'http://localhost:3000',
+          response_type: 'code',
+          scope:'openid profile',
+          post_logout_redirect_uri: 'http://localhost:3000',
+          //silent_redirect_uri:'http://localhost:3000/'
+          userStore: new WebStorageStateStore({store:window.localStorage}),  
+        }
+      )
+      
+      //console.log(this.$route)
+
+      const {
+        code,
+        scope,
+        session_state,
+        state,
+      } = this.$route.query
+    
+      if(code && scope && session_state && state){
+         this.userManager.signinRedirectCallback()
+          .then(user =>{
+            console.log(user)
+            this.$router.push('/')
+          })
+
+      }   
+    }
+  },
+
+  methods:{
+    handleLogin(){
+      return this.userManager.signinRedirect()
+    }
+  },
 
   computed: {
     ...mapState("tricks", ["tricks", "categories", "difficulties"]),
