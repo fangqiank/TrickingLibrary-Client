@@ -10,6 +10,8 @@
     </div> -->
     <div>
       <v-btn @click="handleLogin">Login</v-btn>
+      <v-btn @click="callApi('test')">Access Api</v-btn>
+      <v-btn @click="callApi('admin')">Admin Auth</v-btn>
     </div>
     <div v-for="item in sections" :key="item.Id">
       <div class="d-flex flex-column align-center">
@@ -51,13 +53,29 @@ export default {
           client_id: 'nuxt-client',
           redirect_uri: 'http://localhost:3000',
           response_type: 'code',
-          scope:'openid profile',
+                                      
+          // from backend:
+          // AllowedScopes = new List<string>()
+          //               {
+          //                   IdentityServerConstants.StandardScopes.OpenId,
+          //                   IdentityServerConstants.StandardScopes.Profile,
+          //                   IdentityServerConstants.LocalApi.ScopeName
+          //               },
+          scope:'openid profile IdentityServerApi',
           post_logout_redirect_uri: 'http://localhost:3000',
           //silent_redirect_uri:'http://localhost:3000/'
           userStore: new WebStorageStateStore({store:window.localStorage}),  
         }
       )
       
+      this.userManager
+          .getUser()
+          .then(user =>{
+            if(user){
+              console.log('User from loacal storage:', user)
+              this.$axios.setToken(`Bearer ${user.access_token}`)
+            }
+          })
       //console.log(this.$route)
 
       const {
@@ -70,10 +88,9 @@ export default {
       if(code && scope && session_state && state){
          this.userManager.signinRedirectCallback()
           .then(user =>{
-            console.log(user)
+            
             this.$router.push('/')
           })
-
       }   
     }
   },
@@ -81,6 +98,13 @@ export default {
   methods:{
     handleLogin(){
       return this.userManager.signinRedirect()
+    },
+
+    callApi(x){
+      return this.$axios.$get(`/api/tricks/${x}`)
+      .then(inf =>{
+        console.log(inf)
+      })
     }
   },
 
