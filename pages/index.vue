@@ -10,6 +10,7 @@
     </div> -->
     <div>
       <v-btn @click="handleLogin">Login</v-btn>
+      <v-btn @click="handleLogout">Logout</v-btn>
       <v-btn @click="callApi('test')">Access Api</v-btn>
       <v-btn @click="callApi('admin')">Admin Auth</v-btn>
     </div>
@@ -61,7 +62,7 @@ export default {
           //                   IdentityServerConstants.StandardScopes.Profile,
           //                   IdentityServerConstants.LocalApi.ScopeName
           //               },
-          scope:'openid profile IdentityServerApi',
+          scope:'openid profile IdentityServerApi role',
           post_logout_redirect_uri: 'http://localhost:3000',
           //silent_redirect_uri:'http://localhost:3000/'
           userStore: new WebStorageStateStore({store:window.localStorage}),  
@@ -88,7 +89,7 @@ export default {
       if(code && scope && session_state && state){
          this.userManager.signinRedirectCallback()
           .then(user =>{
-            
+            this.$axios.setToken(`Bearer ${user.access_token}`)
             this.$router.push('/')
           })
       }   
@@ -98,6 +99,10 @@ export default {
   methods:{
     handleLogin(){
       return this.userManager.signinRedirect()
+    },
+
+    handleLogout(){
+      return this.userManager.signoutRedirect()
     },
 
     callApi(x){
