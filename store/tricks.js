@@ -57,11 +57,17 @@ export const mutations = {
 
 export const actions = {
     async fetchTricks({commit}){
-        const tricks = await this.$axios.$get('/api/tricks',{httpsAgent: agent })
-        const categories = await this.$axios.$get('/api/categories',{httpsAgent: agent })
-        const difficulties = await this.$axios.$get('/api/difficulty',{httpsAgent: agent })
-        console.log(tricks)
-        commit('setTricks', {tricks,difficulties,categories})
+        try{
+
+            const tricks = await this.$axios.$get('/api/tricks',{httpsAgent: agent })
+            const categories = await this.$axios.$get('/api/categories',{httpsAgent: agent })
+            const difficulties = await this.$axios.$get('/api/difficulty',{httpsAgent: agent })
+            console.log(tricks)
+            commit('setTricks', {tricks,difficulties,categories})
+        }
+        catch(err){
+            console.log(err)
+        }
     },
 
     async createTrick({},{form}){
