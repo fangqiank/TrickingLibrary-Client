@@ -20,9 +20,32 @@
         Upload
       </v-btn> -->
       <!-- <Upload/> -->
-      <v-btn to="/moderation" depressed>Moderation</v-btn>
+      <v-btn v-if="moderator" to="/moderation" depressed>Moderation</v-btn>
 
-      <ContentCreationDialog></ContentCreationDialog>
+      <v-skeleton-loader
+          :loading = "loading"
+          transition="fade-transition"
+          type="button"
+      >
+        <ContentCreationDialog></ContentCreationDialog>  
+      </v-skeleton-loader>
+
+
+      <v-skeleton-loader
+          :loading = "loading"
+          transition="fade-transition"
+          type="button"
+      >
+        <v-btn depressed outlined v-if='authenticated'>
+          <v-icon left>mdi-account-circle</v-icon> Profile
+        </v-btn>
+
+        <v-btn depressed outlined v-else @click="$auth.signinRedirect()">
+          <v-icon left>mdi-account-circle</v-icon> Sign In
+        </v-btn>
+      </v-skeleton-loader>
+        <v-btn depressed v-if='authenticated' @click="$auth.signoutRedirect()">Logout</v-btn>
+
     </v-app-bar>
     <v-main>
       <v-container>
@@ -33,7 +56,7 @@
 </template>
 
 <script>
-//import {mapMutations} from 'vuex'
+import {mapState,mapGetters} from 'vuex'
 //import Upload from '../components/Upload.vue'
 import ContentCreationDialog from "../components/content-creation/ContentCreationDialog.vue";
 
@@ -46,6 +69,19 @@ export default {
   data() {
     return {};
   },
+
+  // beforeMount(){
+  //   this.$store.dispatch('clientInit')
+  // },
+
+  computed:{
+    ...mapState('auth',['loading']),
+    ...mapGetters('auth',['authenticated','moderator']),
+  },
+
+  // fetch(){
+  //   return this.$store.dispatch('clientInit')
+  // }
 
   //methods:mapMutations('videos',['toggleActive'])
 };

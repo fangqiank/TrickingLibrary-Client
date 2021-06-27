@@ -29,5 +29,9 @@ export const actions = {
         // await dispatch('tricks/fetchTricks')
         // await dispatch('submissions/fetchSubmissions')
         return dispatch('tricks/fetchTricks')
+    },
+
+    clientInit({dispatch}){
+        return dispatch('auth/initialize')
     }
 }

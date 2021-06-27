@@ -9,8 +9,8 @@
       {{ $config.api }}  display the above
     </div> -->
     <div>
-      <v-btn @click="handleLogin">Login</v-btn>
-      <v-btn @click="handleLogout">Logout</v-btn>
+      <!-- <v-btn @click="handleLogin">Login</v-btn>
+      <v-btn @click="handleLogout">Logout</v-btn> -->
       <v-btn @click="callApi('test')">Access Api</v-btn>
       <v-btn @click="callApi('admin')">Admin Auth</v-btn>
     </div>
@@ -35,49 +35,20 @@
 
 <script>
 import { mapState } from "vuex"
-import {UserManager,WebStorageStateStore} from 'oidc-client'
+//import {UserManager,WebStorageStateStore} from 'oidc-client'
 
 export default {
   //components: {},
 
   data:()=>(
     {
-      userManager:null
     }
   ),
 
-  created(){
-    if(!process.server){
-      this.userManager = new UserManager(
-        {
-          authority:'https://localhost:5001',
-          client_id: 'nuxt-client',
-          //redirect_uri: 'http://localhost:3000',
-          redirect_uri: 'https://localhost:3000/oidc/sign-in-callback.html',
-          response_type: 'code',
-                                      
-          // from backend:
-          // AllowedScopes = new List<string>()
-          //               {
-          //                   IdentityServerConstants.StandardScopes.OpenId,
-          //                   IdentityServerConstants.StandardScopes.Profile,
-          //                   IdentityServerConstants.LocalApi.ScopeName
-          //               },
-          scope:'openid profile IdentityServerApi role',
-          post_logout_redirect_uri: 'https://localhost:3000',
-          //silent_redirect_uri:'http://localhost:3000/'
-          userStore: new WebStorageStateStore({store:window.localStorage}),  
-        }
-      )
+  //created(){
+    // if(!process.server){      
+      //this.userManager
       
-      this.userManager
-          .getUser()
-          .then(user =>{
-            if(user){
-              console.log('User from loacal storage:', user)
-              this.$axios.setToken(`Bearer ${user.access_token}`)
-            }
-          })
       //console.log(this.$route)
 
       // const {
@@ -94,17 +65,18 @@ export default {
       //       this.$router.push('/')
       //     })
       // }   
-    }
-  },
+    //}
+  //},
 
   methods:{
-    handleLogin(){
-      return this.userManager.signinRedirect()
-    },
+    // handleLogin(){
+    //   return this.userManager.signinRedirect()
+    //   return 
+    // },
 
-    handleLogout(){
-      return this.userManager.signoutRedirect()
-    },
+    // handleLogout(){
+    //   return this.$auth.signoutRedirect()
+    // },
 
     callApi(x){
       return this.$axios.$get(`/api/tricks/${x}`)
