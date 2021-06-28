@@ -16,17 +16,25 @@ export default async ({app, store}, inject) =>{
                 //                   IdentityServerConstants.StandardScopes.Profile,
                 //                   IdentityServerConstants.LocalApi.ScopeName
                 //               },
-                scope:'openid profile IdentityServerApi role',
-                post_logout_redirect_uri: 'https://localhost:3000',
-                //silent_redirect_uri:'http://localhost:3000/'
-                userStore: new WebStorageStateStore({store:window.localStorage}),  
-            }
-            )
-            
-            inject('auth', userManager)
+            scope:'openid profile IdentityServerApi role',
+            post_logout_redirect_uri: 'https://localhost:3000',
+            silent_redirect_uri:'https://localhost:3000/oidc/sign-in-silent-callback.html',
+            userStore: new WebStorageStateStore({store:window.localStorage}),  
+            //monitorSession:  false,
+        }
+    )
 
-            app.fetch = () =>{
-               return store.dispatch('clientInit')
-            }
+    // userManager.events.addUserSignedOut(
+    //     ()=>{
+    //         console.log("user signed out")
+    //     }
+    // )
+
+            
+    inject('auth', userManager)
+
+    app.fetch = () =>{
+        return store.dispatch('clientInit')
+    }
 
 }
