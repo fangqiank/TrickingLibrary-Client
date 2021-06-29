@@ -23,7 +23,7 @@ export const mutations = {
     },
 
     saveProfile(state, payload){
-      console.log('saveProfile payload: ', payload)
+      //console.log('saveProfile payload: ', payload)
       const {profile} = payload
       state.profile = profile
   },

@@ -45,7 +45,13 @@
               v-bind="attrs"
               v-on="on"
             >
-              <v-icon>mdi-account-circle-outline</v-icon>
+              <v-avatar size="36">
+                <img v-if="profile.image"
+                     :src="`https://localhost:5001/api/videos/${profile.image}`"
+                     alt="profile image"
+                />
+                <v-icon v-else>mdi-account</v-icon>
+              </v-avatar>
             </v-btn>
           </template>
           <v-list>
@@ -97,7 +103,7 @@ export default {
   // },
 
   computed:{
-    ...mapState('auth',['loading']),
+    ...mapState('auth',['loading','profile']),
     ...mapGetters('auth',['authenticated','moderator']),
   },
 
