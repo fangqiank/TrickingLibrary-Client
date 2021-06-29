@@ -27,7 +27,7 @@
           transition="fade-transition"
           type="button"
       >
-        <ContentCreationDialog></ContentCreationDialog>  
+        <ContentCreationDialog></ContentCreationDialog>
       </v-skeleton-loader>
 
 
@@ -36,15 +36,37 @@
           transition="fade-transition"
           type="button"
       >
-        <v-btn depressed outlined v-if='authenticated'>
-          <v-icon left>mdi-account-circle</v-icon> Profile
-        </v-btn>
+        <v-menu offset-y  v-if='authenticated'>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-account-circle-outline</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item @click="$router.push('/profile')">
+              <v-list-item-title>
+                <v-icon left>mdi-account-circle</v-icon> Profile
+              </v-list-item-title>
+            </v-list-item>
+
+            <v-list-item @click="$auth.signoutRedirect()">
+              <v-list-item-title>
+                <v-icon left>mdi-logout</v-icon> Logout
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
 
         <v-btn depressed outlined v-else @click="$auth.signinRedirect()">
-          <v-icon left>mdi-account-circle</v-icon> Sign In
+          <v-icon left>mdi-account-circle</v-icon> Log In
         </v-btn>
       </v-skeleton-loader>
-        <v-btn depressed v-if='authenticated' @click="$auth.signoutRedirect()">Logout</v-btn>
 
     </v-app-bar>
     <v-main>
