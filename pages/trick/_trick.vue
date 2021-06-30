@@ -3,8 +3,8 @@
     <ItemLayout>
         <template v-slot:content>
             <div v-if="submissions" class="mx-3">
-                <v-card v-for="item in submissions" :key=item.Id class="mb-3">
-                    <VideoPlayer :video="item.video"/>
+                <v-card v-for="(item,idx) in submissions" :key="idx" class="mb-3">
+                    <VideoPlayer :video="item.video" />
                     <v-card-text>{{item.description}}</v-card-text>
                 </v-card>
             </div>
@@ -20,8 +20,8 @@
                 color="purple"
             >
                 <div>Description: <strong style="color:#fff">{{getOneTrick.description}}</strong></div>
-                <div>Difficulty: 
-                    <v-chip color="secondary" :to="`/difficulty/${difficulty.id}`">
+                <div>Difficulty:
+                    <v-chip color="secondary" :to="`/difficulty/${difficulty.slug}`">
                         {{difficulty.name}}
                     </v-chip>
                 </div>
@@ -30,9 +30,9 @@
                 {{rd.title}}:
                 <v-chip-group>
                     <!-- {{rd.title}} -->
-                    <v-chip v-for="(c,index) in rd.data" 
-                            :key="index" 
-                            x-small 
+                    <v-chip v-for="(c,index) in rd.data"
+                            :key="index"
+                            x-small
                             class="ma-2"
                             color="primary"
                             :to="rd.routeFactory(c)">
@@ -69,7 +69,7 @@
             ...mapGetters('tricks',['trickById','difficultyById']),
 
             // getOneTrick() {
-            //     return 
+            //     return
             // },
 
             getTrickCategories(){
@@ -83,22 +83,22 @@
                 //console.log(this.getOneTrick.progressions)
                 return [
                     {
-                        title:"Categories", 
-                        data:this.categories.filter(x=> this.getOneTrick.categories.indexOf(x.id) >= 0),
-                        idFactory: c => `category-${c.id}`,
-                        routeFactory :c => `/category/${c.id}`
+                        title:"Categories",
+                        data:this.categories.filter(x=> this.getOneTrick.categories.indexOf(x.slug) >= 0),
+                        idFactory: c => `category-${c.slug}`,
+                        routeFactory :c => `/category/${c.slug}`
                     },
                     {
-                        title:"Prerequisites", 
-                        data:this.tricks.filter(x=> this.getOneTrick.prerequisites.indexOf(x.id) >= 0),
-                        idFactory: c => `trick-${c.id}`,
-                        routeFactory :c => `/trick/${c.id}`
+                        title:"Prerequisites",
+                        data:this.tricks.filter(x=> this.getOneTrick.prerequisites.indexOf(x.slug) >= 0),
+                        idFactory: c => `trick-${c.slug}`,
+                        routeFactory :c => `/trick/${c.slug}`
                     },
                     {
-                        title:"Progressions", 
-                        data:this.tricks.filter(x=> this.getOneTrick.progressions.indexOf(x.id) >= 0),
-                        idFactory: c => `trick-${c.id}`,
-                        routeFactory :c => `/trick/${c.id}`
+                        title:"Progressions",
+                        data:this.tricks.filter(x=> this.getOneTrick.progressions.indexOf(x.slug) >= 0),
+                        idFactory: c => `trick-${c.slug}`,
+                        routeFactory :c => `/trick/${c.slug}`
                     },
                 ]
             },
@@ -117,7 +117,7 @@
         },
 
         head() {
-            if(!this.getOneTrick) 
+            if(!this.getOneTrick)
                 return {}
 
             return {
@@ -127,12 +127,12 @@
                     {
                         hid: 'description',
                         name: 'description',
-                        content: this.getOneTrick.description 
+                        content: this.getOneTrick.description
                     }
                 ]
             }
         }
-        
+
     }
 </script>
 

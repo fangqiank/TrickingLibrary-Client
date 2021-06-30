@@ -1,6 +1,6 @@
 import https from 'https'
 
-const agent = new https.Agent({  
+const agent = new https.Agent({
     rejectUnauthorized: false
 })
 
@@ -11,30 +11,30 @@ const initState = () => ({
 })
 
 export const getters = {
-    trickById : state => id =>state.tricks.find(x=>x.id == id),
-    
-    categoryById : state => id =>state.categories.find(x=>x.id == id),
+    trickById : state => id =>state.tricks.find(x=>x.slug === id),
 
-    difficultyById : state => id =>state.difficulties.find(x=>x.id == id),
+    categoryById : state => id =>state.categories.find(x=>x.slug === id),
+
+    difficultyById : state => id =>state.difficulties.find(x=>x.slug === id),
 
     trickItems: state =>state.tricks.map(x =>(
       {
          text:x.name,
-         value:x.id
+         value:x.slug
       }
     )),
 
     categoryItems: state => state.categories.map(x =>(
         {
            text:x.name,
-           value:x.id
+           value:x.slug
         }
     )),
 
     difficultyItems: state => state.difficulties.map(x =>(
         {
            text:x.name,
-           value:x.id
+           value:x.slug
         }
     )),
 }
@@ -73,7 +73,7 @@ export const actions = {
     async createTrick({},{form}){
         // const requestOptions = {
         //     method: 'POST',
-        //     headers: { 
+        //     headers: {
         //        'Content-Type': 'application/json',
         //     },
         //     body: JSON.stringify(form)
@@ -83,6 +83,8 @@ export const actions = {
         //     .then(data => console.log(data))
 
         this.$axios.setHeader('Content-Type', 'application/json', ['post','put'])
+
+        console.log(JSON.stringify(form))
 
         const trick = this.$axios.$post(
            '/api/tricks',

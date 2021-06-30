@@ -3,7 +3,7 @@
     <!-- publicRuntimeConfig:{
        api:process.env.API_URI
     },
-    nuxtConfig.js 
+    nuxtConfig.js
     -->
     <!-- <div>
       {{ $config.api }}  display the above
@@ -21,7 +21,7 @@
           <v-btn
             v-for="(collectionItem, index) in item.collection"
             :key="index"
-            :to="item.routeFactory(collectionItem.id)"
+            :to="item.routeFactory(collectionItem.slug)"
             class="mx-1"
           >
             {{ collectionItem.name }}
@@ -46,9 +46,9 @@ export default {
   ),
 
   //created(){
-    // if(!process.server){      
+    // if(!process.server){
       //this.userManager
-      
+
       //console.log(this.$route)
 
       // const {
@@ -57,21 +57,21 @@ export default {
       //   session_state,
       //   state,
       // } = this.$route.query
-    
+
       // if(code && scope && session_state && state){
       //    this.userManager.signinRedirectCallback()
       //     .then(user =>{
       //       this.$axios.setToken(`Bearer ${user.access_token}`)
       //       this.$router.push('/')
       //     })
-      // }   
+      // }
     //}
   //},
 
   methods:{
     // handleLogin(){
     //   return this.userManager.signinRedirect()
-    //   return 
+    //   return
     // },
 
     // handleLogout(){
