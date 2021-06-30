@@ -1,6 +1,6 @@
 import https from 'https'
 
-const agent = new https.Agent({  
+const agent = new https.Agent({
     rejectUnauthorized: false,
 })
 
@@ -71,20 +71,20 @@ export const actions = {
     startVideoUpload({$axios,commit},{form}){
         const source = this.$axios.CancelToken.source()
 
-        const uploadPromise = this.$axios.post('/api/videos',form,
+        const uploadPromise = this.$axios.post('/api/files',form,
          {progress:false, cancelToken:source.token},
          {httpsAgent: agent })
            .then(res =>{
              //console.log('res: ',res)
              const {data} = res
-             commit('completeUpload') 
+             commit('completeUpload')
              return data
            })
            .catch(err=>{
                if(this.$axios.isCancel(err)){
                   //todo
                 }
-             
+
            })
 
         commit('setTask',{uploadPromise,source})
@@ -97,8 +97,8 @@ export const actions = {
     //         console.log(createdTrick)
     //         submission.trickId =createdTrick.id
     //     }
-        
-    
+
+
     //     await this.$axios.$post('/api/submissions',submission,{httpsAgent: agent })
     // }
 
@@ -108,7 +108,7 @@ export const actions = {
 
             if(state.uploadCompleted){
                 const video = await state.uploadPromise
-                await this.$axios.delete(`/api/videos/${video}`)
+                await this.$axios.delete(`/api/files/${video}`)
             }else{
                 state.uploadCancelSource.cancel()
             }
