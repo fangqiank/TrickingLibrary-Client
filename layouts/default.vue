@@ -69,7 +69,7 @@
           </v-list>
         </v-menu>
 
-        <v-btn depressed outlined v-else @click="$auth.signinRedirect()">
+        <v-btn depressed outlined v-else @click="loginHandler">
           <v-icon left>mdi-account-circle</v-icon> Log In
         </v-btn>
       </v-skeleton-loader>
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import {mapState,mapGetters} from 'vuex'
+import {mapState, mapGetters, mapActions} from 'vuex'
 //import Upload from '../components/Upload.vue'
 import ContentCreationDialog from "../components/content-creation/ContentCreationDialog.vue";
 
@@ -111,6 +111,8 @@ export default {
   //   return this.$store.dispatch('clientInit')
   // }
 
-  //methods:mapMutations('videos',['toggleActive'])
+  methods: {
+    ...mapActions('auth', ['loginHandler'])
+  },
 };
 </script>

@@ -4,7 +4,7 @@
         <template v-slot:content>
             <TrickList :tricks='tricks' class="mx-2"/>
         </template>
-    
+
         <template v-slot:item>
             <div v-if="difficulty">
                 <div class="text-h6 text-center">
@@ -16,24 +16,24 @@
                 </div>
             </div>
         </template>
-    </ItemLayout>  
+    </ItemLayout>
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+import {mapState} from 'vuex'
     // import trickList from '../../mixins/trickList'
     import TrickList from '../../components/content-creation/TrickList.vue'
     import ItemLayout from '../../components/ItemLayout.vue'
     import https from 'https'
 
-    const agent = new https.Agent({  
+    const agent = new https.Agent({
         rejectUnauthorized: false
     })
 
     export default {
         //mixins:[trickList],
         components:{TrickList,ItemLayout},
-         
+
         data:()=>(
             {
                 difficulty:null,
@@ -41,21 +41,21 @@
             }
         ),
 
-        computed:mapGetters('tricks',['difficultyById']),
+        computed:mapState('tricks',['dictionaries']),
 
         async fetch(){
             //console.log(this.$route.params.category)
 
             const difficultyId = this.$route.params.difficulty
 
-            this.difficulty = this.difficultyById(difficultyId)
+            this.difficulty = this.dictionaries.difficulties[difficultyId]
 
-            this.tricks = await this.$axios.$get(`/api/difficulty/${difficultyId}/tricks`
+            this.tricks = await this.$axios.$get(`/api/difficulties/${difficultyId}/tricks`
             ,{httpsAgent: agent })
         },
 
         head() {
-            if(!this.difficulty) 
+            if(!this.difficulty)
                 return {}
 
             //console.log(this.category)
@@ -66,7 +66,7 @@
                     {
                         hid: 'description',
                         name: 'description',
-                        content: this.difficulty.description 
+                        content: this.difficulty.description
                     }
                 ]
             }

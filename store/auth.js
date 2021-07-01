@@ -60,8 +60,14 @@ export const actions = {
        .finally(() => commit('finishLoading'))
     },
 
+    loginHandler(){
+        if(process.server)
+          return
+        localStorage.setItem('post-login-redirect-path',location.pathname)
+        return this.$auth.signinRedirect()
+    },
   // Eye on
-  watchUserLoaded({state,getters},action){
+  watchUserLoaded({state,getters,dispatch},action){
       if(process.server) return
 
       return new Promise(async (res,rej)=>{
@@ -72,6 +78,7 @@ export const actions = {
             (newVal,oldVal) =>{
               unwatch()
               if(!getters.authenticated){
+                dispatch('loginHandler')
                 this.$auth.signinRedirect()
               }
               else if(!newVal){

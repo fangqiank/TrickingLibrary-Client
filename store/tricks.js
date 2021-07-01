@@ -5,49 +5,77 @@ const agent = new https.Agent({
 })
 
 const initState = () => ({
-    tricks:[],
-    categories:[],
-    difficulties:[]
+    dictionaries:{
+      tricks:null,
+      categories:null,
+      difficulties:null
+    },
+    lists:{
+      tricks:[],
+      categories:[],
+      difficulties:[]
+    },
 })
 
-export const getters = {
-    trickById : state => id =>state.tricks.find(x=>x.slug === id),
-
-    categoryById : state => id =>state.categories.find(x=>x.slug === id),
-
-    difficultyById : state => id =>state.difficulties.find(x=>x.slug === id),
-
-    trickItems: state =>state.tricks.map(x =>(
-      {
-         text:x.name,
-         value:x.slug
-      }
-    )),
-
-    categoryItems: state => state.categories.map(x =>(
-        {
-           text:x.name,
-           value:x.slug
-        }
-    )),
-
-    difficultyItems: state => state.difficulties.map(x =>(
-        {
-           text:x.name,
-           value:x.slug
-        }
-    )),
-}
+// export const getters = {
+//     trickById : state => id =>state.tricks.find(x=>x.slug === id),
+//
+//     categoryById : state => id =>state.categories.find(x=>x.slug === id),
+//
+//     difficultyById : state => id =>state.difficulties.find(x=>x.slug === id),
+//
+//     trickItems: state =>state.tricks.map(x =>(
+//       {
+//          text:x.name,
+//          value:x.slug
+//       }
+//     )),
+//
+//     categoryItems: state => state.categories.map(x =>(
+//         {
+//            text:x.name,
+//            value:x.slug
+//         }
+//     )),
+//
+//     difficultyItems: state => state.difficulties.map(x =>(
+//         {
+//            text:x.name,
+//            value:x.slug
+//         }
+//     )),
+// }
 
 export const state = initState
+
+const setEntities = (state,type, data) =>{
+  state.dictionaries[type] = {}
+  data.forEach(x=>{
+    state.lists[type].push(x)
+    state.dictionaries[type][x.id] = x
+    if(x.slug){
+      state.dictionaries[type][x.slug] = x
+    }
+  })
+}
 
 export const mutations = {
     setTricks(state, payload){
         //console.log('payload',payload)
-        const {tricks,categories,difficulties} = payload
-        state.tricks = tricks
-        state.categories = categories
-        state.difficulties = difficulties
+        const {tricks} = payload
+        setEntities(state,'tricks', tricks)
+    },
+
+    setDifficulties(state, payload){
+      //console.log('payload',payload)
+      const {difficulties} = payload
+      setEntities(state,'difficulties', difficulties)
+    },
+
+    setCategories(state, payload){
+      //console.log('payload',payload)
+      const {categories} = payload
+      setEntities(state,'categories', categories)
     },
 
     reset(state){
@@ -57,17 +85,16 @@ export const mutations = {
 
 export const actions = {
     async fetchTricks({commit}){
-        try{
-
-            const tricks = await this.$axios.$get('/api/tricks',{httpsAgent: agent })
-            const categories = await this.$axios.$get('/api/categories',{httpsAgent: agent })
-            const difficulties = await this.$axios.$get('/api/difficulty',{httpsAgent: agent })
-            console.log(tricks)
-            commit('setTricks', {tricks,difficulties,categories})
-        }
-        catch(err){
-            console.log(err)
-        }
+      return Promise.all(
+        [
+          this.$axios.$get('/api/tricks',{httpsAgent: agent })
+            .then(tricks => commit('setTricks',{tricks})),
+          this.$axios.$get('/api/difficulties',{httpsAgent: agent })
+            .then(difficulties => commit('setDifficulties',{difficulties})),
+          this.$axios.$get('/api/categories',{httpsAgent: agent })
+            .then(categories => commit('setCategories',{categories}))
+        ]
+      )
     },
 
     async createTrick({},{form}){

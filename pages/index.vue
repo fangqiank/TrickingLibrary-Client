@@ -8,12 +8,12 @@
     <!-- <div>
       {{ $config.api }}  display the above
     </div> -->
-    <div>
-      <!-- <v-btn @click="handleLogin">Login</v-btn>
-      <v-btn @click="handleLogout">Logout</v-btn> -->
-      <v-btn @click="callApi('test')">Access Api</v-btn>
-      <v-btn @click="callApi('admin')">Admin Auth</v-btn>
-    </div>
+<!--    <div>-->
+<!--      <v-btn @click="handleLogin">Login</v-btn>-->
+<!--      <v-btn @click="handleLogout">Logout</v-btn>-->
+<!--      <v-btn @click="callApi('test')">Access Api</v-btn>-->
+<!--      <v-btn @click="callApi('admin')">Admin Auth</v-btn>-->
+<!--    </div>-->
     <div v-for="item in sections" :key="item.Id">
       <div class="d-flex flex-column align-center">
         <p class="text-h5">{{ item.title }}</p>
@@ -21,7 +21,7 @@
           <v-btn
             v-for="(collectionItem, index) in item.collection"
             :key="index"
-            :to="item.routeFactory(collectionItem.slug)"
+            :to="item.routeFactory(collectionItem)"
             class="mx-1"
           >
             {{ collectionItem.name }}
@@ -40,10 +40,7 @@ import { mapState } from "vuex"
 export default {
   //components: {},
 
-  data:()=>(
-    {
-    }
-  ),
+  data:()=>({}),
 
   //created(){
     // if(!process.server){
@@ -78,16 +75,16 @@ export default {
     //   return this.$auth.signoutRedirect()
     // },
 
-    callApi(x){
-      return this.$axios.$get(`/api/tricks/${x}`)
-      .then(inf =>{
-        console.log(inf)
-      })
-    }
+    // callApi(x){
+    //   return this.$axios.$get(`/api/tricks/${x}`)
+    //   .then(inf =>{
+    //     console.log(inf)
+    //   })
+    // }
   },
 
   computed: {
-    ...mapState("tricks", ["tricks", "categories", "difficulties"]),
+    ...mapState("tricks", ["lists"]),
 
     // api() {
     //   return process.env.API_URI;
@@ -96,19 +93,19 @@ export default {
     sections() {
       return [
         {
-          collection: this.tricks,
+          collection: this.lists.tricks,
           title: "Tricks",
-          routeFactory: (id) => `/trick/${id}`,
+          routeFactory: (x) => `/trick/${x.slug}`,
         },
         {
-          collection: this.categories,
+          collection: this.lists.categories,
           title: "Categories",
-          routeFactory: (id) => `/category/${id}`,
+          routeFactory: (x) => `/category/${x.id}`,
         },
         {
-          collection: this.difficulties,
+          collection: this.lists.difficulties,
           title: "Difficulties",
-          routeFactory: (id) => `/difficulty/${id}`,
+          routeFactory: (x) => `/difficulty/${x.id}`,
         },
       ];
     },

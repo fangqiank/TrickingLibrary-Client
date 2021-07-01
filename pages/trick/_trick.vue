@@ -2,12 +2,9 @@
     <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
     <ItemLayout>
         <template v-slot:content>
-            <div v-if="submissions" class="mx-3">
-                <v-card v-for="(item,idx) in submissions" :key="idx" class="mb-3">
-                    <VideoPlayer :video="item.video" />
-                    <v-card-text>{{item.description}}</v-card-text>
-                </v-card>
-            </div>
+<!--            <div v-if="submissions" class="mx-3">-->
+          <Submission :mission="item" v-for="(item,idx) in submissions" :key="idx"/>
+<!--            </div>-->
         </template>
 
         <template v-slot:item="{close}">
@@ -41,7 +38,7 @@
                 </v-chip-group>
             </div>
             <!-- </v-sheet> -->
-          <v-divider class="my-1"></v-divider>
+          <v-divider class="my-2"></v-divider>
           <div>
             <v-btn
                    outlined
@@ -56,10 +53,10 @@
 </template>
 
 <script>
-    import {mapState, mapGetters, mapMutations} from 'vuex'
-    import VideoPlayer from '@/components/content-creation/VideoPlayer.vue'
+    import {mapState, mapMutations} from 'vuex'
     import ItemLayout from '@/components/ItemLayout.vue'
-    import TrickSteps from "@/components/content-creation/TrickSteps";
+    import TrickSteps from "@/components/content-creation/TrickSteps"
+    import Submission from "@/components/Submission";
 
     export default {
         data: () =>(
@@ -83,15 +80,16 @@
       },
 
       components:{
-          VideoPlayer,
+          Submission,
           ItemLayout,
-          TrickSteps
+          TrickSteps,
       },
 
       computed:{
           ...mapState('submissions',['submissions']),
-          ...mapState('tricks',['categories','tricks']),
-          ...mapGetters('tricks',['trickById','difficultyById']),
+          ...mapState('tricks',['dictionaries']),
+
+          //...mapGetters('tricks',['trickById','difficultyById']),
 
           // getOneTrick() {
           //     return
@@ -108,21 +106,21 @@
               //console.log(this.getOneTrick.progressions)
               return [
                   {
-                      title:"Categories",
-                      data:this.categories.filter(x=> this.getOneTrick.categories.indexOf(x.slug) >= 0),
-                      idFactory: c => `category-${c.slug}`,
-                      routeFactory :c => `/category/${c.slug}`
+                      title: "Categories",
+                      data: this.getOneTrick.categories.map(x=> this.dictionaries.categories[x]),
+                      idFactory: c => `category-${c.id}`,
+                      routeFactory: c => `/category/${c.id}`
                   },
                   {
-                      title:"Prerequisites",
-                      data:this.tricks.filter(x=> this.getOneTrick.prerequisites.indexOf(x.slug) >= 0),
-                      idFactory: c => `trick-${c.slug}`,
-                      routeFactory :c => `/trick/${c.slug}`
+                      title: "Prerequisites",
+                      data: this.getOneTrick.prerequisites.map(x=> this.dictionaries.tricks[x]),
+                      idFactory: c => `trick-${c.id}`,
+                      routeFactory: c => `/trick/${c.slug}`
                   },
                   {
-                      title:"Progressions",
-                      data:this.tricks.filter(x=> this.getOneTrick.progressions.indexOf(x.slug) >= 0),
-                      idFactory: c => `trick-${c.slug}`,
+                      title: "Progressions",
+                      data: this.getOneTrick.progressions.map(x=> this.dictionaries.tricks[x]),
+                      idFactory: c => `trick-${c.id}`,
                       routeFactory :c => `/trick/${c.slug}`
                   },
               ]
@@ -132,13 +130,13 @@
       async fetch(){
           //console.log(this.$route.params.trick)
 
-          const trickId = this.$route.params.trick
+          const trickSlug = this.$route.params.trick
 
-          this.getOneTrick = this.trickById(this.$route.params.trick)
+          this.getOneTrick = this.dictionaries.tricks[trickSlug]
 
-          this.difficulty = this.difficultyById(this.getOneTrick.difficulty)
+          this.difficulty = this.dictionaries.difficulties[this.getOneTrick.difficulty]
 
-          await this.$store.dispatch('submissions/fetchSubmissionsForTrick',{trickId},{root:true})
+          await this.$store.dispatch('submissions/fetchSubmissionsForTrick',{trickId: trickSlug},{root:true})
       },
 
       head() {

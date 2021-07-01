@@ -19,12 +19,12 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapState} from 'vuex'
     import https from 'https'
     import TrickList from '../../components/content-creation/TrickList.vue'
     import ItemLayout from '../../components/ItemLayout.vue'
 
-    const agent = new https.Agent({  
+    const agent = new https.Agent({
         rejectUnauthorized: false
     })
 
@@ -38,31 +38,33 @@
             }
         ),
 
-        computed:mapGetters('tricks',['categoryById']),
+        computed:{
+          ...mapState('tricks',['dictionaries'])
+        },
 
             // filteredTricks(){
-            //     if(!this.filter) 
+            //     if(!this.filter)
             //         return null
-                    
+
             //     const searchItem = this.filter.trim().toLowerCase()
 
             //     return this.tricks.filter(x=>x.name.toLowerCase().includes(searchItem) ||
             //     x.description.toLowerCase().includes(searchItem))
             // }
-        
+
         async fetch(){
             //console.log(this.$route.params.category)
 
             const categoryId = this.$route.params.category
 
-            this.category = this.categoryById(categoryId)
+            this.category = this.dictionaries.categories[categoryId]
 
             this.tricks = await this.$axios.$get(`/api/categories/${categoryId}/tricks`
             ,{httpsAgent: agent })
         },
 
         head() {
-            if(!this.category) 
+            if(!this.category)
                 return {}
 
             //console.log(this.category)
@@ -73,7 +75,7 @@
                     {
                         hid: 'description',
                         name: 'description',
-                        content: this.category.description 
+                        content: this.category.description
                     }
                 ]
             }

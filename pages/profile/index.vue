@@ -1,12 +1,13 @@
 ﻿<template xmlns="">
   <ItemLayout>
     <template v-slot:content>
-      <div v-if="submissions" class="mx-3">
-        <v-card v-for="item in submissions" :key=item.Id class="mb-3">
-          <VideoPlayer :video="item.video"/>
-          <v-card-text>{{item.description}}</v-card-text>
-        </v-card>
-      </div>
+      <Submission :mission="item" v-for="(item,idx) in submissions" :key="idx"/>
+<!--      <div v-if="submissions" class="mx-3">-->
+<!--        <v-card v-for="item in submissions" :key=item.Id class="mb-3">-->
+<!--          <VideoPlayer :video="item.video.videoLink" :thumb="item.video.thumbnailLink"/>-->
+<!--          <v-card-text>{{item.description}}</v-card-text>-->
+<!--        </v-card>-->
+<!--      </div>-->
     </template>
 
     <template v-slot:item>
@@ -39,13 +40,13 @@
 </template>
 
 <script>
-import VideoPlayer from '@/components/content-creation/VideoPlayer'
 import ItemLayout from '@/components/ItemLayout'
 import {mapMutations, mapState} from "vuex";
+import Submission from "../../components/Submission";
 
 export default {
   components:{
-    VideoPlayer,
+    Submission,
     ItemLayout
   },
 
@@ -83,12 +84,12 @@ export default {
   },
 
   mounted(){
-    // return this.$store.dispatch('auth/watchUserLoaded',async ()=>{
-    //   const profile = this.$store.state.auth.profile
-    //   console.log('mounted profile: ',profile)
-    //   this.submissions = await this.$axios.$get(`/api/users/${profile.id}/submissions`)
-    //   //console.log('submission: ', this.submissions)
-    // })
+    return this.$store.dispatch('auth/watchUserLoaded',async ()=>{
+      const profile = this.$store.state.auth.profile
+      console.log('mounted profile: ',profile)
+      this.submissions = await this.$axios.$get(`/api/users/${profile.id}/submissions`)
+      //console.log('submission: ', this.submissions)
+    })
 
   }
 }
