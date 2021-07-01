@@ -1,7 +1,7 @@
 <template>
   <div v-if="items">
     <v-btn
-      :to="`/moderation/${item.id}/${item.type}/${item.target}`"
+      :to="`/moderation/${item.id}`"
       v-for="(item, index) in items"
       :key="index"
     >

@@ -34,10 +34,13 @@
             >
             </v-text-field>
           </v-card-text>
-          <v-card-actions class='justify-center'>
-            <v-btn 
-              v-for="(action,idx) in reviewActions" 
-              :key="idx" 
+          <div v-if="outdated">
+            Outdated
+          </div>
+          <v-card-actions class='justify-center' v-else>
+            <v-btn
+              v-for="(action,idx) in reviewActions"
+              :key="idx"
               :color="reviewStatusColor(action.status)"
               :disabled="action.disabled"
               @click="handleCreateRiview(action.status)"
@@ -49,7 +52,7 @@
         </v-card>
       </v-col>
     </v-row>
-   
+
   </div>
 </template>
 
@@ -87,7 +90,7 @@ const reviewStatusIcon = status => {
     return 'mdi-clock'
 
   return ''
-} 
+}
 
 
 // const commentWithReplies = cmt =>({...cmt, replies:[]})
@@ -101,6 +104,7 @@ const endpointResolever = (type) => {
 export default {
   components: { CommentSection },
   data: () => ({
+    current: null,
     item: null,
     comments:[],
     reviews:[],
@@ -108,24 +112,31 @@ export default {
     replyId:0,
   }),
 
-  created() {
+  async created() {
       //console.log(this.$route.params)
-      const { modId, type, trickId } = this.$route.params
-      const endpoint = endpointResolever(type)
-      this.$axios.$get(`/api/${endpoint}/${trickId}`,{
+      const { moderationId } = this.$route.params
+
+      const modeItem = await this.$axios.$get(`/api/moderationitems/${moderationId}`,{
+        httpsAgent: agent}
+      )
+      //console.log(modeItem)
+      this.comments = modeItem.comments
+      this.reviews = modeItem.reviews
+
+      // this.$axios.$get(`/api/moderationitems/${modId}/reviews`,{
+      //   httpsAgent: agent}
+      // )
+      // .then(res => this.reviews = res)
+
+      const endpoint = endpointResolever(modeItem.type)
+
+      this.$axios.$get(`/api/${endpoint}/${modeItem.current}`,{
+        httpsAgent: agent}
+      ).then(item => this.current = item )
+
+      this.$axios.$get(`/api/${endpoint}/${modeItem.target}`,{
         httpsAgent: agent}
       ).then(item => this.item = item )
-
-      this.$axios.$get(`/api/moderationitems/${modId}/comments`,{
-        httpsAgent: agent}
-      )
-      //.then(res => this.comments = res.map(commentWithReplies))
-      .then(res => this.comments = res)
-
-      this.$axios.$get(`/api/moderationitems/${modId}/reviews`,{
-        httpsAgent: agent}
-      )
-      .then(res => this.reviews = res)
   },
 
   methods:{
@@ -137,30 +148,30 @@ export default {
     // },
 
     reviewStatusColor,
-    
+
     reviewStatusIcon,
 
     handleSendComment(content){
-      const { modId } = this.$route.params
-      
-      return this.$axios.$post(`/api/moderationitems/${modId}/comments`,{content},{httpsAgent: agent})
+      const { moderationId } = this.$route.params
+
+      return this.$axios.$post(`/api/moderationitems/${moderationId}/comments`,{content},{httpsAgent: agent})
         .then(x => {
           this.comments.push(x)
           console.log('comments: ', this.comments)
-        })  
+        })
     },
 
     handleCreateRiview(status){
-      const { modId } = this.$route.params
+      const { moderationId } = this.$route.params
 
-      return this.$axios.$post(`/api/moderationitems/${modId}/reviews`,
+      return this.$axios.$post(`/api/moderationitems/${moderationId}/reviews`,
         {comment:this.reviewComment, status: status},
         {httpsAgent: agent})
         .then(x => {
           this.reviews.push(x)
           this.reviewComment = ''
           console.log('reviews: ', this.reviews)
-        }) 
+        })
     },
 
   },
@@ -177,9 +188,13 @@ export default {
     approveCount(){
       return this.reviews.filter(x=>x.status ===REVIEW_STATUS.APPROVED).length
     },
+
+    outdated(){
+      return this.current && this.item && (this.item.version - this.current.version) <= 0
+    }
   }
-  
-};  
+
+};
 </script>
 
 <style>

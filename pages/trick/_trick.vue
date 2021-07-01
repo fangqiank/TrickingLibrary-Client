@@ -10,7 +10,7 @@
             </div>
         </template>
 
-        <template v-slot:item>
+        <template v-slot:item="{close}">
             <!-- <v-sheet class="pa-3 sticky"> -->
             <div class="text-h6 text-center">
                 {{getOneTrick.name}}
@@ -41,14 +41,25 @@
                 </v-chip-group>
             </div>
             <!-- </v-sheet> -->
+          <v-divider class="my-1"></v-divider>
+          <div>
+            <v-btn
+                   outlined
+                   small
+                   @click="editHandler();close()"
+            >
+              Edit
+            </v-btn>
+          </div>
         </template>
     </ItemLayout>
 </template>
 
 <script>
-    import {mapState,mapGetters} from 'vuex'
-    import VideoPlayer from '../../components/content-creation/VideoPlayer.vue'
-    import ItemLayout from '../../components/ItemLayout.vue'
+    import {mapState, mapGetters, mapMutations} from 'vuex'
+    import VideoPlayer from '@/components/content-creation/VideoPlayer.vue'
+    import ItemLayout from '@/components/ItemLayout.vue'
+    import TrickSteps from "@/components/content-creation/TrickSteps";
 
     export default {
         data: () =>(
@@ -58,80 +69,94 @@
             }
         ),
 
-        components:{
-            VideoPlayer,
-            ItemLayout
-        },
-
-        computed:{
-            ...mapState('submissions',['submissions']),
-            ...mapState('tricks',['categories','tricks']),
-            ...mapGetters('tricks',['trickById','difficultyById']),
-
-            // getOneTrick() {
-            //     return
-            // },
-
-            getTrickCategories(){
-                //console.log(this.getOneTrick.categories)
-                return this.categories.filter(x=>
-                    this.getOneTrick.categories.indexOf(x.name) >= 0
-                )
-            },
-
-            getRelatedData(){
-                //console.log(this.getOneTrick.progressions)
-                return [
-                    {
-                        title:"Categories",
-                        data:this.categories.filter(x=> this.getOneTrick.categories.indexOf(x.slug) >= 0),
-                        idFactory: c => `category-${c.slug}`,
-                        routeFactory :c => `/category/${c.slug}`
-                    },
-                    {
-                        title:"Prerequisites",
-                        data:this.tricks.filter(x=> this.getOneTrick.prerequisites.indexOf(x.slug) >= 0),
-                        idFactory: c => `trick-${c.slug}`,
-                        routeFactory :c => `/trick/${c.slug}`
-                    },
-                    {
-                        title:"Progressions",
-                        data:this.tricks.filter(x=> this.getOneTrick.progressions.indexOf(x.slug) >= 0),
-                        idFactory: c => `trick-${c.slug}`,
-                        routeFactory :c => `/trick/${c.slug}`
-                    },
-                ]
-            },
-        },
-
-        async fetch(){
-            //console.log(this.$route.params.trick)
-
-            const trickId = this.$route.params.trick
-
-            this.getOneTrick = this.trickById(this.$route.params.trick)
-
-            this.difficulty = this.difficultyById(this.getOneTrick.difficulty)
-
-            await this.$store.dispatch('submissions/fetchSubmissionsForTrick',{trickId},{root:true})
-        },
-
-        head() {
-            if(!this.getOneTrick)
-                return {}
-
-            return {
-                title: this.getOneTrick.name,
-                meta: [
-                // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-                    {
-                        hid: 'description',
-                        name: 'description',
-                        content: this.getOneTrick.description
-                    }
-                ]
+      methods:{
+        ...mapMutations('videos',['activate']),
+        editHandler(){
+          this.activate(
+            {
+              component:TrickSteps,
+              edit: true,
+              editPayload:this.getOneTrick
             }
+          )
         }
+      },
+
+      components:{
+          VideoPlayer,
+          ItemLayout,
+          TrickSteps
+      },
+
+      computed:{
+          ...mapState('submissions',['submissions']),
+          ...mapState('tricks',['categories','tricks']),
+          ...mapGetters('tricks',['trickById','difficultyById']),
+
+          // getOneTrick() {
+          //     return
+          // },
+
+          getTrickCategories(){
+              //console.log(this.getOneTrick.categories)
+              return this.categories.filter(x=>
+                  this.getOneTrick.categories.indexOf(x.name) >= 0
+              )
+          },
+
+          getRelatedData(){
+              //console.log(this.getOneTrick.progressions)
+              return [
+                  {
+                      title:"Categories",
+                      data:this.categories.filter(x=> this.getOneTrick.categories.indexOf(x.slug) >= 0),
+                      idFactory: c => `category-${c.slug}`,
+                      routeFactory :c => `/category/${c.slug}`
+                  },
+                  {
+                      title:"Prerequisites",
+                      data:this.tricks.filter(x=> this.getOneTrick.prerequisites.indexOf(x.slug) >= 0),
+                      idFactory: c => `trick-${c.slug}`,
+                      routeFactory :c => `/trick/${c.slug}`
+                  },
+                  {
+                      title:"Progressions",
+                      data:this.tricks.filter(x=> this.getOneTrick.progressions.indexOf(x.slug) >= 0),
+                      idFactory: c => `trick-${c.slug}`,
+                      routeFactory :c => `/trick/${c.slug}`
+                  },
+              ]
+          },
+      },
+
+      async fetch(){
+          //console.log(this.$route.params.trick)
+
+          const trickId = this.$route.params.trick
+
+          this.getOneTrick = this.trickById(this.$route.params.trick)
+
+          this.difficulty = this.difficultyById(this.getOneTrick.difficulty)
+
+          await this.$store.dispatch('submissions/fetchSubmissionsForTrick',{trickId},{root:true})
+      },
+
+      head() {
+          if(!this.getOneTrick)
+              return {}
+
+          return {
+              title: this.getOneTrick.name,
+              meta: [
+              // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+                  {
+                      hid: 'description',
+                      name: 'description',
+                      content: this.getOneTrick.description
+                  }
+              ]
+          }
+      }
 
     }
 </script>

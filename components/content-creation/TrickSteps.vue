@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import { mapGetters, mapActions, mapMutations, mapState } from "vuex";
 import { close } from "./_shared";
 
 export default {
@@ -99,23 +99,35 @@ export default {
     },
   }),
 
-  computed: {
-    //...mapState('videos',['active']),
+  created() {
+    if(this.editing){
+      Object.assign(this.form, this.editPayload)
+    }
+  },
 
+  computed: {
+    ...mapState('videos',['editing','editPayload']),
     ...mapGetters("tricks", ["categoryItems", "difficultyItems", "trickItems"]),
   },
 
   methods: {
     //...mapMutations('videos',['reset']),
-    ...mapActions("tricks", ["createTrick"]),
+    ...mapActions("tricks", ["createTrick","updateTrick"]),
 
-    handleSave() {
-      //   this.form = {"name":"Test","description":"","difficulty":"ae911c8c-2f72-4a5d-b1d2-51379714dafb","prerequisites":[],"progressions":[],"categories":["43378c81-1e00-4c6c-8083-2ade44d72610","d7c1b799-60d8-404c-a425-c5c725932fa9"]}
+    async handleSave() {
+      //this.form = {"name":"Test","description":"","difficulty":"ae911c8c-2f72-4a5d-b1d2-51379714dafb","prerequisites":[],"progressions":[],"categories":["43378c81-1e00-4c6c-8083-2ade44d72610","d7c1b799-60d8-404c-a425-c5c725932fa9"]}
 
-      //console.log(JSON.stringify(this.form))
-      this.createTrick({
-        form: this.form,
-      });
+      console.log(JSON.stringify(this.form))
+      if(this.editing){
+        await this.updateTrick({
+          form:this.form
+        })
+      }else{
+        await this.createTrick({
+          form: this.form,
+        });
+      }
+
 
       this.close();
 

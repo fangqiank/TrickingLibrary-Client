@@ -86,12 +86,27 @@ export const actions = {
 
         console.log(JSON.stringify(form))
 
-        const trick = this.$axios.$post(
+        const newTrick = this.$axios.$post(
            '/api/tricks',
            form,
           {httpsAgent: agent }
         )
 
-        return trick
-    }
+        return newTrick
+    },
+
+  async updateTrick({state,commit,dispatch},{form}){
+
+    this.$axios.setHeader('Content-Type', 'application/json', ['post','put'])
+
+    // console.log(JSON.stringify(form))
+
+    const updTrick = this.$axios.$put(
+      '/api/tricks',
+      form,
+      {httpsAgent: agent }
+    )
+
+    return updTrick
+  }
 }
