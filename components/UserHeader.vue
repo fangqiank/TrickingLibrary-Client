@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="d-flex align-center">
+  <div class="d-flex align-center" :class="{'flex-row-reverse': reverse}">
     <v-avatar :size="size" class="mx-2">
       <img :src="imageUrl" alt="portrait"/>
     </v-avatar>
@@ -7,6 +7,9 @@
       {{username}}
     </div>
     <v-spacer/>
+    <div v-if="append">
+      {{append}}
+    </div>
   </div>
 </template>
 
@@ -29,6 +32,18 @@ export default {
       required: false,
       type: String,
       default: '42'
+    },
+
+    append:{
+      required: false,
+      type: String,
+      default: ''
+    },
+
+    reverse:{
+      required: false,
+      type: Boolean,
+      default: false
     }
   },
 }

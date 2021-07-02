@@ -1,14 +1,25 @@
 <template>
   <div>
-    <div v-if="item">
-      {{ item.description }}
-    </div>
-
+<!--    <div v-if="item">-->
+<!--      {{ item.description }}-->
+<!--    </div>-->
     <v-row>
-      <v-col cols="7">
+      <v-col cols="8">
+        <v-row justify="center">
+          <v-col cols="4" v-if="current">
+            <TrickInfoCard :trick="current" />
+          </v-col>
+          <v-col cols="4" v-if="current" class="d-flex justify-center">
+            <v-icon size="40">mdi-arrow-right</v-icon>
+          </v-col>
+          <v-col cols="4" v-if="target">
+            <TrickInfoCard :trick="target"/>
+          </v-col>
+        </v-row>
         <CommentSection :comments="comments" @send="handleSendComment"/>
       </v-col>
-      <v-col cols="5">
+
+      <v-col cols="4">
         <v-card>
           <v-card-title>Reviews ({{approveCount}} / {{reviews.length}})</v-card-title>
           <v-card-text>
@@ -59,6 +70,7 @@
 <script>
 import https from "https";
 import CommentSection from '@/components/comments/CommentSection.vue';
+import TrickInfoCard from "../../components/TrickInfoCard";
 
 const agent = new https.Agent({
   rejectUnauthorized: false,
@@ -102,10 +114,10 @@ const endpointResolever = (type) => {
 };
 
 export default {
-  components: { CommentSection },
+  components: {TrickInfoCard, CommentSection },
   data: () => ({
     current: null,
-    item: null,
+    target: null,
     comments:[],
     reviews:[],
     reviewComment:'',
@@ -136,7 +148,7 @@ export default {
 
       this.$axios.$get(`/api/${endpoint}/${modeItem.target}`,{
         httpsAgent: agent}
-      ).then(item => this.item = item )
+      ).then(item => this.target = item )
   },
 
   methods:{
@@ -190,7 +202,7 @@ export default {
     },
 
     outdated(){
-      return this.current && this.item && (this.item.version - this.current.version) <= 0
+      return this.current && this.target && (this.target.version - this.current.version) <= 0
     }
   }
 

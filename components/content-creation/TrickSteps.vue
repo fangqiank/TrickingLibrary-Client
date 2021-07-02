@@ -28,13 +28,15 @@
             ></v-text-field>
 
             <v-select
-              :items="difficultyItems"
+              :items="lists.difficulties.map(x => ({value:x.id,text:x.name}))"
               v-model="form.difficulty"
               label="Difficulty"
             ></v-select>
 
             <v-select
-              :items="trickItems"
+              :items="lists.tricks
+                           .filter(x => !form.id || x.id !== form.id)
+                           .map(x => ({value:x.id,text:x.name}))"
               v-model="form.prerequisites"
               label="Prerequisites"
               multiple
@@ -44,7 +46,9 @@
             ></v-select>
 
             <v-select
-              :items="trickItems"
+              :items="lists.tricks
+                           .filter(x => !form.id || x.id !== form.id)
+                           .map(x => ({value:x.id,text:x.name}))"
               v-model="form.progressions"
               label="Progressions"
               multiple
@@ -53,7 +57,7 @@
               deletable-chips
             ></v-select>
             <v-select
-              :items="categoryItems"
+              :items="lists.categories.map(x => ({value:x.id,text:x.name}))"
               v-model="form.categories"
               label="Categories"
               multiple
@@ -79,7 +83,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import { close } from "./_shared";
 
 export default {
@@ -107,7 +111,7 @@ export default {
 
   computed: {
     ...mapState('videos',['editing','editPayload']),
-    ...mapGetters("tricks", ["categoryItems", "difficultyItems", "trickItems"]),
+    ...mapState("tricks", ["lists"]),
   },
 
   methods: {
