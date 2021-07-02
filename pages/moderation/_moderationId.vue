@@ -71,6 +71,7 @@
 import https from "https";
 import CommentSection from '@/components/comments/CommentSection.vue';
 import TrickInfoCard from "../../components/TrickInfoCard";
+import {guard, GUARD_LEVEL} from "../../components/auth/AuthMixings";
 
 const agent = new https.Agent({
   rejectUnauthorized: false,
@@ -123,6 +124,8 @@ export default {
     reviewComment:'',
     replyId:0,
   }),
+
+  mixins: [guard(GUARD_LEVEL.AUTH)],
 
   async created() {
       //console.log(this.$route.params)

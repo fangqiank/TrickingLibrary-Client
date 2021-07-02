@@ -12,7 +12,7 @@ const initState = () => ({
     uploadCancelSource: null,
     editing: false,
     editPayload :null,
-    //type:'',
+    setup:null,
 })
 
 //import {UPLOAD_TYPE} from '../data/enum'
@@ -20,12 +20,15 @@ const initState = () => ({
 export const state = initState
 
 export const mutations = {
-    activate(state,{component, edit=false, editPayload=null}){
+    activate(state,{component, edit=false, editPayload=null, setup = null}){
       state.active = true
       state.component = component
       if(edit){
         state.editing = true
         state.editPayload =editPayload
+      }
+      if(setup){
+        state.setup = setup
       }
     },
 

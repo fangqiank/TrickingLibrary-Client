@@ -1,4 +1,4 @@
-import {mapActions} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 
 export const close = {
     methods:{
@@ -8,4 +8,22 @@ export const close = {
         }
     }
 }
+
+export const formPLus = (formFactory) => (
+  {
+    data:() => (
+      {
+        form: formFactory()
+      }
+    ),
+
+    created() {
+      this.setup(this.form)
+    },
+
+    computed:{
+      ...mapState("videos", ["setup"]),
+    }
+  }
+)
 

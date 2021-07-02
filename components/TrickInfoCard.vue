@@ -30,33 +30,57 @@
     </div>
     <!-- </v-sheet> -->
     <v-divider class="my-2" />
+
+    <IfAuthenticated>
+      <template v-slot:allowed>
+        <div>
+          <v-btn
+            outlined
+            small
+            @click="editHandler();close()"
+          >
+            Edit
+          </v-btn>
+
+          <v-btn
+            outlined
+            small
+            @click="uploadHandler();close()"
+          >
+            Upload
+          </v-btn>
+        </div>
+
+      </template>
+
+      <template v-slot:forbidden="{login}">
+        <v-btn small outlined @click="login">
+          <v-icon left>mdi-account-circle</v-icon> Log in to edit/update
+        </v-btn>
+      </template>
+    </IfAuthenticated>
+
+    <v-divider class="my-2" />
     <UserHeader :username="trick.user.username"
                 :imageUrl="trick.user.image"
-                append="Edited by"
+                :append="trick.version === 1 ? `Created by` :`Edited by`"
                 reverse
                 class="mb-2"
     />
-    <v-divider class="my-2" />
-    <div>
-      <v-btn
-        outlined
-        small
-        @click="editHandler();close()"
-      >
-        Edit
-      </v-btn>
-    </div>
+
   </div>
 </template>
 
 <script>
-import {mapMutations, mapState} from "vuex";
-import UserHeader from "./UserHeader";
-import TrickSteps from "./content-creation/TrickSteps";
+import {mapMutations, mapState} from "vuex"
+import UserHeader from "./UserHeader"
+import TrickSteps from "./content-creation/TrickSteps"
+import SubmissionSteps from "./content-creation/SubmissionSteps"
+import IfAuthenticated from "./auth/IfAuthenticated";
 
 export default {
   name: "TrickInfoCard",
-  components: {TrickSteps, UserHeader},
+  components: {IfAuthenticated, TrickSteps, UserHeader},
   props:{
     trick:{
       required: true,
@@ -122,11 +146,18 @@ export default {
     editHandler(){
       this.activate(
         {
-          component:TrickSteps,
+          component: TrickSteps,
           edit: true,
-          editPayload:this.trick
+          editPayload: this.trick
         }
       )
+    },
+
+    uploadHandler(){
+      this.activate({
+          component: SubmissionSteps,
+          setup: (form) => form.trickId = this.trick.slug
+        })
     }
   },
 }

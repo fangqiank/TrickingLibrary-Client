@@ -37,7 +37,7 @@
 
 <script>
 //import {UPLOAD_TYPE} from '../../data/enum'
-import {mapState,mapMutations} from 'vuex';
+import {mapState,mapMutations,mapGetters} from 'vuex';
 import TrickSteps from './TrickSteps.vue'
 import SubmissionSteps  from './SubmissionSteps.vue'
 import CategoryForm from './CategoryForm.vue';
@@ -48,22 +48,23 @@ export default {
    components:{TrickSteps,SubmissionSteps,CategoryForm,DifficultyForm},
    data() {
       return {
-       
+
       }
    },
 
    computed:{
     ...mapState('videos',['active','component']),
+    ...mapGetters('auth',['moderator']),
     menuItems(){
         return  [
-            {component: TrickSteps, title:'Trick'},
-            {component: SubmissionSteps, title:'Submission'},
-            {component: CategoryForm, title:'Category'},
-            {component: DifficultyForm, title:'Difficulty'},
-        ]
+            {component: TrickSteps, title: 'Trick', display: true},
+            {component: SubmissionSteps, title: 'Submission', display: true},
+            {component: CategoryForm, title: 'Category', display: this.moderator},
+            {component: DifficultyForm, title: 'Difficulty', display: this.moderator},
+        ].filter(x => x.display)
     }
    },
-   
+
    methods: {
      ...mapMutations('videos',['activate']),
    }
