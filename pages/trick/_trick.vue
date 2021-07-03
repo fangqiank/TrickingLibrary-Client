@@ -3,7 +3,7 @@
     <ItemLayout>
         <template v-slot:content>
 <!--            <div v-if="submissions" class="mx-3">-->
-          <Submission :mission="item" v-for="(item,idx) in submissions" :key="idx"/>
+          <SubmissionFeed :loadSubmissions = "loadSubmissionsHandler"/>
 <!--            </div>-->
         </template>
 
@@ -59,29 +59,40 @@
     import TrickSteps from "@/components/content-creation/TrickSteps"
     import Submission from "@/components/Submission";
     import TrickInfoCard from "@/components/TrickInfoCard";
+    import https from 'https'
+    import SubmissionFeed from "@/components/SubmissionFeed";
+
+    const agent = new https.Agent({
+      rejectUnauthorized: false
+    })
 
     export default {
         data: () =>(
             {
-                getOneTrick:null,
+                //getOneTrick:null,
                 //difficulty:null
             }
         ),
 
-      // methods:{
-      //   ...mapMutations('videos',['activate']),
-      //   editHandler(){
-      //     this.activate(
-      //       {
-      //         component:TrickSteps,
-      //         edit: true,
-      //         editPayload:this.getOneTrick
-      //       }
-      //     )
-      //   }
-      // },
+      methods:{
+        // ...mapMutations('videos',['activate']),
+        // editHandler(){
+        //   this.activate(
+        //     {
+        //       component:TrickSteps,
+        //       edit: true,
+        //       editPayload:this.getOneTrick
+        //     }
+        //   )
+        // }
+        loadSubmissionsHandler(query){
+          //console.log(query)
+          return this.$axios.$get(`/api/tricks/${this.getOneTrick.slug}/submissions${query}`,{httpsAgent: agent })
+        }
+      },
 
       components:{
+        SubmissionFeed,
         TrickInfoCard,
         Submission,
         ItemLayout,
@@ -89,8 +100,12 @@
       },
 
       computed:{
-          ...mapState('submissions',['submissions']),
+          //...mapState('submissions',['submissions']),
           ...mapState('tricks',['dictionaries']),
+
+        getOneTrick(){
+            return this.dictionaries.tricks[this.$route.params.trick]
+          }
       //
       //     //...mapGetters('tricks',['trickById','difficultyById']),
       //
@@ -131,17 +146,16 @@
 
       },
 
-      async fetch(){
+      //async fetch(){
           //console.log(this.$route.params.trick)
 
-          const trickSlug = this.$route.params.trick
-
-          this.getOneTrick = this.dictionaries.tricks[trickSlug]
+          //this.getOneTrick =
 
           //this.difficulty = this.dictionaries.difficulties[this.getOneTrick.difficulty]
 
-          await this.$store.dispatch('submissions/fetchSubmissionsForTrick',{trickId: trickSlug},{root:true})
-      },
+          //await this.$store.dispatch('submissions/fetchSubmissionsForTrick',{trickId: trickSlug},{root:true})
+
+      //},
 
       head() {
           if(!this.getOneTrick)

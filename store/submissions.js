@@ -1,6 +1,6 @@
 import https from 'https'
 
-const agent = new https.Agent({  
+const agent = new https.Agent({
     rejectUnauthorized: false
 })
 
@@ -24,7 +24,7 @@ export const mutations = {
 
 export const actions = {
     async fetchSubmissionsForTrick({$axios,commit},{trickId}){
-        const submissions = await this.$axios.$get(`https://localhost:5001/api/tricks/${trickId}/submissions`,{httpsAgent: agent })
+        const submissions = await this.$axios.$get(`/api/tricks/${trickId}/submissions`,{httpsAgent: agent })
         //console.log(submissions)
         commit('setSubmissions', {submissions})
     },

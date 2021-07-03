@@ -73,6 +73,11 @@
 <script>
 import {mapActions, mapMutations, mapState} from "vuex";
 import {close, formPLus} from "./_shared";
+import https from 'https'
+
+const agent = new https.Agent({
+  rejectUnauthorized: false
+})
 
 export default {
   name: "SubmissionSteps",
@@ -105,7 +110,7 @@ export default {
   methods: {
     ...mapMutations("videos", ["hide"]),
 
-    ...mapActions("videos", ["startVideoUpload", "createSubmission"]),
+    ...mapActions("videos", ["startVideoUpload"]),
 
     async handleFile(file) {
       if (!file) return;
@@ -117,8 +122,8 @@ export default {
     },
 
     handleSave() {
-      this.createSubmission({ form: this.form });
-
+      //this.createSubmission({ form: this.form });
+      this.$axios.$post('/api/submissions',this.form,{httpsAgent: agent })
       this.hide();
 
       //Object.assign(this.$data,initState())

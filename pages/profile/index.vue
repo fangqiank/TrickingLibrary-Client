@@ -1,6 +1,7 @@
 ﻿<template xmlns="">
   <ItemLayout>
     <template v-slot:content>
+      <SubmissionFeed :loadSubmissions="loadSubmissionsHandler"/>
       <Submission :mission="item" v-for="(item,idx) in submissions" :key="idx"/>
 <!--      <div v-if="submissions" class="mx-3">-->
 <!--        <v-card v-for="item in submissions" :key=item.Id class="mb-3">-->
@@ -42,11 +43,13 @@
 <script>
 import ItemLayout from '@/components/ItemLayout'
 import {mapMutations, mapState} from "vuex";
-import Submission from "../../components/Submission";
-import {guard, GUARD_LEVEL} from "../../components/auth/AuthMixings";
+import Submission from "@/components/Submission";
+import {guard, GUARD_LEVEL} from "@/components/auth/AuthMixings";
+import SubmissionFeed from "@/components/SubmissionFeed";
 
 export default {
   components:{
+    SubmissionFeed,
     Submission,
     ItemLayout
   },
@@ -73,7 +76,7 @@ export default {
       const formData = new FormData()
       formData.append('image',inputFile.files[0])
 
-      console.log(inputFile)
+      //console.log(inputFile)
 
       return this.$axios.$put('/api/users/whoami/image', formData)
        .then(profile =>{
@@ -83,18 +86,22 @@ export default {
        })
     },
 
-    ...mapMutations('auth',['saveProfile'])
+    ...mapMutations('auth',['saveProfile']),
+
+    loadSubmissionsHandler(query){
+      const profile = this.$store.state.auth.profile
+      return this.$axios.$get(`/api/users/${profile.id}/submissions${query}`)
+    }
   },
 
-  mounted(){
-    return this.$store.dispatch('auth/watchUserLoaded',async ()=>{
-      const profile = this.$store.state.auth.profile
-      console.log('mounted profile: ',profile)
-      this.submissions = await this.$axios.$get(`/api/users/${profile.id}/submissions`)
-      //console.log('submission: ', this.submissions)
-    })
-
-  }
+  // mounted(){
+  //   return this.$store.dispatch('auth/watchUserLoaded',async ()=>{
+  //     //console.log('mounted profile: ',profile)
+  //     this.submissions = await
+  //     //console.log('submission: ', this.submissions)
+  //   })
+  //
+  // }
 }
 </script>
 
