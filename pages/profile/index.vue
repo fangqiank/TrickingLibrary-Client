@@ -89,8 +89,8 @@ export default {
     ...mapMutations('auth',['saveProfile']),
 
     loadSubmissionsHandler(query){
-      const profile = this.$store.state.auth.profile
-      return this.$axios.$get(`/api/users/${profile.id}/submissions${query}`)
+      console.log(this.$store.state.auth.profile)
+      return this.$axios.$get(`/api/users/${this.$store.state.auth.profile.id}/submissions${query}`)
     }
   },
 

@@ -1,19 +1,28 @@
 <template>
   <div>
-      <v-text-field 
-        label="Comment" 
+      <v-text-field
+        label="Comment"
         v-model="content"
         clearable
         @keydown.ctrl.enter="$emit('sendNewComment',content)"
       ></v-text-field>
-      <v-btn v-if="$listeners['cancelSend']"  @click="$emit('cancelSend')">Cancel</v-btn>
-      <v-btn @click="$emit('sendNewComment',content)" :disabled="!content">{{label}}</v-btn>
+      <v-btn @click="cancel">Cancel</v-btn>
+      <v-btn @click="sendComment">{{label}}</v-btn>
   </div>
 </template>
 
 <script>
+import {configurable, creator} from "./_share";
+import https from 'https'
+
+const agent = new https.Agent({
+  rejectUnauthorized: false
+})
+
 export default {
-  name:'CommentInput',
+  name: 'CommentInput',
+
+  mixins: [creator, configurable],
 
   data:()=>(
       {
@@ -28,6 +37,20 @@ export default {
           default:'send'
       }
   },
+
+  methods:{
+    sendComment(){
+      const data = {
+        parentId: this.parentId,
+        parentType: this.parentType,
+        content: this.content
+      }
+
+      return this.$axios.$post('/api/comments', data,{httpsAgent: agent })
+      .then(this.emitComment)
+      .then(this.cancel)
+    }
+  }
 }
 </script>
 

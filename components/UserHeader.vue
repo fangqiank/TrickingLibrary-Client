@@ -25,7 +25,8 @@ export default {
 
     username:{
       required: false,
-      type: String
+      type: String,
+      default:''
     },
 
     size:{
