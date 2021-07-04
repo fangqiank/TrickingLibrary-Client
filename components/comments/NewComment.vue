@@ -4,18 +4,28 @@
       :comment="comment"
       :parent-id="comment.id"
       :parent-type="commentParentType"
-      @comment-create = "appendComment"
-      @loadReplies ="handleLoadReplies"
+      @comment-create = "c => content.push(c)"
+      @[loadRepliesHandler] ="loadContentsHandler"
     />
 
     <div class='ml-5'>
-      <CommentBody v-for="(c,idx) in comments"
+      <CommentBody v-for="(c,idx) in content"
                    :comment="c"
                    :key='idx'
                    :parent-id="comment.id"
                    :parent-type="commentParentType"
-                   @comment-create = "appendComment"
+                   @comment-create = "x => content.push(x)"
      />
+
+    <div class="d-flex justify-center" v-if="content.length > 0 && !finished">
+      <v-btn
+        outlined
+        small
+        @click="loadContentsHandler"
+      >
+        load more
+      </v-btn>
+    </div>
     </div>
   </div>
 </template>
@@ -23,7 +33,8 @@
 <script>
 import CommentBody from './CommentBody.vue'
 import https from "https"
-import {COMMENTS_PARENT_TYPE, container} from "./_share";
+import {COMMENTS_PARENT_TYPE} from "./_share";
+import {feed} from "../../mixins/feed";
 
 const agent = new https.Agent({
   rejectUnauthorized: false,
@@ -32,7 +43,7 @@ const agent = new https.Agent({
 export default {
   name:'NewComment',
 
-  mixins:[container],
+  mixins:[feed('first')],
 
   components:{
     CommentBody
@@ -54,6 +65,11 @@ export default {
   computed:{
     commentParentType(){
       return COMMENTS_PARENT_TYPE.COMMENT
+    },
+
+    loadRepliesHandler(){
+      return this.content.length === 0
+      ? 'loadReplies' : ''
     }
   },
 
@@ -68,10 +84,14 @@ export default {
     //   })
     // },
 
-    handleLoadReplies(){
-      this.$axios.$get(`/api/comments/${this.comment.id}/replies`)
-      .then(x => this.comments = x)
-    }
+    getContentUrl() {
+      return `/api/comments/${this.comment.id}/${this.commentParentType}${this.query}`;
+    },
+
+    // loadRepliesHandler(){
+    //   this.$axios.$get(`/api/comments/${this.comment.id}/replies`)
+    //   .then(x => this.comments = x)
+    // }
   }
 }
 

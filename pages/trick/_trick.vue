@@ -3,7 +3,7 @@
     <ItemLayout>
         <template v-slot:content>
 <!--            <div v-if="submissions" class="mx-3">-->
-          <SubmissionFeed :loadSubmissions = "loadSubmissionsHandler"/>
+          <SubmissionFeed :contentEndPoint = "`/api/tricks/${getOneTrick.slug}/submissions`"/>
 <!--            </div>-->
         </template>
 
@@ -85,10 +85,11 @@
         //     }
         //   )
         // }
-        loadSubmissionsHandler(query){
-          //console.log(query)
-          return this.$axios.$get(`/api/tricks/${this.getOneTrick.slug}/submissions${query}`,{httpsAgent: agent })
-        }
+
+        // loadSubmissionsHandler(query){
+        //   console.log(query)
+        //   return this.$axios.$get(`/api/tricks/${this.getOneTrick.slug}/submissions${query}`,{httpsAgent: agent })
+        // }
       },
 
       components:{

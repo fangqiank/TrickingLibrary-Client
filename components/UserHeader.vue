@@ -1,7 +1,10 @@
 ﻿<template>
   <div class="d-flex align-center" :class="{'flex-row-reverse': reverse}">
     <v-avatar :size="size" class="mx-2">
-      <img :src="imageUrl" alt="portrait"/>
+      <img v-if="imageUrl" :src="imageUrl" alt="portrait"/>
+      <v-icon v-else>
+        mdi-account
+      </v-icon>
     </v-avatar>
     <div v-if="username">
       {{username}}

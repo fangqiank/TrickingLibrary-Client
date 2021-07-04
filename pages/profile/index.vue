@@ -1,8 +1,8 @@
 ﻿<template xmlns="">
   <ItemLayout>
     <template v-slot:content>
-      <SubmissionFeed :loadSubmissions="loadSubmissionsHandler"/>
-      <Submission :mission="item" v-for="(item,idx) in submissions" :key="idx"/>
+      <SubmissionFeed :contentEndPoint="`/api/users/${$store.state.auth.profile.id}/submissions`"/>
+<!--      <Submission :mission="item" v-for="(item,idx) in submissions" :key="idx"/>-->
 <!--      <div v-if="submissions" class="mx-3">-->
 <!--        <v-card v-for="item in submissions" :key=item.Id class="mb-3">-->
 <!--          <VideoPlayer :video="item.video.videoLink" :thumb="item.video.thumbnailLink"/>-->
@@ -87,11 +87,6 @@ export default {
     },
 
     ...mapMutations('auth',['saveProfile']),
-
-    loadSubmissionsHandler(query){
-      console.log(this.$store.state.auth.profile)
-      return this.$axios.$get(`/api/users/${this.$store.state.auth.profile.id}/submissions${query}`)
-    }
   },
 
   // mounted(){
