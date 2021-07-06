@@ -1,43 +1,53 @@
 <template>
-  <div v-if="items">
-    <v-btn
-      :to="`/moderation/${item.id}`"
-      v-for="(item, index) in items"
-      :key="index"
-    >
-      {{ item.target}}
-    </v-btn>
+  <div>
+    <v-list>
+      <v-list-item
+        :to="`/moderation/${item.id}`"
+        v-for="(item, index) in content"
+        :key="index"
+      >
+        <v-list-item-avatar>
+<!--          <v-icon>mdi-account</v-icon>-->
+          <user-header :image-url="item.targetObject.user.image" />
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>Title</v-list-item-title>
+          <v-list-item-subtitle>Sub Title</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </div>
 </template>
 
 <script>
-import https from "https";
-// import {guard, GUARD_LEVEL} from "../../components/auth/AuthMixings";
-
-const agent = new https.Agent({
-  rejectUnauthorized: false,
-});
+//import agent from "@/store/httpsAgent";
+import {feed} from "@/mixins/feed";
+import {modItemRender} from "@/mixins/moderation";
 
 export default {
   data: () => ({
     items: [],
   }),
 
-  // mixins: [guard(GUARD_LEVEL.AUTH)],
+  mixins: [feed(''), modItemRender],
 
-  methods: {
-    async fetchData() {
-      if(process.server)
-        return
-
-      this.items = await this.$axios.$get("/api/moderationitems", {
-        httpsAgent: agent,
-      });
-    },
+  fetch(){
+    return this.loadContentsHandler()
   },
 
-  mounted() {
-    this.fetchData();
+  methods: {
+    getContentUrl(){
+      return `/api/moderationitems${this.query}`
+    },
+
+    parseContentHandler(content){
+      const {moderationItems, targets} = content
+      console.log('moderation????: ',content)
+      this.content = moderationItems.map(x => ({
+        ...x,
+        targetObject: targets.find(t=>t.id === x.target)
+      }))
+    }
   },
 };
 </script>

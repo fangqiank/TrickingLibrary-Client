@@ -13,11 +13,7 @@
 
 <script>
 import {configurable, creator} from "./_share";
-import https from 'https'
-
-const agent = new https.Agent({
-  rejectUnauthorized: false
-})
+import agent from "@/store/httpsAgent";
 
 export default {
   name: 'CommentInput',
@@ -46,7 +42,7 @@ export default {
         content: this.content
       }
 
-      return this.$axios.$post('/api/comments', data,{httpsAgent: agent })
+      return this.$axios.$post('/api/comments', data,{httpsAgent: agent() })
       .then(this.emitComment)
       .then(this.cancel)
     }

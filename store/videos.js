@@ -1,8 +1,4 @@
-import https from 'https'
-
-const agent = new https.Agent({
-    rejectUnauthorized: false,
-})
+import agent from "@/store/httpsAgent";
 
 const initState = () => ({
     uploadPromise: null,
@@ -82,7 +78,7 @@ export const actions = {
 
         const uploadPromise = this.$axios.post('/api/files',form,
          {progress:false, cancelToken:source.token},
-         {httpsAgent: agent })
+         {httpsAgent: agent() })
            .then(res =>{
              //console.log('res: ',res)
              const {data} = res

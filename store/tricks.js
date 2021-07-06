@@ -1,8 +1,4 @@
-import https from 'https'
-
-const agent = new https.Agent({
-    rejectUnauthorized: false
-})
+import agent from "@/store/httpsAgent";
 
 const initState = () => ({
     dictionaries:{
@@ -87,11 +83,14 @@ export const actions = {
     async fetchTricks({commit}){
       return Promise.all(
         [
-          this.$axios.$get('/api/tricks',{httpsAgent: agent })
-            .then(tricks => commit('setTricks',{tricks})),
-          this.$axios.$get('/api/difficulties',{httpsAgent: agent })
+          this.$axios.$get('/api/tricks',{httpsAgent: agent() })
+            .then(tricks => {
+              console.log('Tricks: ', tricks)
+              commit('setTricks',{tricks})
+             }),
+          this.$axios.$get('/api/difficulties',{httpsAgent: agent() })
             .then(difficulties => commit('setDifficulties',{difficulties})),
-          this.$axios.$get('/api/categories',{httpsAgent: agent })
+          this.$axios.$get('/api/categories',{httpsAgent: agent() })
             .then(categories => commit('setCategories',{categories}))
         ]
       )
@@ -111,12 +110,10 @@ export const actions = {
 
         this.$axios.setHeader('Content-Type', 'application/json', ['post','put'])
 
-        console.log(JSON.stringify(form))
-
         const newTrick = this.$axios.$post(
            '/api/tricks',
            form,
-          {httpsAgent: agent }
+          //{httpsAgent: agent() }
         )
 
         return newTrick
@@ -131,7 +128,7 @@ export const actions = {
     const updTrick = this.$axios.$put(
       '/api/tricks',
       form,
-      {httpsAgent: agent }
+      {httpsAgent: agent() }
     )
 
     return updTrick

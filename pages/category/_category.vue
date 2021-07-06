@@ -20,13 +20,11 @@
 
 <script>
     import {mapState} from 'vuex'
-    import https from 'https'
+    import agent from "@/store/httpsAgent";
     import TrickList from '../../components/content-creation/TrickList.vue'
     import ItemLayout from '../../components/ItemLayout.vue'
 
-    const agent = new https.Agent({
-        rejectUnauthorized: false
-    })
+
 
     export default {
         components:{TrickList,ItemLayout},
@@ -60,7 +58,7 @@
             this.category = this.dictionaries.categories[categoryId]
 
             this.tricks = await this.$axios.$get(`/api/categories/${categoryId}/tricks`
-            ,{httpsAgent: agent })
+            ,{httpsAgent: agent() })
         },
 
         head() {

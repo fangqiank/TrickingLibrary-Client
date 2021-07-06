@@ -54,7 +54,7 @@
               :key="idx"
               :color="reviewStatusColor(action.status)"
               :disabled="action.disabled"
-              @click="handleCreateRiview(action.status)"
+              @click="createRiviewHandler(action.status)"
             >
               <v-icon class='mr-2'>{{reviewStatusIcon(action.status)}}</v-icon>
               {{action.title}}
@@ -67,55 +67,17 @@
 </template>
 
 <script>
-import https from "https";
+import agent from "@/store/httpsAgent";
 import CommentSection from '@/components/comments/CommentSection.vue';
 import TrickInfoCard from "../../components/TrickInfoCard";
 //import {guard, GUARD_LEVEL} from "../../components/auth/AuthMixings";
-import {COMMENTS_PARENT_TYPE} from "../../components/comments/_share";
-
-const agent = new https.Agent({
-  rejectUnauthorized: false,
-});
-
-const REVIEW_STATUS = {
-  APPROVED: 0,
-  REJECTED: 1,
-  WAITING: 2
-}
-
-const reviewStatusColor = status => {
-  if(status === REVIEW_STATUS.APPROVED )
-    return 'green'
-  if(status === REVIEW_STATUS.REJECTED )
-    return 'red'
-  if(status === REVIEW_STATUS.WAITING )
-    return 'orange'
-
-  return ''
-}
-
-const reviewStatusIcon = status => {
-  if(status === REVIEW_STATUS.APPROVED )
-    return 'mdi-check'
-  if(status === REVIEW_STATUS.REJECTED )
-    return 'mdi-close'
-  if(status === REVIEW_STATUS.WAITING )
-    return 'mdi-clock'
-
-  return ''
-}
-
-
-// const commentWithReplies = cmt =>({...cmt, replies:[]})
-
-const endpointResolever = (type) => {
-  if (type === "trick") {
-    return "tricks";
-  }
-};
+import {COMMENTS_PARENT_TYPE} from "@/components/comments/_share";
+import {modItemRender, REVIEW_STATUS} from "@/mixins/moderation";
 
 export default {
   components: {TrickInfoCard, CommentSection },
+
+  mixins: [modItemRender],
 
   data: () => ({
     current: null,
@@ -133,9 +95,9 @@ export default {
       const{moderationId} = this.$route.params
 
       this.modItem = await this.$axios.$get(`/api/moderationitems/${moderationId}`,{
-        httpsAgent: agent}
+        httpsAgent: agent()}
       )
-      console.log('modItem: ', this.modItem)
+      //console.log('modItem: ', this.modItem)
 
       const {type,current,target} = this.modItem
       this.comments = this.modItem.comments
@@ -146,14 +108,14 @@ export default {
       // )
       // .then(res => this.reviews = res)
 
-      const endpoint = endpointResolever(type)
+      const endpoint = this.endpointResolver(type)
 
       this.$axios.$get(`/api/${endpoint}/${current}`,{
-        httpsAgent: agent}
+        httpsAgent: agent()}
       ).then(item => this.current = item )
 
       this.$axios.$get(`/api/${endpoint}/${target}`,{
-        httpsAgent: agent}
+        httpsAgent: agent()}
       ).then(item => this.target = item )
   },
 
@@ -165,26 +127,22 @@ export default {
     //   .then(comments=>this.$set(comment,'replies',comments))
     // },
 
-    reviewStatusColor,
-
-    reviewStatusIcon,
-
-    handleSendComment(content){
+    sendCommentHandler(content){
       const { moderationId } = this.$route.params
 
-      return this.$axios.$post(`/api/moderationitems/${moderationId}/comments`,{content},{httpsAgent: agent})
+      return this.$axios.$post(`/api/moderationitems/${moderationId}/comments`,{content},{httpsAgent: agent()})
         .then(x => {
           this.comments.push(x)
           console.log('comments: ', this.comments)
         })
     },
 
-    handleCreateRiview(status){
+    createRiviewHandler(status){
       const { moderationId } = this.$route.params
 
       return this.$axios.$post(`/api/moderationitems/${moderationId}/reviews`,
         {comment:this.reviewComment, status: status},
-        {httpsAgent: agent})
+        {httpsAgent: agent()})
         .then(x => {
           this.reviews.push(x)
           this.reviewComment = ''

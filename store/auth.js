@@ -1,8 +1,4 @@
-import https from 'https'
-
-const agent = new https.Agent({
-  rejectUnauthorized: false
-})
+import agent from "@/store/httpsAgent";
 
 const initState = () => ({
     //user:null,
@@ -43,7 +39,8 @@ export const mutations = {
 
 export const actions = {
     initialize({commit}) {
-      return this.$axios.$get('/api/users/whoami',{httpsAgent: agent })
+      //console.log('agent: ',agent())
+      return this.$axios.$get('/api/users/whoami',{httpsAgent: agent() })
         .then(profile => {
           console.log('profile: ', profile)
           commit('saveProfile', {profile})
@@ -77,14 +74,23 @@ export const actions = {
     //    .finally(() => commit('finishLoading'))
     // },
 
-    loginHandler(){
-      if(process.server)
-        return
+  loginHandler(){
+    if(process.server)
+      return
 
-      localStorage.setItem('post-login-redirect-path',location.pathname)
-        //return this.$auth.signinRedirect()
-      window.location = this.$config.auth.loginPath
-    },
+    //localStorage.setItem('post-login-redirect-path',location.pathname)
+      //return this.$auth.signinRedirect()
+    const returnUrl = encodeURIComponent(location.href)
+    window.location = `${this.$config.auth.loginPath}?returnUrl=${returnUrl}`
+  },
+
+  logoutHandler(){
+    if(process.server)
+      return
+
+    const returnUrl = encodeURIComponent(location.href)
+    window.location = `${this.$config.auth.logoutPath}`
+  },
   // Eye on
 
   /*

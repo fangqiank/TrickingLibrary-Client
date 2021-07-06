@@ -20,12 +20,8 @@
 import ItemLayout from '@/components/ItemLayout'
 import Submission from "@/components/Submission";
 import SubmissionFeed from "@/components/SubmissionFeed";
-import https from 'https'
+import agent from "@/store/httpsAgent";
 import UserHeader from "../../components/UserHeader";
-
-const agent = new https.Agent({
-  rejectUnauthorized: false
-})
 
 export default {
   components:{
@@ -44,7 +40,7 @@ export default {
   async fetch() {
     console.log(this.$route.params)
     const {username} = this.$route.params
-    this.profile = await this.$axios.$get(`/api/users/${username}`,{httpsAgent: agent })
+    this.profile = await this.$axios.$get(`/api/users/${username}`,{httpsAgent: agent() })
   }
 }
 </script>

@@ -1,8 +1,4 @@
-﻿import https from 'https'
-
-const agent = new https.Agent({
-  rejectUnauthorized: false
-})
+﻿import agent from "@/store/httpsAgent";
 
 export const feed = (order, /*waitAuth = false*/) =>({
   data:()=>(
@@ -66,24 +62,21 @@ export const feed = (order, /*waitAuth = false*/) =>({
     },
 
     loadContentsHandler(){
-      if(process.server)
-        return
-
-      // if(!this.enabled)
-      //   return
-
       this.loading = true
       this.started = true
 
-      return this.$axios.$get(this.getContentUrl(),{httpsAgent: agent })
+      return this.$axios.$get(this.getContentUrl(),{httpsAgent: agent() })
         .then(content => {
-          console.log(content)
+         // console.log('load content: ', content)
           this.finished= content.length < this.limit
-          content.forEach(x => this.content.push(x))
+          this.parseContentHandler(content)
           this.cursor += content.length
-
         })
         .finally(()=>this.loading = false)
     },
+
+    parseContentHandler(content){
+      content.forEach(x => this.content.push(x))
+    }
   },
 })

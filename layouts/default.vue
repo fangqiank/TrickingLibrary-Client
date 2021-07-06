@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import {mapGetters, mapState} from 'vuex'
+import {mapActions, mapGetters, mapState} from 'vuex'
 //import Upload from '../components/Upload.vue'
 import ContentCreationDialog from "../components/content-creation/ContentCreationDialog.vue";
 import IfAuthenticated from "../components/auth/IfAuthenticated";
@@ -168,9 +168,7 @@ export default {
   // }
 
   methods: {
-    logoutHandler(){
-      console.log('logged out')
-    }
+    ...mapActions('auth',['logoutHandler']),
   },
 };
 </script>
