@@ -4,7 +4,7 @@ const agent = new https.Agent({
   rejectUnauthorized: false
 })
 
-export const feed = (order, waitAuth = false) =>({
+export const feed = (order, /*waitAuth = false*/) =>({
   data:()=>(
     {
       content: [],
@@ -14,7 +14,7 @@ export const feed = (order, waitAuth = false) =>({
       order: order,
       finished: false,
       loading: false,
-      enabled: !waitAuth
+      //enabled: !waitAuth
     }
   ),
 
@@ -25,13 +25,14 @@ export const feed = (order, waitAuth = false) =>({
     }
   },
 
-  created(){
+  //remove oidc approach
+  /* created(){
     return this.$store.dispatch('auth/watchUserLoaded')
       .then(() => {
         this.enabled = true
         this.loadContentsHandler()
       })
-  },
+  },*/
 
   watch:{
     'order': function (){
@@ -68,8 +69,8 @@ export const feed = (order, waitAuth = false) =>({
       if(process.server)
         return
 
-      if(!this.enabled)
-        return
+      // if(!this.enabled)
+      //   return
 
       this.loading = true
       this.started = true

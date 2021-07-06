@@ -44,7 +44,7 @@
 import ItemLayout from '@/components/ItemLayout'
 import {mapMutations, mapState} from "vuex";
 import Submission from "@/components/Submission";
-import {guard, GUARD_LEVEL} from "@/components/auth/AuthMixings";
+//import {guard, GUARD_LEVEL} from "@/components/auth/AuthMixings";
 import SubmissionFeed from "@/components/SubmissionFeed";
 
 export default {
@@ -65,7 +65,7 @@ export default {
     }
   ),
 
-  mixins: [guard(GUARD_LEVEL.AUTH)],
+  //mixins: [guard(GUARD_LEVEL.AUTH)],
 
   methods:{
     changeProfileImage(e){

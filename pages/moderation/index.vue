@@ -12,7 +12,7 @@
 
 <script>
 import https from "https";
-import {guard, GUARD_LEVEL} from "../../components/auth/AuthMixings";
+// import {guard, GUARD_LEVEL} from "../../components/auth/AuthMixings";
 
 const agent = new https.Agent({
   rejectUnauthorized: false,
@@ -23,7 +23,7 @@ export default {
     items: [],
   }),
 
-  mixins: [guard(GUARD_LEVEL.AUTH)],
+  // mixins: [guard(GUARD_LEVEL.AUTH)],
 
   methods: {
     async fetchData() {

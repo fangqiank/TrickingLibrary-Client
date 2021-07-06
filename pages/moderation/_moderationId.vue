@@ -70,7 +70,7 @@
 import https from "https";
 import CommentSection from '@/components/comments/CommentSection.vue';
 import TrickInfoCard from "../../components/TrickInfoCard";
-import {guard, GUARD_LEVEL} from "../../components/auth/AuthMixings";
+//import {guard, GUARD_LEVEL} from "../../components/auth/AuthMixings";
 import {COMMENTS_PARENT_TYPE} from "../../components/comments/_share";
 
 const agent = new https.Agent({
@@ -126,7 +126,7 @@ export default {
     //replyId:0,
   }),
 
-  mixins: [guard(GUARD_LEVEL.AUTH)],
+  // mixins: [guard(GUARD_LEVEL.AUTH)],
 
   async created() {
 

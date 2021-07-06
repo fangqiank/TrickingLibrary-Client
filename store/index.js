@@ -1,6 +1,6 @@
 import https from 'https'
 
-const agent = new https.Agent({  
+const agent = new https.Agent({
     rejectUnauthorized: false
 })
 
@@ -22,13 +22,14 @@ export const mutations = {
 
 export const actions = {
     //async nuxtServerInit({$axios,commit,dispatch}){
-    nuxtServerInit({dispatch}){
+    async nuxtServerInit({dispatch}){
         // const message = await this.$axios.$get('https://localhost:5001/api/home',{httpsAgent: agent })
         // // console.log(message)
         // // commit('setMessage', message)
         // await dispatch('tricks/fetchTricks')
         // await dispatch('submissions/fetchSubmissions')
-        return dispatch('tricks/fetchTricks')
+        await dispatch('auth/initialize')
+        await dispatch('tricks/fetchTricks')
     },
 
     clientInit({dispatch}){

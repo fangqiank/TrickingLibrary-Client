@@ -1,13 +1,13 @@
 ﻿<template>
 <div>
-  <v-skeleton-loader
-    v-if="loading || authenticated"
-    :loading = "loading"
-    transition="fade-transition"
-    type="button"
-  >
-    <slot name="allowed"></slot>
-  </v-skeleton-loader>
+<!--  <v-skeleton-loader-->
+<!--    v-if="loading"-->
+<!--    :loading = "loading"-->
+<!--    transition="fade-transition"-->
+<!--    type="button"-->
+<!--  >-->
+    <slot v-if="authenticated" name="allowed"></slot>
+<!--  </v-skeleton-loader>-->
 
   <slot
     v-else
@@ -18,13 +18,13 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "IfAuthenticated",
 
   computed:{
-    ...mapState('auth',['loading']),
+    //...mapState('auth',['loading']),
     ...mapGetters('auth',['authenticated']),
   },
 

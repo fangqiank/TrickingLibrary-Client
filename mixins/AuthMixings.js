@@ -1,4 +1,6 @@
-﻿import {mapGetters} from "vuex";
+﻿//replaced by other ways
+
+import {mapGetters} from "vuex";
 
 export const GUARD_LEVEL = {
   AUTH: 1,

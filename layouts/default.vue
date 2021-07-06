@@ -52,7 +52,8 @@
                   </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item @click="$auth.signoutRedirect()">
+<!--                <v-list-item @click="$auth.signoutRedirect()">-->
+                <v-list-item @click="logoutHandler">
                   <v-list-item-title>
                     <v-icon left>mdi-logout</v-icon> Logout
                   </v-list-item-title>
@@ -137,10 +138,11 @@ import ContentCreationDialog from "../components/content-creation/ContentCreatio
 import IfAuthenticated from "../components/auth/IfAuthenticated";
 
 export default {
+  name:'default',
   components: {
     IfAuthenticated,
     //Upload,
-    ContentCreationDialog,
+    ContentCreationDialog
   },
 
   data() {
@@ -165,8 +167,10 @@ export default {
   //   return this.$store.dispatch('clientInit')
   // }
 
-  // methods: {
-  //   ...mapActions('auth', ['loginHandler'])
-  // },
+  methods: {
+    logoutHandler(){
+      console.log('logged out')
+    }
+  },
 };
 </script>

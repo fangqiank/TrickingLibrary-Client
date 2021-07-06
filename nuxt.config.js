@@ -5,7 +5,22 @@ import fs from 'fs'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   publicRuntimeConfig:{
-    api:process.env.API_URI
+    auth:{
+      loginPath: process.env.LOGIN_PATH,
+      logoutPath: process.env.LOGOUT_PATH
+    },
+
+    axios:{
+      baseURL: "https://localhost:5001",
+      https:true
+    }
+  },
+
+  privateRuntimeConfig:{
+    axios:{
+      baseURL: "http://localhost:5000",
+      https:false
+    }
   },
 
   server:{
@@ -38,7 +53,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    {src: '~/plugins/clientInit.js', mode:'client'}
+    //{src: '~/plugins/clientInit.js', mode:'client'} //Oidc-clint to connect identity server4
+    "~/plugins/axios"
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

@@ -17,7 +17,8 @@ export default {
 
   components: {Submission},
 
-  mixins:[feed('', true)],
+  //mixins:[feed('', true)],
+  mixins:[feed('')],
 
   data:()=>(
     {
