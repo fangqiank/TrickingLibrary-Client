@@ -15,7 +15,8 @@ export const  guard = (level) => ({
       next()
     }else{
       next(nuxt =>{
-        nuxt.$store.dispatch('auth/watchUserLoaded', ()=>{
+        nuxt.$store.dispatch('auth/watchUserLoaded')
+        then(()=>{
           let allowed = false
           if(level === GUARD_LEVEL.AUTH){
             allowed = nuxt.$store.getters['auth/authenticated']
@@ -28,7 +29,7 @@ export const  guard = (level) => ({
             if(nuxt.$fetch){
               nuxt.$fetch
             }
-          }else{
+          }else {
             nuxt.$store.dispatch('auth/loginHandler')
           }
         })

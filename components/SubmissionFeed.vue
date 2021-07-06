@@ -4,7 +4,7 @@
       <v-tab>Latest</v-tab>
       <v-tab>Top</v-tab>
     </v-tabs>
-    <span>{{query}}</span>
+<!--    <span>{{query}}</span>-->
     <Submission :mission="item" v-for="(item,idx) in content" :key="idx"/>
   </div>
 </template>
@@ -17,7 +17,7 @@ export default {
 
   components: {Submission},
 
-  mixins:[feed('')],
+  mixins:[feed('', true)],
 
   data:()=>(
     {

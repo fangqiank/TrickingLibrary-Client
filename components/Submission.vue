@@ -7,9 +7,20 @@
     </UserHeader>
     <VideoPlayer :video="mission.video" :thumb="mission.thumb"/>
     <v-card-actions>
-      <span>{{mission.upVotes}}</span>
-      <v-btn icon>
+      <v-btn
+        x-small
+        :color = "mission.vote === 1 ? 'blue':''"
+        icon
+        @click="voteHandler(1)">
         <v-icon>mdi-thumb-up</v-icon>
+      </v-btn>
+      <span class="mx-3">{{mission.score}}</span>
+      <v-btn
+        x-small
+        :color = "mission.vote === -1 ? 'blue':''"
+        icon
+        @click="voteHandler(-1)">
+        <v-icon>mdi-thumb-down</v-icon>
       </v-btn>
       <v-spacer/>
       <v-btn icon @click="showComments = !showComments">
@@ -55,7 +66,6 @@ export default {
       required: true,
       type: Object
     },
-
   },
 
   computed:{
@@ -63,6 +73,16 @@ export default {
       return COMMENTS_PARENT_TYPE.SUBMISSION
     }
   },
+
+  methods:{
+    voteHandler(val){
+      if(this.mission.vote === val)
+        return
+      this.mission.score += this.mission.value === 0 ? val : val*2
+      this.mission.vote = val
+      return this.$axios.$put(`/api/submissions/${this.mission.id}/vote?value=${val}`,null)
+    }
+  }
 }
 </script>
 

@@ -4,7 +4,7 @@ const agent = new https.Agent({
   rejectUnauthorized: false
 })
 
-export const feed = (order) =>({
+export const feed = (order, waitAuth = false) =>({
   data:()=>(
     {
       content: [],
@@ -13,7 +13,8 @@ export const feed = (order) =>({
       limit: 10,
       order: order,
       finished: false,
-      loading: false
+      loading: false,
+      enabled: !waitAuth
     }
   ),
 
@@ -22,6 +23,14 @@ export const feed = (order) =>({
       required: false,
       type: String
     }
+  },
+
+  created(){
+    return this.$store.dispatch('auth/watchUserLoaded')
+      .then(() => {
+        this.enabled = true
+        this.loadContentsHandler()
+      })
   },
 
   watch:{
@@ -56,6 +65,12 @@ export const feed = (order) =>({
     },
 
     loadContentsHandler(){
+      if(process.server)
+        return
+
+      if(!this.enabled)
+        return
+
       this.loading = true
       this.started = true
 
@@ -65,7 +80,7 @@ export const feed = (order) =>({
           this.finished= content.length < this.limit
           content.forEach(x => this.content.push(x))
           this.cursor += content.length
-          
+
         })
         .finally(()=>this.loading = false)
     },

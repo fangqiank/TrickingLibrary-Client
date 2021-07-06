@@ -67,30 +67,21 @@ export const actions = {
         return this.$auth.signinRedirect()
     },
   // Eye on
-  watchUserLoaded({state,getters,dispatch},action){
-      if(process.server) return
+  watchUserLoaded({state,getters}){
+      if(process.server)
+        return
 
-      return new Promise(async (res,rej)=>{
+      return new Promise(async (resolve,reject)=>{
         if(state.loading){
-          console.log('start watching')
           const unwatch = this.watch(
             store=> store.auth.loading,
             (newVal,oldVal) =>{
               unwatch()
-              if(!getters.authenticated){
-                dispatch('loginHandler')
-                this.$auth.signinRedirect()
-              }
-              else if(!newVal){
-                console.log('finish loading executing action')
-                res(action())
-              }
-
+              resolve(getters.authenticated)
             }
           )
         }else{
-          console.log('user is loaded executing action')
-          await res(action())
+          resolve(getters.authenticated)
         }
       })
 
