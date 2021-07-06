@@ -1,6 +1,10 @@
 ﻿<template>
   <v-card class="my-3">
-    <UserHeader :username="mission.user.username" :image-url="mission.user.image"/>
+    <UserHeader :username="mission.user.username" :image-url="mission.user.image">
+      <template v-slot:append>
+        <span class="caption text--gray">{{mission.created}}</span>
+      </template>
+    </UserHeader>
     <VideoPlayer :video="mission.video" :thumb="mission.thumb"/>
     <v-card-actions>
       <span>{{mission.upVotes}}</span>

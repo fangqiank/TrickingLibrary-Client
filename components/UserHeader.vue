@@ -1,18 +1,24 @@
 ﻿<template>
   <div class="d-flex align-center" :class="{'flex-row-reverse': reverse}">
-    <v-avatar :size="size" class="mx-2">
-      <img v-if="imageUrl" :src="imageUrl" alt="portrait"/>
-      <v-icon v-else>
-        mdi-account
-      </v-icon>
-    </v-avatar>
-    <div v-if="username">
-      {{username}}
+    <div
+      class="d-flex align-center"
+      :class="{'pointer': link}"
+      @click="linkHandler"
+    >
+      <v-avatar :size="size" class="mx-2">
+        <img v-if="imageUrl" :src="imageUrl" alt="portrait"/>
+        <v-icon v-else>
+          mdi-account
+        </v-icon>
+      </v-avatar>
+      <div v-if="username">
+        {{username}}
+      </div>
     </div>
+
     <v-spacer/>
-    <div v-if="append">
-      {{append}}
-    </div>
+
+    <slot name="append"></slot>
   </div>
 </template>
 
@@ -38,18 +44,26 @@ export default {
       default: '42'
     },
 
-    append:{
-      required: false,
-      type: String,
-      default: ''
-    },
-
     reverse:{
       required: false,
       type: Boolean,
       default: false
-    }
+    },
+
+    link:{
+      required: false,
+      type: Boolean,
+      default: true
+    },
+
   },
+
+  methods:{
+    linkHandler(){
+      if(this.link)
+        return this.$router.push(`/profile/${this.username}`)
+    }
+  }
 }
 </script>
 

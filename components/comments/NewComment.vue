@@ -17,7 +17,7 @@
                    @comment-create = "x => content.push(x)"
      />
 
-    <div class="d-flex justify-center" v-if="content.length > 0 && !finished">
+    <div class="d-flex justify-center" v-if="started && !finished">
       <v-btn
         outlined
         small
@@ -68,7 +68,7 @@ export default {
     },
 
     loadRepliesHandler(){
-      return this.content.length === 0
+      return this.started
       ? 'loadReplies' : ''
     }
   },

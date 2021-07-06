@@ -63,10 +63,13 @@
     <v-divider class="my-2" />
     <UserHeader :username="trick.user.username"
                 :imageUrl="trick.user.image"
-                :append="trick.version === 1 ? `Created by` :`Edited by`"
                 reverse
                 class="mb-2"
-    />
+    >
+      <template v-slot:append>
+        <span>{{trick.version === 1 ? `Created by` :`Edited by`}}</span>
+      </template>
+    </UserHeader>
 
   </div>
 </template>
