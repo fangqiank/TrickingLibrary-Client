@@ -106,7 +106,7 @@ export default {
   methods: {
     ...mapMutations("videos", ["hide"]),
 
-    ...mapActions("videos", ["startVideoUpload"]),
+    ...mapActions("videos", ["startVideoUpload","createSubmission"]),
 
     async handleFile(file) {
       if (!file) return;
@@ -118,8 +118,8 @@ export default {
     },
 
     handleSave() {
-      //this.createSubmission({ form: this.form });
-      this.$axios.$post('/api/submissions',this.form,{httpsAgent: agent() })
+      this.createSubmission({ form: this.form });
+      // this.$axios.$post('/api/submissions',this.form, /* {httpsAgent: agent() }*/)
       this.hide();
 
       //Object.assign(this.$data,initState())

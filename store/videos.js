@@ -16,7 +16,7 @@ const initState = () => ({
 export const state = initState
 
 export const mutations = {
-    activate(state,{component, edit=false, editPayload=null, setup = null}){
+    activate(state,{component, edit=false, editPayload=null, setup = () => {}}){
       state.active = true
       state.component = component
       if(edit){
@@ -76,14 +76,13 @@ export const actions = {
     startVideoUpload({$axios,commit},{form}){
         const source = this.$axios.CancelToken.source()
 
-        const uploadPromise = this.$axios.post('/api/files',form,
-         {progress:false, cancelToken:source.token},
-         {httpsAgent: agent() })
+        const uploadPromise = this.$axios.$post('/api/files',form,
+         {progress:false, cancelToken:source.token}, /*{httpsAgent: agent() }*/)
            .then(res =>{
              //console.log('res: ',res)
-             const {data} = res
+             //const {data} = res
              commit('completeUpload')
-             return data
+             return res
            })
            .catch(err=>{
                if(this.$axios.isCancel(err)){
@@ -121,7 +120,7 @@ export const actions = {
         commit('reset')
     },
 
-    async createSubmission({/*$axios,*/state,dispatch,commit},{form}){
+    async createSubmission({state,dispatch,commit},{form}){
         if(!state.uploadPromise){
             console.log("uploadPromise is null")
             return
@@ -129,9 +128,11 @@ export const actions = {
 
         form.video = await state.uploadPromise
 
+        await this.$axios.$post('/api/submissions', form, /* {httpsAgent: agent() }*/)
+
         //await this.createOneSubmission({form: this.form})
 
-        await dispatch('submissions/createOneSubmission',{form},{root:true})
+        //await dispatch('submissions/createOneSubmission',{form},{root:true})
 
         commit('reset')
     }

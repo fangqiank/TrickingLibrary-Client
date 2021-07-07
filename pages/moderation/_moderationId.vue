@@ -171,15 +171,17 @@ export default {
 
       const endpoint = this.endpointResolver(type)
 
-      this.loadReviewsHandler()
+      const loadReviews = this.loadReviewsHandler()
 
-      this.$axios.$get(`/api/${endpoint}/${current}`,{
+      const loadCurrent = this.$axios.$get(`/api/${endpoint}/${current}`,{
         httpsAgent: agent()}
       ).then(item => this.current = item )
 
-      this.$axios.$get(`/api/${endpoint}/${target}`,{
+      const loadTarget =this.$axios.$get(`/api/${endpoint}/${target}`,{
         httpsAgent: agent()}
       ).then(item => this.target = item )
+
+      await Promise.all([loadReviews,loadCurrent,loadTarget])
   },
 
   methods:{

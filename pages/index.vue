@@ -14,6 +14,11 @@
 <!--      <v-btn @click="callApi('test')">Access Api</v-btn>-->
 <!--      <v-btn @click="callApi('admin')">Admin Auth</v-btn>-->
 <!--    </div>-->
+    <div>
+      <h3 class="text-h5 text-center">Tricks</h3>
+      <TrickFeedForFrontPage/>
+    </div>
+    <v-divider class="my-3"/>
     <div v-for="item in sections" :key="item.Id">
       <div class="d-flex flex-column align-center">
         <p class="text-h5">{{ item.title }}</p>
@@ -36,9 +41,10 @@
 <script>
 import { mapState } from "vuex"
 //import {UserManager,WebStorageStateStore} from 'oidc-client'
+import TrickFeedForFrontPage from '@/components/front-page/TrickFeedForFrontPage'
 
 export default {
-  //components: {},
+  components: {TrickFeedForFrontPage},
 
   data:()=>({}),
 
@@ -92,11 +98,11 @@ export default {
 
     sections() {
       return [
-        {
-          collection: this.lists.tricks,
-          title: "Tricks",
-          routeFactory: (x) => `/trick/${x.slug}`,
-        },
+        // {
+        //   collection: this.lists.tricks,
+        //   title: "Tricks",
+        //   routeFactory: (x) => `/trick/${x.slug}`,
+        // },
         {
           collection: this.lists.categories,
           title: "Categories",

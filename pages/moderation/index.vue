@@ -7,7 +7,7 @@
         :key="index"
       >
         <v-list-item-avatar>
-          <user-header :image-url="item.targetObject.user.image" />
+          <user-header :image-url="item.user.image" />
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>{{item.targetObject.name}}</v-list-item-title>
@@ -45,6 +45,9 @@
           <div class="d-flex justify-end" v-else>Waiting for review</div>
         </v-list-item-content>
       </v-list-item>
+      <v-list-item @click="loadContentsHandler" v-if="!finished">
+        <v-list-item-content class="d-flex justify-center">Load More</v-list-item-content>
+      </v-list-item>
     </v-list>
   </div>
 </template>
@@ -70,14 +73,14 @@ export default {
       return `/api/moderationitems${this.query}`
     },
 
-    parseContentHandler(content){
-      const {moderationItems, targets} = content
-      console.log('moderation????: ',content)
-      this.content = moderationItems.map(x => ({
-        ...x,
-        targetObject: targets.find(t=>t.id === x.target)
-      }))
-    }
+    // parseContentHandler(content){
+    //   const {moderationItems, targets} = content
+    //   console.log('moderation????: ',content)
+    //   this.content = moderationItems.map(x => ({
+    //     ...x,
+    //     targetObject: targets.find(t=>t.id === x.target)
+    //   }))
+    // }
   },
 };
 </script>

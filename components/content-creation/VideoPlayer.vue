@@ -1,7 +1,7 @@
 <template>
   <div class="video-container">
     <div class="player" :class="{ hide: playing }">
-      <v-icon large @click="playing = !playing"> mdi-play </v-icon>
+      <v-icon large @click.stop="playing = !playing"> mdi-play </v-icon>
     </div>
     <video
       ref="video"

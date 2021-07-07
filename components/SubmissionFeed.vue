@@ -5,7 +5,11 @@
       <v-tab>Top</v-tab>
     </v-tabs>
 <!--    <span>{{query}}</span>-->
-    <Submission :mission="item" v-for="(item,idx) in content" :key="idx"/>
+    <Submission
+      :mission="item"
+      v-for="(item,idx) in content" :key="idx"
+      class="my-3"
+    />
   </div>
 </template>
 

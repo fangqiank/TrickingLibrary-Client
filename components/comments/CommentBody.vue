@@ -4,6 +4,7 @@
       <v-sheet color="teal darken-4" rounded class="d-flex align-center">
         <UserHeader
           :image-url="comment.user.image"
+          class="pa-2"
         />
         <p class='mb-1' v-html="comment.htmlContent"></p>
       </v-sheet>
