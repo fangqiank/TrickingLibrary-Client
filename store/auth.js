@@ -7,7 +7,7 @@ const initState = () => ({
 })
 
 const ROLES = {
-    MODERATOR: 'Admin'
+    MODERATOR: 'mod'
 }
 
 export const state = initState
@@ -27,7 +27,7 @@ export const mutations = {
     }, */
 
     saveProfile(state, payload){
-      //console.log('saveProfile payload: ', payload)
+      console.log('saveProfile payload: ', payload)
       const {profile} = payload
       state.profile = profile
   },
@@ -46,7 +46,7 @@ export const actions = {
           commit('saveProfile', {profile})
         })
         .catch(e => {
-          console.log('failed to loading profile', e.response)
+          console.log('failed to loading profile')
         })
     },
     //    return this.$auth.querySessionStatus()

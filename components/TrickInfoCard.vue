@@ -55,7 +55,7 @@
 
       <template v-slot:forbidden="{login}">
         <v-btn small outlined @click="login">
-          <v-icon left>mdi-account-circle</v-icon> Log in to edit/update
+          <v-icon small outlined left>mdi-account-circle</v-icon> Log in to edit/update
         </v-btn>
       </template>
     </IfAuthenticated>

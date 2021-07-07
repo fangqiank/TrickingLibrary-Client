@@ -73,8 +73,17 @@
         </v-stepper-content>
 
         <v-stepper-content step="2">
+          <v-text-field
+            v-if="editing"
+            label="Reason For Change"
+            v-model="form.reason"
+          />
           <div class="d-flex justify-center">
-            <v-btn @click="handleSave" color="teal accent-4">Save</v-btn>
+            <v-btn
+              :disabled="editing && form.reason.length < 5"
+              @click="handleSave"
+              color="teal accent-4"
+            >Save</v-btn>
           </div>
         </v-stepper-content>
       </v-stepper-items>
@@ -97,6 +106,7 @@ export default {
       name: "",
       description: "",
       difficulty: "",
+      reason:'',
       prerequisites: [],
       progressions: [],
       categories: [],
@@ -119,8 +129,6 @@ export default {
     ...mapActions("tricks", ["createTrick","updateTrick"]),
 
     async handleSave() {
-      //this.form = {"name":"Test","description":"","difficulty":"ae911c8c-2f72-4a5d-b1d2-51379714dafb","prerequisites":[],"progressions":[],"categories":["43378c81-1e00-4c6c-8083-2ade44d72610","d7c1b799-60d8-404c-a425-c5c725932fa9"]}
-
       console.log(JSON.stringify(this.form))
       if(this.editing){
         await this.updateTrick({
