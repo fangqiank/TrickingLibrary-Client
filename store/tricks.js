@@ -63,13 +63,13 @@ export const mutations = {
     },
 
     setDifficulties(state, payload){
-      //console.log('payload',payload)
+      //console.log('difficulty payload',payload)
       const {difficulties} = payload
       setEntities(state,'difficulties', difficulties)
     },
 
     setCategories(state, payload){
-      //console.log('payload',payload)
+      //console.log(' category payload',payload)
       const {categories} = payload
       setEntities(state,'categories', categories)
     },

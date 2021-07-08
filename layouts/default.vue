@@ -12,7 +12,9 @@
 
       <v-toolbar-title></v-toolbar-title>
 
-      <v-spacer></v-spacer>
+      <v-spacer/>
+      <NavbarSearch/>
+      <v-spacer/>
       <!-- <v-btn
         depressed
         @click="toggleActive"

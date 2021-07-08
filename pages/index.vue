@@ -15,36 +15,47 @@
 <!--      <v-btn @click="callApi('admin')">Admin Auth</v-btn>-->
 <!--    </div>-->
     <div>
-      <h3 class="text-h5 text-center">Tricks</h3>
+      <h3 class="text-h5 text-center py-3" >Tricks</h3>
       <TrickFeedForFrontPage/>
     </div>
     <v-divider class="my-3"/>
-    <div v-for="item in sections" :key="item.Id">
-      <div class="d-flex flex-column align-center">
-        <p class="text-h5">{{ item.title }}</p>
-        <div>
-          <v-btn
-            v-for="(collectionItem, index) in item.collection"
-            :key="index"
-            :to="item.routeFactory(collectionItem)"
-            class="mx-1"
-          >
-            {{ collectionItem.name }}
-          </v-btn>
-        </div>
-      </div>
-      <v-divider class="my-3"></v-divider>
+    <div>
+      <h3 class="text-h5 text-center py-3">Categories</h3>
+      <CategoryFeedForFrontPage/>
     </div>
+    <v-divider class="my-3"/>
+    <div>
+      <h3 class="text-h5 text-center py-3">Difficulties</h3>
+      <DifficultyFeedForFrontPage/>
+    </div>
+<!--    <div v-for="item in sections" :key="item.Id">-->
+<!--      <div class="d-flex flex-column align-center">-->
+<!--        <p class="text-h5">{{ item.title }}</p>-->
+<!--        <div>-->
+<!--          <v-btn-->
+<!--            v-for="(collectionItem, index) in item.collection"-->
+<!--            :key="index"-->
+<!--            :to="item.routeFactory(collectionItem)"-->
+<!--            class="mx-1"-->
+<!--          >-->
+<!--            {{ collectionItem.name }}-->
+<!--          </v-btn>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <v-divider class="my-3"></v-divider>-->
+<!--    </div>-->
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex"
 //import {UserManager,WebStorageStateStore} from 'oidc-client'
+import CategoryFeedForFrontPage from '@/components/front-page/CategoryFeedForFrontPage'
 import TrickFeedForFrontPage from '@/components/front-page/TrickFeedForFrontPage'
+import DifficultyFeedForFrontPage from '@/components/front-page/DifficultyFeedForFrontPage'
 
 export default {
-  components: {TrickFeedForFrontPage},
+  components: {CategoryFeedForFrontPage, TrickFeedForFrontPage, DifficultyFeedForFrontPage},
 
   data:()=>({}),
 
@@ -90,13 +101,13 @@ export default {
   },
 
   computed: {
-    ...mapState("tricks", ["lists"]),
+    // ...mapState("tricks", ["lists"]),
 
     // api() {
     //   return process.env.API_URI;
     // },
 
-    sections() {
+    /* sections() {
       return [
         // {
         //   collection: this.lists.tricks,
@@ -114,7 +125,7 @@ export default {
           routeFactory: (x) => `/difficulty/${x.id}`,
         },
       ];
-    },
+    }, */
   },
   //...mapState('submissions',['submissions']),
 

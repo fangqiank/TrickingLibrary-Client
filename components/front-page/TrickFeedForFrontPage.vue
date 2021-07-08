@@ -1,14 +1,22 @@
 ﻿<template>
   <div>
-    <v-row>
-      <v-col v-for="(trick,idx) in content" :key="idx" class="d-flex justify-center align-start">
+    <v-row justify="space-around">
+      <v-col lg="3" v-for="(trick,idx) in content" :key="idx" class="d-flex justify-center align-start">
         <v-card width="300" @click="()=>$router.push(`/trick/${trick.slug}`)" :ripple="false">
           <v-card-title>{{trick.name}}</v-card-title>
-          <Submission  :mission="trick.submission" :slim="true"/>
+          <Submission
+            v-if="trick.submission"
+            :mission="trick.submission"
+            slim
+            :elevation=0
+          />
           <v-card-text>{{trick.description}}</v-card-text>
         </v-card>
       </v-col>
     </v-row>
+    <div v-if="!finished" class="d-flex justify-center my-3">
+      <v-btn @click="loadContentsHandler">Load More</v-btn>
+    </div>
   </div>
 </template>
 
@@ -19,6 +27,12 @@ import agent from "@/store/httpsAgent";
 
 export default {
   name: "TrickFeedForFrontPage",
+
+  data:()=>(
+    {
+      limit: 8
+    }
+  ),
 
   mixins:[feed('')],
 
@@ -37,21 +51,22 @@ export default {
       let step = this.cursor + this.limit
       if(step > maxRange){
         step = maxRange
+        this.finished = true
       }
 
       const tricks = this.lists.tricks.slice(this.cursor, step)
       this.cursor += this.limit
 
-      //console.log('trickfeedfrontpage',tricks)
+      const submissionRequests = tricks.map(trick => this.$axios
+        .$get(`/api/submissions/bestSubmissions?bytricks=${trick.slug}`, {httpsAgent: agent()})
+        .then(submission => this.content.push(
+          {
+            ...trick,
+            submission
+          }
+        )))
 
-      return Promise.all(tricks.map(trick => this.$axios
-        .$get(`/api/tricks/${trick.slug}/bestSubmissions`, {httpsAgent: agent()})
-      .then(submission => this.content.push(
-        {
-          ...trick,
-          submission
-        }
-      ))))
+      return Promise.all(submissionRequests)
     }
   }
 }

@@ -1,9 +1,10 @@
 ﻿<template>
-  <v-card>
+  <v-card :elevation="elevation">
     <UserHeader
       :username="mission.user.username"
       :image-url="mission.user.image"
       class="pa-2"
+      :size="slim ? '32' : '42'"
     >
       <template v-slot:append>
         <div v-if="slim">
@@ -103,6 +104,12 @@ export default {
       required: false,
       type: Boolean,
       default: false
+    },
+
+    elevation:{
+      required: false,
+      type: Number,
+      default: 8
     },
   },
 

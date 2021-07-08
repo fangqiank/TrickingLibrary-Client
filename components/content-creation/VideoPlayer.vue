@@ -61,8 +61,8 @@ export default {
     width: 100%;
     z-index: 1;
 
-    border-top-left-radius: inherit;
-    border-top-right-radius: inherit;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 
   .player {
