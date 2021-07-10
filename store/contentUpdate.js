@@ -16,7 +16,7 @@ const initState = (active=false,component=null) => ({
 export const state = initState
 
 export const mutations = {
-    activate(state,{component, edit=false, editPayload=null, setup = () => {}}){
+    activate(state,{component, edit=false, editPayload=null, setup =null}){
       state.active = true
       state.component = component
       if(edit){

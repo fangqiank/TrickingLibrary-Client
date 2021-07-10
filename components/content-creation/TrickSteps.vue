@@ -160,12 +160,12 @@ export default {
   },
 
   computed: {
-    ...mapState('videos',['editing','editPayload']),
+    ...mapState('contentUpdate',['editing','editPayload']),
     ...mapState("tricks", ["lists","dictionaries"]),
   },
 
   methods: {
-    //...mapMutations('videos',['reset']),
+    //...mapMutations('contentUpdate',['reset']),
     ...mapActions("tricks", ["createTrick","updateTrick"]),
 
     async handleSave() {

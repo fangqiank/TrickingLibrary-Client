@@ -22,15 +22,18 @@
           ...mapState('tricks',['dictionaries','lists']),
 
           tricks(){
-            const categoryId =this.$route.params.category
+            const categorySlug =this.$route.params.category
+            const categoryId =this.dictionaries.categories[categorySlug].id
             //console.log('_category.categoryId',categoryId)
             return this.lists.tricks.filter(x => x.categories.indexOf(categoryId) > -1)
+            // return this.dictionaries.categories[categorySlug]
+            //   .tricks.map(x=>this.dictionaries.tricks[x])
 
           },
 
           category(){
-            const categoryId =this.$route.params.category
-            return this.dictionaries.categories[categoryId]
+            const categorySlug =this.$route.params.category
+            return this.dictionaries.categories[categorySlug]
           }
         },
 

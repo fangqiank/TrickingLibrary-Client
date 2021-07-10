@@ -25,7 +25,7 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step 
+            <v-stepper-step
               :complete="step > 3"
               step="3"
             >
@@ -34,7 +34,7 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step 
+            <v-stepper-step
               :complete="step > 4"
               step="4"
             >
@@ -108,21 +108,21 @@ export default {
    },
 
    computed:{
-    ...mapState('videos',['uploadPromise','active','step','type']),
+    ...mapState('contentUpdate',['uploadPromise','active','step','type']),
     uploadType(){
       return UPLOAD_TYPE
     }
    },
 
    methods:{
-    ...mapMutations('videos',['reset','toggleActive','setUploadType','incStep']),
+    ...mapMutations('contentUpdate',['reset','toggleActive','setUploadType','incStep']),
 
-    ...mapActions('videos',['startVideoUpload','createTrick']),
+    ...mapActions('contentUpdate',['startVideoUpload','createTrick']),
 
     async handleFile(file){
       if(!file)
         return
-      
+
       const form = new FormData()
       form.append('video',file)
       this.startVideoUpload({form})

@@ -122,7 +122,7 @@ export default {
           title: "Categories",
           data: this.trick.categories.map(x=> this.dictionaries.categories[x]),
           idFactory: c => `category-${c.id}`,
-          routeFactory: c => `/category/${c.id}`
+          routeFactory: c => `/category/${c.slug}`
         },
         {
           title: "Prerequisites",
@@ -145,7 +145,7 @@ export default {
   },
 
   methods:{
-    ...mapMutations('videos',['activate']),
+    ...mapMutations('contentUpdate',['activate']),
 
     editHandler(){
       this.activate(

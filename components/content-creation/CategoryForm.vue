@@ -35,37 +35,54 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapState} from 'vuex'
 import {close} from './_shared'
 
 export default {
-    name:'CategoryForm',
+  name:'CategoryForm',
 
-    data:() =>(
-        {
-            form: {
-                name:'',
-                description:'',
-            },
-
-          validation:{
-            valid: false,
-            name: [v => !!v || 'Name is required'],
-            description: [v => !!v || 'Description is required'],
+  data:() =>(
+      {
+          form: {
+              name:'',
+              description:'',
           },
+
+        validation:{
+          valid: false,
+          name: [v => !!v || 'Name is required'],
+          description: [v => !!v || 'Description is required'],
+        },
+      }
+  ),
+
+  mixins:[close],
+
+  created() {
+      if(this.editPayload){
+        const {id, name, description} = this.editPayload
+
+        Object.assign(this.form,{id, name, description})
+      }
+  },
+
+  computed:{
+    //...mapGetters('tricks',['categoryItems','difficultyItems']),
+
+    ...mapState('contentUpdate',['editPayload'])
+  },
+
+  methods:{
+      handleSave(){
+        if(this.form.id){
+          this.$axios.$put('/api/categories', this.form)
+        }else{
+          this.$axios.$post('/api/categories', this.form)
         }
-    ),
 
-    mixins:[close],
-
-    computed:mapGetters('tricks',['categoryItems','difficultyItems']),
-
-    methods:{
-        handleSave(){
-            this.$axios.$post('/api/categories', this.form)
-            this.close()
-        }
-    }
+        this.close()
+      }
+  }
 
 }
 

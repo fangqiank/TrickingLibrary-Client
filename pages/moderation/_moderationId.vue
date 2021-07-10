@@ -4,13 +4,23 @@
       <v-col cols="8">
         <v-row justify="center">
           <v-col cols="5" v-if="current">
-            <TrickInfoCard :trick="current" />
+            <component
+              v-if="itemComponent"
+              :[itemComponent.payload]="current"
+              :is="itemComponent.is"
+            />
+<!--            <TrickInfoCard :trick="current" />-->
           </v-col>
           <v-col cols="2" v-if="current" class="d-flex justify-center">
             <v-icon size="40">mdi-arrow-right</v-icon>
           </v-col>
           <v-col cols="5" v-if="target">
-            <TrickInfoCard :trick="target"/>
+            <component
+              v-if="itemComponent"
+              :[itemComponent.payload]="target"
+              :is="itemComponent.is"
+            />
+<!--            <TrickInfoCard :trick="target"/>-->
           </v-col>
         </v-row>
 
@@ -120,6 +130,7 @@
 import agent from "@/store/httpsAgent";
 import CommentSection from '@/components/comments/CommentSection.vue';
 import TrickInfoCard from "@/components/TrickInfoCard";
+import SimpleInfoCard from "@/components/moderation/SimpleInfoCard";
 import IfAuthenticated from "@/components/auth/IfAuthenticated";
 import UserHeader from "@/components/UserHeader";
 //import {guard, GUARD_LEVEL} from "../../components/auth/AuthMixings";
@@ -254,7 +265,26 @@ export default {
     selectedReview(){
       const review =this.reviewActions.find(x=>x.value === this.review.status)
       return review === undefined ? null : review
-    }
+    },
+
+    itemComponent(){
+      if(!this.modItem)
+        return null
+
+      if(this.modItem.type === 'trick')
+        return {
+          is: TrickInfoCard,
+          payload: 'trick'
+        }
+
+      if(this.modItem.type === 'category')
+        return {
+          is: SimpleInfoCard,
+          payload: 'payload'
+        }
+
+      return null
+    },
   }
 
 };

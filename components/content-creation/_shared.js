@@ -2,7 +2,7 @@ import {mapActions, mapState} from 'vuex'
 
 export const close = {
     methods:{
-        ...mapActions('videos',['cancelUpload']),
+        ...mapActions('contentUpdate',['cancelUpload']),
 
         close(hard=true){
           return this.cancelUpload({hard: true})
@@ -23,7 +23,7 @@ export const formPLus = (formFactory) => (
     },
 
     computed:{
-      ...mapState("videos", ["setup"]),
+      ...mapState("contentUpdate", ["setup"]),
     }
   }
 )

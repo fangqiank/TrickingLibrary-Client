@@ -8,6 +8,10 @@ const endpointResolver = (type) => {
   if (type === "trick") {
     return "tricks";
   }
+
+  if (type === "category") {
+    return "categories";
+  }
 };
 
 const reviewStatusColor = status => {

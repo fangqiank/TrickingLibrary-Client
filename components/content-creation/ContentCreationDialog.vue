@@ -63,7 +63,7 @@ export default {
    },
 
    computed:{
-    ...mapState('videos',['active','component']),
+    ...mapState('contentUpdate',['active','component']),
     ...mapGetters('auth',['moderator']),
     menuItems(){
         return  [
@@ -76,7 +76,7 @@ export default {
    },
 
    methods: {
-     ...mapMutations('videos',['activate']),
+     ...mapMutations('contentUpdate',['activate']),
    }
 }
 </script>

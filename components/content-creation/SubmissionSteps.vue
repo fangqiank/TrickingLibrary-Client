@@ -139,9 +139,9 @@ export default {
   },
 
   methods: {
-    ...mapMutations("videos", ["hide"]),
+    ...mapMutations("contentUpdate", ["hide"]),
 
-    ...mapActions("videos", ["startVideoUpload","createSubmission"]),
+    ...mapActions("contentUpdate", ["startVideoUpload","createSubmission"]),
 
     async handleFile(file) {
       if (!file) return;
