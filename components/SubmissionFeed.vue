@@ -16,13 +16,15 @@
 <script>
 import Submission from "@/components/Submission";
 import {feed} from "../mixins/feed";
+import agent from "@/store/httpsAgent";
+
 export default {
   name: "SubmissionFeed",
 
   components: {Submission},
 
   //mixins:[feed('', true)],
-  mixins:[feed('')],
+  mixins:[feed('latest')],
 
   data:()=>(
     {
@@ -54,15 +56,33 @@ export default {
     // }
   },
 
+  async fetch(){
+    await this.loadContentsHandler()
+    if(this.$route.query.submission){
+      const submission = await this.$axios.$get(`/api/submissions/${this.$route.query.submission}`,{httpsAgent: agent()})
+
+      const existed = this.content.map(x => x.id).indexOf(submission.id)
+      if(existed > -1){
+        this.content.splice(existed, 1)
+      }
+
+      this.content.unshift(submission)
+    }
+  },
+
   watch:{
-    'tab': {
-      handler: function(newValue){
+    // 'tab': {
+    //   handler: function(newValue){
+    //     this.order = newValue === 0 ? 'latest'
+    //       : newValue === 1 ? 'top'
+    //         :'latest'
+    //   },
+    //   immediate:true
+    'tab':  function(newValue){
         this.order = newValue === 0 ? 'latest'
           : newValue === 1 ? 'top'
             :'latest'
-      },
-      immediate:true
-    }
+    },
   },
 
   // methods:{

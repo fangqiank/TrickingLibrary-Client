@@ -128,7 +128,7 @@ export const actions = {
     const updTrick = this.$axios.$put(
       '/api/tricks',
       form,
-      {httpsAgent: agent() }
+      {httpsAgent: agent()}
     )
 
     return updTrick

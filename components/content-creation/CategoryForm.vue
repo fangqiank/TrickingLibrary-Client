@@ -9,12 +9,27 @@
       </v-card-title>
 
       <v-card-text>
-          <v-text-field label="Name" v-model='form.name'></v-text-field>
-          <v-text-field label="Description" v-model='form.description'></v-text-field>
+        <v-form ref="form" v-model="validation.valid">
+          <v-text-field
+            label="Name"
+            :rules="validation.name"
+            v-model='form.name'
+          />
+          <v-text-field
+            label="Description"
+            :rules="validation.description"
+            v-model='form.description'
+          />
+        </v-form>
       </v-card-text>
 
       <v-card-actions class="d-flex justify-center">
-        <v-btn @click='handleSave' color="teal accent-4">Save</v-btn>
+        <v-btn
+          @click='$refs.form.validate() ? handleSave() : 0'
+          color="lime darken-4"
+        >
+          Create
+        </v-btn>
       </v-card-actions>
   </v-card>
 </template>
@@ -32,6 +47,12 @@ export default {
                 name:'',
                 description:'',
             },
+
+          validation:{
+            valid: false,
+            name: [v => !!v || 'Name is required'],
+            description: [v => !!v || 'Description is required'],
+          },
         }
     ),
 

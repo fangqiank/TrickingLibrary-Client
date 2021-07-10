@@ -2,7 +2,7 @@
   <div>
     <v-row justify="space-around">
       <v-col lg="3" v-for="(trick,idx) in content" :key="idx" class="d-flex justify-center align-start">
-        <v-card width="300" @click="()=>$router.push(`/trick/${trick.slug}`)" :ripple="false">
+        <v-card width="300" @click="()=>$router.push(`/tricks/${trick.slug}`)" :ripple="false">
           <v-card-title>{{trick.name}}</v-card-title>
           <Submission
             v-if="trick.submission"

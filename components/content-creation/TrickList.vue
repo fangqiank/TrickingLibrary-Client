@@ -1,22 +1,25 @@
 <template>
     <div>
-        <v-text-field label="Search" 
+        <v-text-field label="Search"
             v-model="filter"
             outlined
             prepend-inner-icon="mdi-magnify"
-            >
-            </v-text-field>
-        <div v-for="item in filteredTricks" :key=item.id>
-            <p>
-                Trick Name: <span style="color:blue"><strong>{{item.name}}</strong></span>
-            </p>
-        </div>
+        />
+      <v-row>
+        <v-col lg="3" v-for="(item, idx) in filteredTricks"  :key="idx">
+          <TrickInfoCard :trick="item"/>
+        </v-col>
+      </v-row>
     </div>
 </template>
 
 <script>
+import TrickInfoCard from '@/components/TrickInfoCard'
+import {hasOccurrence} from "@/data/functions";
 export default {
     name:"TrickList",
+
+    components:{TrickInfoCard},
 
     props:{
         tricks:{
@@ -30,16 +33,17 @@ export default {
                 filter:'',
             }
     ),
-        
+
     computed:{
         filteredTricks(){
-            if(!this.filter) 
-                return null
-                
-            const searchItem = this.filter.trim().toLowerCase()
-    
-            return this.tricks.filter(x=>x.name.toLowerCase().includes(searchItem) ||
-            x.description.toLowerCase().includes(searchItem))
+            if(!this.filter)
+                return this.tricks
+
+            return this.tricks.filter(x=>{
+              let searchIndex = (x.name + x.description).toLowerCase()
+
+              return hasOccurrence(searchIndex, this.filter)
+            })
         }
     }
 }

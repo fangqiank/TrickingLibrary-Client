@@ -36,6 +36,19 @@
         </div>
         {{profile.username}}
       </div>
+      <v-divider class="my-2"/>
+      <div>
+        <h6 class="text-h6 mb-3">Completed Tricks ({{completedTricks.length}} / {{lists.tricks.length}})</h6>
+        <v-chip
+          v-for="({trick,submission},idx) in completedTricks"
+          :key="idx"
+          x-small
+          class="ma-1"
+          @click="toSubmissionHandler(trick.slug, submission.id)"
+        >
+          {{trick.name}}
+        </v-chip>
+      </div>
     </template>
   </ItemLayout>
 </template>
@@ -46,6 +59,7 @@ import {mapMutations, mapState} from "vuex";
 import Submission from "@/components/Submission";
 //import {guard, GUARD_LEVEL} from "@/components/auth/AuthMixings";
 import SubmissionFeed from "@/components/SubmissionFeed";
+import profile from "@/mixins/profile";
 
 export default {
   components:{
@@ -55,7 +69,7 @@ export default {
   },
 
   computed:{
-    ...mapState('auth', ['profile'])
+    ...mapState('auth', ['profile']),
   },
 
   data:() =>(
@@ -65,7 +79,7 @@ export default {
     }
   ),
 
-  //mixins: [guard(GUARD_LEVEL.AUTH)],
+  mixins: [profile],
 
   methods:{
     changeProfileImage(e){

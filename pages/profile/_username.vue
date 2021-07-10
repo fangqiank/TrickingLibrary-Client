@@ -11,6 +11,20 @@
           :image-url="profile.image"
           :link="false"
         />
+
+        <v-divider class="my-2"/>
+        <div>
+          <h6 class="text-h6 mb-3">Completed Tricks ({{completedTricks.length}} / {{lists.tricks.length}})</h6>
+          <v-chip
+            v-for="({trick,submission},idx) in completedTricks"
+            :key="idx"
+            x-small
+            class="ma-1"
+            @click="toSubmissionHandler(trick.slug, submission.id)"
+          >
+            {{trick.name}}
+          </v-chip>
+        </div>
       </div>
     </template>
   </ItemLayout>
@@ -22,6 +36,7 @@ import Submission from "@/components/Submission";
 import SubmissionFeed from "@/components/SubmissionFeed";
 import agent from "@/store/httpsAgent";
 import UserHeader from "../../components/UserHeader";
+import profile from "@/mixins/profile";
 
 export default {
   components:{
@@ -36,6 +51,8 @@ export default {
       profile:null
     }
   ),
+
+  mixins:[profile],
 
   async fetch() {
     console.log(this.$route.params)

@@ -16,53 +16,75 @@
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="step > 2" step="2">
-          Select Trick
-        </v-stepper-step>
+<!--        <v-stepper-step :complete="step > 2" step="2">-->
+<!--          Select Trick-->
+<!--        </v-stepper-step>-->
 
-        <v-divider></v-divider>
+<!--        <v-divider></v-divider>-->
 
-        <v-stepper-step :complete="step > 3" step="3">
+        <v-stepper-step :complete="step > 2" step="3">
           Submission
         </v-stepper-step>
 
         <v-divider></v-divider>
 
-        <v-stepper-step step="4"> Review </v-stepper-step>
+        <v-stepper-step step="3"> Review </v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items class="fpt-0">
         <v-stepper-content step="1">
           <div>
-            <v-file-input accept="vodeo/*" @change="handleFile"></v-file-input>
+            <v-file-input
+              v-model="file"
+              accept="vodeo/*"
+              @change="handleFile"
+            />
           </div>
         </v-stepper-content>
 
         <v-stepper-content step="2">
-          <div>
-            <v-select
+          <v-form ref="form" v-model="validation.valid">
+            <v-autocomplete
               :items="lists.tricks.map(x=>({value: x.slug,text: x.name}))"
+              :rules="validation.trickId"
               label="Select Trick"
               v-model="form.trickId"
-            ></v-select>
+            />
+            <v-text-field
+              :rules="validation.description"
+              label="Description"
+              v-model="form.description"
+            />
             <div class="d-flex justify-center">
-              <v-btn @click="step++">Next</v-btn>
+              <v-btn
+                :disabled="!validation.valid"
+                @click="$refs.form.validate() ? step++ : 0"
+              >
+                Next
+              </v-btn>
             </div>
-          </div>
+          </v-form>
         </v-stepper-content>
+
+<!--        <v-stepper-content step="3">-->
+<!--          <div>-->
+<!--            <v-text-field label="Description" v-model="form.description" />-->
+<!--            <div class="d-flex justify-center">-->
+<!--              <v-btn @click="step++">Next</v-btn>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </v-stepper-content>-->
 
         <v-stepper-content step="3">
-          <div>
-            <v-text-field label="Description" v-model="form.description" />
-            <div class="d-flex justify-center">
-              <v-btn @click="step++">Next</v-btn>
-            </div>
-          </div>
-        </v-stepper-content>
+          <div><strong>File Name: </strong> {{fileName}}</div>
+          <div v-if="form.trickId"><strong>Trick: </strong> {{dictionaries.tricks[form.trickId].name}}</div>
+          <div><strong>Description: </strong> {{form.description}}</div>
 
-        <v-stepper-content step="4">
-          <div class="d-flex justify-center">
-            <v-btn @click="handleSave" color="teal accent-4">Save</v-btn>
+          <div class="d-flex">
+            <v-btn @click="handleRestart" color="teal accent-4" small>Restart</v-btn>
+            <v-btn @click="step--" color="red accent-2" class="mx-2" small>Edit</v-btn>
+            <v-spacer/>
+            <v-btn @click="handleSave" color="lime darken-4" small>Complete</v-btn>
           </div>
         </v-stepper-content>
       </v-stepper-items>
@@ -73,25 +95,35 @@
 <script>
 import {mapActions, mapMutations, mapState} from "vuex";
 import {close, formPLus} from "./_shared";
-import agent from "@/store/httpsAgent";
+//import agent from "@/store/httpsAgent";
+
+const initForm = () => (
+  {
+    trickId: "",
+    video: "",
+    description: "",
+  }
+)
 
 export default {
   name: "SubmissionSteps",
 
   mixins: [
     close,
-    formPLus(() =>(
-      {
-        trickId: "",
-        video: "",
-        description: "",
-      }
-    ))
+    formPLus(initForm)
   ],
 
   data: () => (
     {
       step: 1,
+
+      file: null,
+
+      validation:{
+        valid: false,
+        trickId: [v => !!v || 'Trick is required'],
+        description: [v => !!v || 'Description is required'],
+      },
     }
   ),
 
@@ -99,8 +131,11 @@ export default {
   },
 
   computed: {
-    ...mapState("tricks", ["lists"]),
-    //...mapState('videos',['active']),
+    ...mapState("tricks", ["lists","dictionaries"]),
+
+    fileName(){
+      return this.file ? this.file.name : ""
+    }
   },
 
   methods: {
@@ -115,6 +150,13 @@ export default {
       form.append("video", file);
       this.startVideoUpload({ form });
       this.step++;
+    },
+
+    handleRestart(){
+      this.formPLus = initForm()
+      this.cancelUpload({hard: false})
+      this.step = 1
+      this.file = null
     },
 
     handleSave() {

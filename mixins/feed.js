@@ -76,7 +76,10 @@ export const feed = (order, /*waitAuth = false*/) =>({
     },
 
     parseContentHandler(content){
-      content.forEach(x => this.content.push(x))
+      content.forEach(x => {
+        if(!this.content.some(y => y.id === x.id))
+        this.content.push(x)
+      })
     }
   },
 })

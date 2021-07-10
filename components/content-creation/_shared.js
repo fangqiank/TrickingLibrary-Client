@@ -3,8 +3,9 @@ import {mapActions, mapState} from 'vuex'
 export const close = {
     methods:{
         ...mapActions('videos',['cancelUpload']),
-        close(){
-            this.cancelUpload()
+
+        close(hard=true){
+          return this.cancelUpload({hard: true})
         }
     }
 }

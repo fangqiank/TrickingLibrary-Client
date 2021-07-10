@@ -38,13 +38,14 @@
                   v-bind="attrs"
                   v-on="on"
                 >
-                  <v-avatar size="36">
-                    <img v-if="profile.image"
-                         :src="profile.image"
-                         alt="profile image"
-                    />
-                    <v-icon v-else>mdi-account</v-icon>
-                  </v-avatar>
+                  <UserHeader :link="false" :image-url="profile.image" size="36"/>
+<!--                  <v-avatar size="36">-->
+<!--                    <img v-if="profile.image"-->
+<!--                         :src="profile.image"-->
+<!--                         alt="profile image"-->
+<!--                    />-->
+<!--                    <v-icon v-else>mdi-account</v-icon>-->
+<!--                  </v-avatar>-->
                 </v-btn>
               </template>
               <v-list>

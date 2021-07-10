@@ -1,14 +1,14 @@
 import agent from "@/store/httpsAgent";
 
-const initState = () => ({
+const initState = (active=false,component=null) => ({
     uploadPromise: null,
-    active:false,
-    component:null,
-    uploadCompleted:false,
+    active: active,
+    component: component,
+    uploadCompleted: false,
     uploadCancelSource: null,
     editing: false,
-    editPayload :null,
-    setup:null,
+    editPayload: null,
+    setup: null,
 })
 
 //import {UPLOAD_TYPE} from '../data/enum'
@@ -67,8 +67,13 @@ export const mutations = {
         state.uploadCompleted = true
     },
 
-    reset(state){
+    reset(state, {hard}){
+      if(hard) {
         Object.assign(state,initState())
+      }else{
+        Object.assign(state,initState(true, state.component))
+      }
+
     }
 }
 
@@ -106,7 +111,7 @@ export const actions = {
     //     await this.$axios.$post('/api/submissions',submission,{httpsAgent: agent })
     // }
 
-    async cancelUpload({$axios,state,commit}){
+    async cancelUpload({$axios,state,commit}, {hard}){
         if(state.uploadPromise){
             commit('hide')
 
@@ -117,7 +122,7 @@ export const actions = {
                 state.uploadCancelSource.cancel()
             }
         }
-        commit('reset')
+        commit('reset', {hard})
     },
 
     async createSubmission({state,dispatch,commit},{form}){
@@ -134,6 +139,6 @@ export const actions = {
 
         //await dispatch('submissions/createOneSubmission',{form},{root:true})
 
-        commit('reset')
+        commit('reset',{hard: true})
     }
 }

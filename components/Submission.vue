@@ -1,5 +1,5 @@
 ﻿<template>
-  <v-card :elevation="elevation">
+  <v-card :elevation="elevation" :class="{'highlight':highlight}">
     <UserHeader
       :username="mission.user.username"
       :image-url="mission.user.image"
@@ -116,6 +116,10 @@ export default {
   computed:{
     submissionParentType(){
       return COMMENTS_PARENT_TYPE.SUBMISSION
+    },
+
+    highlight(){
+      return parseInt(this.$route.query.submission) ===  parseInt(this.mission.id)
     }
   },
 
@@ -132,5 +136,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .hightlight {
+    box-shadow: 0 1px 8px 0 #35495e !important;
+  }
 </style>

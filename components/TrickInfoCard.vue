@@ -1,5 +1,5 @@
 ﻿<template>
-  <div>
+  <v-sheet class="pa-3" >
     <div class="text-h6 text-center">
       <span>{{trick.name}}</span>
     </div>
@@ -9,7 +9,7 @@
     >
       <div>Description: <strong style="color:#fff">{{trick.description}}</strong></div>
       <div>Difficulty:
-        <v-chip color="secondary" :to="`/difficulty/${getDifficulty.slug}`">
+        <v-chip color="secondary" :to="`/difficulties/${getDifficulty.id}`">
           {{getDifficulty.name}}
         </v-chip>
       </div>
@@ -72,8 +72,7 @@
         <span>{{trick.version === 1 ? `Created by` :`Edited by`}}</span>
       </template>
     </UserHeader>
-
-  </div>
+  </v-sheet>
 </template>
 
 <script>
@@ -129,13 +128,13 @@ export default {
           title: "Prerequisites",
           data: this.trick.prerequisites.map(x=> this.dictionaries.tricks[x]),
           idFactory: c => `trick-${c.id}`,
-          routeFactory: c => `/trick/${c.slug}`
+          routeFactory: c => `/tricks/${c.slug}`
         },
         {
           title: "Progressions",
           data: this.trick.progressions.map(x=> this.dictionaries.tricks[x]),
           idFactory: c => `trick-${c.id}`,
-          routeFactory :c => `/trick/${c.slug}`
+          routeFactory :c => `/tricks/${c.slug}`
         },
       ]
     },

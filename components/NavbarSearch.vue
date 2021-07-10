@@ -21,6 +21,7 @@
 
 <script>
 import {mapState} from "vuex";
+import {hasOccurrence} from "@/data/functions";
 
 const itemFactory = (name, type, slug) => ({
   name: name,
@@ -35,14 +36,8 @@ export default {
 
   methods:{
     searchFilter(item, queryText, itemText){
-      const queryParts = queryText.toLowerCase().split(' ')
-      if(queryParts.length > 0){
-        return queryParts.map(
-          x => x.searchIndex.indexOf(x) > -1)
-                .reduce((prev, curr) => prev && curr
-        )
-      }
-    }
+      return hasOccurrence(item.searchIndex,queryText)
+    },
   },
 
   computed:{

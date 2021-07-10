@@ -19,21 +19,27 @@
 
       <v-stepper-items class="fpt-0">
         <v-stepper-content step="1">
-          <div>
-            <v-text-field label="Name" v-model="form.name"></v-text-field>
+          <v-form ref="form" v-model="validation.valid">
+            <v-text-field
+              :rules= "validation.name"
+              label= "Name"
+              v-model= "form.name"
+            />
 
             <v-text-field
-              label="Description"
-              v-model="form.description"
-            ></v-text-field>
+              :rules= "validation.description"
+              label= "Description"
+              v-model= "form.description"
+            />
 
             <v-select
               :items="lists.difficulties.map(x => ({value:x.id,text:x.name}))"
+              :rules= "validation.difficulty"
               v-model="form.difficulty"
               label="Difficulty"
-            ></v-select>
+            />
 
-            <v-select
+            <v-autocomplete
               :items="lists.tricks
                            .filter(x => !form.id || x.id !== form.id)
                            .map(x => ({value:x.id,text:x.name}))"
@@ -43,9 +49,9 @@
               small-chips
               chips
               deletable-chips
-            ></v-select>
+            />
 
-            <v-select
+            <v-autocomplete
               :items="lists.tricks
                            .filter(x => !form.id || x.id !== form.id)
                            .map(x => ({value:x.id,text:x.name}))"
@@ -55,35 +61,61 @@
               small-chips
               chips
               deletable-chips
-            ></v-select>
+            />
             <v-select
               :items="lists.categories.map(x => ({value:x.id,text:x.name}))"
+              :rules= "validation.categories"
               v-model="form.categories"
               label="Categories"
               multiple
               small-chips
               chips
               deletable-chips
-            ></v-select>
+            />
 
             <div class="d-flex justify-center">
-              <v-btn @click="step++">Next</v-btn>
+              <v-btn
+                @click="$refs.form.validate() ? step++ : 0"
+                :disabled="!validation.valid"
+              >
+                Next
+              </v-btn>
             </div>
-          </div>
+          </v-form>
         </v-stepper-content>
 
         <v-stepper-content step="2">
+          <div><strong>Name: </strong> {{form.name}}</div>
+          <div><strong>Description: </strong> {{form.description}}</div>
+          <div v-if="form.difficulty"><strong>Difficulty: </strong> {{dictionaries.difficulties[form.difficulty].name}}</div>
+          <div><strong>Prerequisites: </strong> {{form.prerequisites.map(x =>
+            dictionaries.tricks[x].name).join(', ')}}</div>
+          <div><strong>Progressions: </strong> {{form.progressions.map(x =>
+            dictionaries.tricks[x].name).join(', ')}}</div>
+          <div><strong>Categories: </strong> {{form.categories.map(x =>
+            dictionaries.categories[x].name).join(', ')}}</div>
           <v-text-field
             v-if="editing"
             label="Reason For Change"
             v-model="form.reason"
           />
-          <div class="d-flex justify-center">
+          <div class="d-flex mt-3">
+            <v-btn
+              @click="step--"
+              color="teal accent-4"
+              small
+            >
+              Edit
+            </v-btn>
+            <v-spacer/>
             <v-btn
               :disabled="editing && form.reason.length < 5"
               @click="handleSave"
-              color="teal accent-4"
-            >Save</v-btn>
+              color="lime darken-4"
+              small
+            >
+              {{ editing ? 'Update' : 'Create'  }}
+            </v-btn>
           </div>
         </v-stepper-content>
       </v-stepper-items>
@@ -111,6 +143,14 @@ export default {
       progressions: [],
       categories: [],
     },
+
+    validation:{
+      valid: false,
+      name: [v => !!v || 'name is required'],
+      description: [v => !!v || 'Description is required'],
+      difficulty: [v => !!v || 'Difficulty is required'],
+      categories: [v => v.length > 0 || 'At least one category is required'],
+    },
   }),
 
   created() {
@@ -121,7 +161,7 @@ export default {
 
   computed: {
     ...mapState('videos',['editing','editPayload']),
-    ...mapState("tricks", ["lists"]),
+    ...mapState("tricks", ["lists","dictionaries"]),
   },
 
   methods: {
