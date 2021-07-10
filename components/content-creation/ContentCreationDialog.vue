@@ -7,9 +7,19 @@
             depressed
             v-bind="attrs"
             v-on="on"
+            class="d-flex d-md-none"
             >
             Create
             </v-btn>
+
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            icon
+            class="d-flex d-md-none"
+          >
+            <v-icon>mdi-plus-box</v-icon>
+          </v-btn>
         </template>
         <v-list>
             <v-list-item

@@ -6,7 +6,12 @@
 <!--    transition="fade-transition"-->
 <!--    type="button"-->
 <!--  >-->
-    <slot v-if="authenticated" name="allowed"></slot>
+    <slot
+      v-if="authenticated"
+      name="allowed"
+      :moderator="moderator"
+      :admin="admin"
+    ></slot>
 <!--  </v-skeleton-loader>-->
 
   <slot
@@ -25,7 +30,7 @@ export default {
 
   computed:{
     //...mapState('auth',['loading']),
-    ...mapGetters('auth',['authenticated']),
+    ...mapGetters('auth',['authenticated', 'moderator', 'admin']),
   },
 
   methods: {

@@ -13,18 +13,7 @@
         />
 
         <v-divider class="my-2"/>
-        <div>
-          <h6 class="text-h6 mb-3">Completed Tricks ({{completedTricks.length}} / {{lists.tricks.length}})</h6>
-          <v-chip
-            v-for="({trick,submission},idx) in completedTricks"
-            :key="idx"
-            x-small
-            class="ma-1"
-            @click="toSubmissionHandler(trick.slug, submission.id)"
-          >
-            {{trick.name}}
-          </v-chip>
-        </div>
+        <ProfileWithCompletedTricks  :profile-submissions="profile.submissions"/>
       </div>
     </template>
   </ItemLayout>
@@ -32,18 +21,19 @@
 
 <script>
 import ItemLayout from '@/components/ItemLayout'
-import Submission from "@/components/Submission";
-import SubmissionFeed from "@/components/SubmissionFeed";
-import agent from "@/store/httpsAgent";
-import UserHeader from "../../components/UserHeader";
-import profile from "@/mixins/profile";
+import Submission from "@/components/Submission"
+import SubmissionFeed from "@/components/SubmissionFeed"
+import ProfileWithCompletedTricks from "@/components/ProfileWithCompletedTricks"
+import agent from "@/store/httpsAgent"
+import UserHeader from "../../components/UserHeader"
 
 export default {
   components:{
     UserHeader,
     SubmissionFeed,
     Submission,
-    ItemLayout
+    ItemLayout,
+    ProfileWithCompletedTricks
   },
 
   data:() =>(
@@ -52,7 +42,7 @@ export default {
     }
   ),
 
-  mixins:[profile],
+  //mixins:[profile],
 
   async fetch() {
     console.log(this.$route.params)

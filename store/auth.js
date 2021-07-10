@@ -1,4 +1,5 @@
 import agent from "@/store/httpsAgent";
+import {mapGetters} from "vuex";
 
 const initState = () => ({
     //user:null,
@@ -13,10 +14,11 @@ const ROLES = {
 export const state = initState
 
 export const getters = {
-    //authenticated: state => !state.loading && state.user !=  null,
-    authenticated: state => !state.loading && state.profile !=  null,
-    //moderator:  (state, getters) => getters.authenticated && state.user.profile === ROLES.MODERATOR
-    moderator:  (state, getters) => getters.authenticated && state.profile.isMod
+  //authenticated: state => !state.loading && state.user !=  null,
+  authenticated: state => !state.loading && state.profile !=  null,
+  //moderator:  (state, getters) => getters.authenticated && state.user.profile === ROLES.MODERATOR
+  moderator:  (state, getters) => getters.authenticated && state.profile.isMod,
+  admin: (state, getters) => false
 }
 
 export const mutations = {

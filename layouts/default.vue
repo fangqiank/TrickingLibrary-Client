@@ -5,9 +5,10 @@
       <nuxt-link
         to="/"
         style="text-decoration: none"
-        class="text-h5 text--primary"
+        class="text-h5 text--primary mr-2"
       >
-        Tricking Library
+        <span class="d-none d-md-flex">Tricking Library</span>
+        <span class="d-flex d-md-none">TL</span>
       </nuxt-link>
 
       <v-toolbar-title></v-toolbar-title>
@@ -22,11 +23,19 @@
         Upload
       </v-btn> -->
       <!-- <Upload/> -->
-      <v-btn to="/moderation" depressed class="mx-2">Moderation</v-btn>
+
 
       <IfAuthenticated>
-        <template v-slot:allowed>
-          <div>
+        <template v-slot:allowed="{moderator}">
+          <div class="d-flex align-center">
+            <v-btn
+              v-if="moderator"
+              to="/moderation"
+              depressed
+              class="mx-2 d-none d-md-flex"
+            >
+              Moderation
+            </v-btn>
             <ContentCreationDialog />
 
             <v-menu offset-y >
@@ -49,6 +58,12 @@
                 </v-btn>
               </template>
               <v-list>
+                <v-list-item to="/moderation" class="d-flex d-md-none">
+                  <v-list-item-title>
+                    <v-icon left>mdi-clipboard</v-icon> Moderation
+                  </v-list-item-title>
+                </v-list-item>
+
                 <v-list-item @click="$router.push('/profile')">
                   <v-list-item-title>
                     <v-icon left>mdi-account-circle</v-icon> Profile
