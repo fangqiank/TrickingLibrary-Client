@@ -283,6 +283,12 @@ export default {
           payload: 'payload'
         }
 
+      if(this.modItem.type === 'difficulty')
+        return {
+          is: SimpleInfoCard,
+          payload: 'payload'
+        }
+
       return null
     },
   }

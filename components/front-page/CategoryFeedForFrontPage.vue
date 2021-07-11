@@ -4,6 +4,7 @@
       <v-col lg="3" v-for="(category,idx) in content" :key="idx" class="d-flex justify-center align-start">
         <v-card width="300" @click="()=>$router.push(`/categories/${category.slug}`)" :ripple="false">
           <v-card-title>{{category.name}}</v-card-title>
+<!--          <span>{{category}}</span>span>-->
           <Submission
             v-if="category.submission"
             :mission="category.submission"
@@ -38,7 +39,7 @@ export default {
   ),
 
   computed:{
-    ...mapState('tricks', ['lists'])
+    ...mapState('tricks', ['lists','dictionaries'])
   },
 
   fetch() {
@@ -58,11 +59,15 @@ export default {
       const categories = this.lists.categories.slice(this.cursor, step)
       this.cursor += this.limit
 
-      const byTricks = (c) => c.tricks.reduce((pre,cur) =>`${pre};${cur}`, '')
+      //const byTricks = (c) => c.tricks.reduce((pre,cur) =>`${pre};${cur}`, '')
+
       const submissionRequests = categories.map(category => {
         if(category.tricks.length > 0){
+          const byTricks = category.tricks.map(x => this.dictionaries.tricks[x].slug)
+            .reduce((pre,cur) =>`${pre};${cur}`, '')
+
           return this.$axios
-            .$get(`/api/submissions/bestSubmissions?bytricks=${byTricks(category)}`, {httpsAgent: agent()})
+            .$get(`/api/submissions/bestSubmissions?bytricks=${byTricks}`, {httpsAgent: agent()})
             .then(submission => this.content.push(
               {
                 ...category,

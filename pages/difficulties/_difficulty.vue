@@ -24,8 +24,9 @@ import {mapState} from 'vuex'
           ...mapState('tricks',['dictionaries','lists']),
 
           tricks(){
-            const difficultyId =this.$route.params.difficulty
-            //console.log('_category.categoryId',categoryId)
+            const difficultySlug =this.$route.params.difficulty
+            const difficultyId =this.dictionaries.difficulties[difficultySlug].id
+            console.log(difficultyId)
             return this.lists.tricks.filter(x => x.difficulty === difficultyId)
           },
 

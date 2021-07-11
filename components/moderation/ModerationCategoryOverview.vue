@@ -46,7 +46,7 @@ export default {
     ...mapMutations('contentUpdate',['activate']),
 
     editHandler(category){
-      console.log('editHandler:category',category)
+      //console.log('editHandler:category',category)
       this.activate({
         component: CategoryForm,
         edit: true,

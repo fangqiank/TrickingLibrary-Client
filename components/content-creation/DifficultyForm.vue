@@ -38,33 +38,50 @@
 </template>
 
 <script>
-    import {close} from './_shared'
-    export default {
-        name:'DifficultyForm',
+  import {close} from './_shared'
+  import {mapState} from "vuex";
+  export default {
+      name:'DifficultyForm',
 
-        data: () =>(
-            {
-                form: {
-                    name:'',
-                    description:'',
-                },
-
-              validation:{
-                valid: false,
-                name: [v => !!v || 'Name is required'],
-                description: [v => !!v || 'Description is required'],
+      data: () =>(
+          {
+              form: {
+                  name:'',
+                  description:'',
               },
-            }
-        ),
 
-        mixins:[close],
+            validation:{
+              valid: false,
+              name: [v => !!v || 'Name is required'],
+              description: [v => !!v || 'Description is required'],
+            },
+          }
+      ),
 
-        methods:{
-            handleSave(){
-                this.$axios.$post('/api/difficulties', this.form)
-                this.close()
+    created() {
+      if(this.editPayload){
+        const {id, name, description} = this.editPayload
+
+        Object.assign(this.form,{id, name, description})
+      }
+    },
+
+      mixins:[close],
+
+      computed:{
+        ...mapState('contentUpdate',['editPayload'])
+      },
+
+      methods:{
+          handleSave(){
+            if(this.form.id){
+              this.$axios.$put('/api/difficulties', this.form)
+            }else{
+              this.$axios.$post('/api/difficulties', this.form)
             }
-        }
+            this.close()
+          }
+      }
 
     }
 </script>

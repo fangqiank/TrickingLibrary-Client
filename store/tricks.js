@@ -63,7 +63,7 @@ export const mutations = {
     },
 
     setDifficulties(state, payload){
-      //console.log('difficulty payload',payload)
+      console.log('difficulty payload',payload)
       const {difficulties} = payload
       setEntities(state,'difficulties', difficulties)
     },
@@ -85,7 +85,7 @@ export const actions = {
         [
           this.$axios.$get('/api/tricks',{httpsAgent: agent() })
             .then(tricks => {
-              console.log('Tricks: ', tricks)
+              //console.log('Tricks: ', tricks)
               commit('setTricks',{tricks})
              }),
           this.$axios.$get('/api/difficulties',{httpsAgent: agent() })

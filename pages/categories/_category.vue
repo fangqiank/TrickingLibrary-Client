@@ -26,9 +26,6 @@
             const categoryId =this.dictionaries.categories[categorySlug].id
             //console.log('_category.categoryId',categoryId)
             return this.lists.tricks.filter(x => x.categories.indexOf(categoryId) > -1)
-            // return this.dictionaries.categories[categorySlug]
-            //   .tricks.map(x=>this.dictionaries.tricks[x])
-
           },
 
           category(){

@@ -9,7 +9,7 @@
     >
       <div>Description: <strong style="color:#fff">{{trick.description}}</strong></div>
       <div>Difficulty:
-        <v-chip color="secondary" :to="`/difficulties/${getDifficulty.id}`">
+        <v-chip color="secondary" :to="`/difficulties/${getDifficulty.slug}`">
           {{getDifficulty.name}}
         </v-chip>
       </div>

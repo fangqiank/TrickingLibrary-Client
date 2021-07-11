@@ -12,6 +12,10 @@ const endpointResolver = (type) => {
   if (type === "category") {
     return "categories";
   }
+
+  if (type === "difficulty") {
+    return "difficulties";
+  }
 };
 
 const reviewStatusColor = status => {

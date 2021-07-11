@@ -2,8 +2,9 @@
   <div>
     <v-row justify="space-around">
       <v-col lg="3" v-for="(difficulty,idx) in content" :key="idx" class="d-flex justify-center align-start">
-        <v-card width="300" @click="()=>$router.push(`/difficulties/${difficulty.id}`)" :ripple="false">
+        <v-card width="300" @click="()=>$router.push(`/difficulties/${difficulty.slug}`)" :ripple="false">
           <v-card-title>{{difficulty.name}}</v-card-title>
+<!--          <span>{{difficulty}}</span>-->
           <Submission
             v-if="difficulty.submission"
             :mission="difficulty.submission"
@@ -38,7 +39,7 @@ export default {
   ),
 
   computed:{
-    ...mapState('tricks', ['lists'])
+    ...mapState('tricks', ['lists','dictionaries'])
   },
 
   fetch() {
@@ -58,12 +59,15 @@ export default {
       const difficulties = this.lists.difficulties.slice(this.cursor, step)
       this.cursor += this.limit
 
-      const byTricks = (d) => d.tricks.reduce((pre,cur) =>`${pre};${cur}`, '')
+      //const byTricks = (tricks) => d.tricks.reduce((pre,cur) =>`${pre};${cur}`, '')
 
       const submissionRequests = difficulties.map(difficulty => {
         if(difficulty.tricks.length > 0){
+          const byTricks = difficulty.tricks.map(x => this.dictionaries.tricks[x].slug)
+            .reduce((pre,cur) =>`${pre};${cur}`, '')
+
           return this.$axios
-            .$get(`/api/submissions/bestSubmissions?bytricks=${byTricks(difficulty)}`, {httpsAgent: agent()})
+            .$get(`/api/submissions/bestSubmissions?bytricks=${byTricks}`, {httpsAgent: agent()})
             .then(submission => this.content.push(
               {
                 ...difficulty,
