@@ -15,7 +15,7 @@
 
 <script>
 import Submission from "@/components/Submission";
-import {feed} from "../mixins/feed";
+import {feed} from "@/mixins/feed";
 import agent from "@/store/httpsAgent";
 
 export default {

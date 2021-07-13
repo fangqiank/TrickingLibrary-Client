@@ -45,9 +45,9 @@ export default {
 
     items(){
       return []
-        .concat(this.lists.tricks.map(x=>itemFactory(x.name, 'trick', x.slug)))
-        .concat(this.lists.categories.map(x=>itemFactory(x.name, 'category', x.id)))
-        .concat(this.lists.difficulties.map(x=>itemFactory(x.name, 'difficulty', x.id)))
+        .concat(this.lists.tricks.map(x=>itemFactory(x.name, 'tricks', x.slug)))
+        .concat(this.lists.categories.map(x=>itemFactory(x.name, 'categories', x.id)))
+        .concat(this.lists.difficulties.map(x=>itemFactory(x.name, 'difficulties', x.id)))
     }
   }
 }

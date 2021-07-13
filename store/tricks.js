@@ -46,12 +46,13 @@ export const state = initState
 
 const setEntities = (state,type, data) =>{
   state.dictionaries[type] = {}
+
+  state.lists[type] = []
+
   data.forEach(x=>{
     state.lists[type].push(x)
     state.dictionaries[type][x.id] = x
-    if(x.slug){
-      state.dictionaries[type][x.slug] = x
-    }
+    state.dictionaries[type][x.slug] = x
   })
 }
 
@@ -63,7 +64,7 @@ export const mutations = {
     },
 
     setDifficulties(state, payload){
-      console.log('difficulty payload',payload)
+      //console.log('difficulty payload',payload)
       const {difficulties} = payload
       setEntities(state,'difficulties', difficulties)
     },
@@ -80,7 +81,7 @@ export const mutations = {
 }
 
 export const actions = {
-    async fetchTricks({commit}){
+    async loadContents({commit}){
       return Promise.all(
         [
           this.$axios.$get('/api/tricks',{httpsAgent: agent() })

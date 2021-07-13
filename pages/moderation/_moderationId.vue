@@ -11,7 +11,7 @@
             />
 <!--            <TrickInfoCard :trick="current" />-->
           </v-col>
-          <v-col cols="2" v-if="current" class="d-flex justify-center">
+          <v-col cols="2" v-if="current && target" class="d-flex justify-center">
             <v-icon size="40">mdi-arrow-right</v-icon>
           </v-col>
           <v-col cols="5" v-if="target">
@@ -19,6 +19,7 @@
               v-if="itemComponent"
               :[itemComponent.payload]="target"
               :is="itemComponent.is"
+              @handle-edit=itemComponent.editHandler(target)
             />
 <!--            <TrickInfoCard :trick="target"/>-->
           </v-col>
@@ -44,7 +45,7 @@
 
       <v-col cols="4">
         <v-card>
-<!--          <v-card-title>Reviews ({{approveCount}} / {{3}})</v-card-title>-->
+          <v-card-title>Reviews ({{approveCount}} / {{3}})</v-card-title>
           <v-card-text>
             <div v-if="reviews.length >0">
               <div class="d-flex mb-2" v-for="(review,idx) in reviews" :key="idx">
@@ -135,8 +136,13 @@ import IfAuthenticated from "@/components/auth/IfAuthenticated";
 import UserHeader from "@/components/UserHeader";
 //import {guard, GUARD_LEVEL} from "../../components/auth/AuthMixings";
 import {COMMENTS_PARENT_TYPE} from "@/components/comments/_share";
-import {modItemRender, REVIEW_STATUS} from "@/mixins/moderation";
-import {mapGetters} from "vuex";
+import {modItemRender, REVIEW_STATUS, VERSION_STATE} from "@/mixins/moderation";
+import {mapActions, mapGetters, mapMutations} from "vuex";
+import {EVENTS} from "@/data/events";
+import {MODERATION_TYPES} from '@/mixins/moderation'
+import CategoryForm from "@/components/content-creation/CategoryForm";
+import DifficultyForm from "@/components/content-creation/DifficultyForm";
+import {onContentUpdated} from "@/mixins/onContentUpdated";
 
 const initReview = () => (
   {
@@ -148,7 +154,7 @@ const initReview = () => (
 export default {
   components: {TrickInfoCard, CommentSection, IfAuthenticated,UserHeader},
 
-  mixins: [modItemRender],
+  mixins: [modItemRender, onContentUpdated],
 
   data: () => ({
     current: null,
@@ -169,28 +175,24 @@ export default {
       )
       //console.log('modItem: ', this.modItem)
 
-      const {type,current,target} = this.modItem
-      this.comments = this.modItem.comments
-      //this.reviews = this.modItem.reviews
+      // const {type,current,target} = this.modItem
+      // this.comments = this.modItem.comments
+      //
+      // const endpoint = this.endpointResolver(type)
+      //
+      // const loadReviews = this.loadReviewsHandler()
+      //
+      // const loadCurrent = this.$axios.$get(`/api/${endpoint}/${current}`,{
+      //   httpsAgent: agent()}
+      // ).then(item => this.current = item )
+      //
+      // const loadTarget =this.$axios.$get(`/api/${endpoint}/${target}`,{
+      //   httpsAgent: agent()}
+      // ).then(item => this.target = item )
+      //
+      // await Promise.all([loadReviews,loadCurrent,loadTarget])
 
-      // this.$axios.$get(`/api/moderationitems/${modId}/reviews`,{
-      //   httpsAgent: agent}
-      // )
-      // .then(res => this.reviews = res)
-
-      const endpoint = this.endpointResolver(type)
-
-      const loadReviews = this.loadReviewsHandler()
-
-      const loadCurrent = this.$axios.$get(`/api/${endpoint}/${current}`,{
-        httpsAgent: agent()}
-      ).then(item => this.current = item )
-
-      const loadTarget =this.$axios.$get(`/api/${endpoint}/${target}`,{
-        httpsAgent: agent()}
-      ).then(item => this.target = item )
-
-      await Promise.all([loadReviews,loadCurrent,loadTarget])
+      await this.loadRelationships()
   },
 
   methods:{
@@ -209,7 +211,9 @@ export default {
     //       this.comments.push(x)
     //       console.log('comments: ', this.comments)
     //     })
-    // },
+    // }
+    ...mapActions('tricks',['loadContents']),
+    ...mapMutations('contentUpdate',['activate']),
 
     loadReviewsHandler(){
         return this.$axios.$get(`/api/moderationitems/${this.modItem.id}/reviews`,{httpsAgent: agent()})
@@ -232,11 +236,35 @@ export default {
       )
         .then(this.loadReviewsHandler)
         .then(this.resetReviewFormHandler)
+        .then(() => this.$nuxt.$emit(EVENTS.CONTENT_UPDATED))
+        .then(this.loadContents)
     },
 
     resetReviewFormHandler(){
       this.review = initReview()
-    }
+    },
+
+    loadRelationships(){
+      const {type,current,target} = this.modItem
+
+      const endpoint = this.endpointResolver(type)
+
+      const loadReviews = this.loadReviewsHandler()
+
+      const loadCurrent = this.$axios.$get(`/api/${endpoint}/${current}`,{
+        httpsAgent: agent()}
+      ).then(item => this.current = item )
+
+      const loadTarget =this.$axios.$get(`/api/${endpoint}/${target}`,{
+        httpsAgent: agent()}
+      ).then(item => this.target = item )
+
+      return Promise.all([loadReviews,loadCurrent,loadTarget])
+    },
+
+    onUpdate(){
+      return this.loadRelationships()
+    },
   },
 
   computed:{
@@ -255,7 +283,7 @@ export default {
     },
 
     outdated(){
-      return this.current && this.target && (this.target.version - this.current.version) <= 0
+      return this.current && this.target && this.current.state === VERSION_STATE.OUTDATED
     },
 
     modItemParentType(){
@@ -271,22 +299,27 @@ export default {
       if(!this.modItem)
         return null
 
-      if(this.modItem.type === 'trick')
+      if(this.modItem.type === MODERATION_TYPES.TRICK)
         return {
           is: TrickInfoCard,
           payload: 'trick'
         }
 
-      if(this.modItem.type === 'category')
+      if(this.modItem.type === MODERATION_TYPES.CATEGORY)
         return {
           is: SimpleInfoCard,
-          payload: 'payload'
+          payload: 'payload',
+          editHandler: (category) => this.activate(
+            {component: CategoryForm, editPayload: category})
         }
 
-      if(this.modItem.type === 'difficulty')
+      if(this.modItem.type === MODERATION_TYPES.DIFFICULTY)
         return {
           is: SimpleInfoCard,
-          payload: 'payload'
+          payload: 'payload',
+          editHandler: (difficulty) => this.activate(
+            {component: DifficultyForm, editPayload: difficulty})
+
         }
 
       return null

@@ -4,7 +4,6 @@
       <v-col lg="3" v-for="(category,idx) in content" :key="idx" class="d-flex justify-center align-start">
         <v-card width="300" @click="()=>$router.push(`/categories/${category.slug}`)" :ripple="false">
           <v-card-title>{{category.name}}</v-card-title>
-<!--          <span>{{category}}</span>span>-->
           <Submission
             v-if="category.submission"
             :mission="category.submission"

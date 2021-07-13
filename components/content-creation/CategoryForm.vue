@@ -12,6 +12,7 @@
         <v-form ref="form" v-model="validation.valid">
           <v-text-field
             label="Name"
+            :disabled="!!editPayload"
             :rules="validation.name"
             v-model='form.name'
           />
@@ -28,7 +29,7 @@
           @click='$refs.form.validate() ? handleSave() : 0'
           color="lime darken-4"
         >
-          Create
+          {{ !!editPayload ? 'Update' : 'Create'  }}
         </v-btn>
       </v-card-actions>
   </v-card>
@@ -36,33 +37,38 @@
 
 <script>
 import {mapState} from 'vuex'
-import {close} from './_shared'
+import {close, formPLus} from '@/components/content-creation/_shared'
+import {VERSION_STATE} from "@/mixins/moderation";
 
 export default {
   name:'CategoryForm',
 
   data:() =>(
       {
-          form: {
-              name:'',
-              description:'',
-          },
-
         validation:{
           valid: false,
           name: [v => !!v || 'Name is required'],
           description: [v => !!v || 'Description is required'],
         },
+
+        staged: false
       }
   ),
 
-  mixins:[close],
+  mixins:[close,formPLus(()=>(
+    {
+      name:'',
+      description:'',
+    }
+  ))],
 
   created() {
       if(this.editPayload){
-        const {id, name, description} = this.editPayload
+        const {id, name, description,state} = this.editPayload
 
         Object.assign(this.form,{id, name, description})
+
+        this.staged = state && state === VERSION_STATE.STAGED
       }
   },
 
@@ -73,12 +79,18 @@ export default {
   },
 
   methods:{
-      handleSave(){
+      async handleSave(){
         if(this.form.id){
-          this.$axios.$put('/api/categories', this.form)
+          if(this.staged){
+            await this.$axios.$put('/api/categories/staged', this.form)
+          }else{
+            await this.$axios.$put('/api/categories', this.form)
+          }
         }else{
-          this.$axios.$post('/api/categories', this.form)
+          await this.$axios.$post('/api/categories', this.form)
         }
+
+        this.notifyChangesHandler()
 
         this.close()
       }

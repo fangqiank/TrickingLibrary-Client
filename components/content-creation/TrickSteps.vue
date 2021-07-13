@@ -23,6 +23,7 @@
             <v-text-field
               :rules= "validation.name"
               label= "Name"
+              :disabled="!!editPayload"
               v-model= "form.name"
             />
 
@@ -95,7 +96,7 @@
           <div><strong>Categories: </strong> {{form.categories.map(x =>
             dictionaries.categories[x].name).join(', ')}}</div>
           <v-text-field
-            v-if="editing"
+            v-if="requireReason"
             label="Reason For Change"
             v-model="form.reason"
           />
@@ -109,12 +110,12 @@
             </v-btn>
             <v-spacer/>
             <v-btn
-              :disabled="editing && form.reason.length < 5"
+              :disabled="requireReason && form.reason.length < 5"
               @click="handleSave"
               color="lime darken-4"
               small
             >
-              {{ editing ? 'Update' : 'Create'  }}
+              {{ !!editPayload ? 'Update' : 'Create'  }}
             </v-btn>
           </div>
         </v-stepper-content>
@@ -124,17 +125,15 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
-import { close } from "./_shared";
+import {mapState} from "vuex";
+import {close, formPLus} from "@/components/content-creation/_shared";
+import {VERSION_STATE} from "@/mixins/moderation";
 
 export default {
   name: "TrickSteps",
 
-  mixins: [close],
-
-  data: () => ({
-    step: 1,
-    form: {
+  mixins: [close, formPLus(() => (
+    {
       name: "",
       description: "",
       difficulty: "",
@@ -142,7 +141,11 @@ export default {
       prerequisites: [],
       progressions: [],
       categories: [],
-    },
+    }
+  ))],
+
+  data: () => ({
+    step: 1,
 
     validation:{
       valid: false,
@@ -154,35 +157,42 @@ export default {
   }),
 
   created() {
-    if(this.editing){
+    if(this.editPayload){
       Object.assign(this.form, this.editPayload)
     }
   },
 
   computed: {
-    ...mapState('contentUpdate',['editing','editPayload']),
+    ...mapState('contentUpdate',['editPayload']),
+
     ...mapState("tricks", ["lists","dictionaries"]),
+
+    staged(){
+      return this.form.state === VERSION_STATE.STAGED
+    },
+
+    requireReason(){
+      return this.editPayload && !this.staged;
+    }
   },
 
   methods: {
     //...mapMutations('contentUpdate',['reset']),
-    ...mapActions("tricks", ["createTrick","updateTrick"]),
+    //...mapActions("tricks", ["createTrick","updateTrick"]),
 
     async handleSave() {
-      console.log(JSON.stringify(this.form))
-      if(this.editing){
-        await this.updateTrick({
-          form:this.form
-        })
+      //console.log(JSON.stringify(this.form))
+      if(this.form.id) {
+        if (this.staged) {
+          await this.$axios.$put(`/api/tricks/staged`, this.form)
+        } else {
+          await this.$axios.$put(`/api/tricks`, this.form)
+        }
       }else{
-        await this.createTrick({
-          form: this.form,
-        });
+       await this.$axios.$post(`/api/tricks`, this.form)
       }
-
-
+      this.notifyChangesHandler()
       this.close();
-
       //Object.assign(this.$data,initState())
     },
   },

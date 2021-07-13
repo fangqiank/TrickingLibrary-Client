@@ -82,9 +82,16 @@
         </template>
 
        <template v-slot:forbidden="{login}">
-          <v-btn outlined @click="login">
-            <v-icon left>mdi-account-circle</v-icon> Log In
+          <v-btn outlined @click="login" class="d-none d-md-flex">
+            <v-icon left>mdi-login</v-icon> Log In
           </v-btn>
+         <v-btn
+           class="d-flex d-md-none"
+           icon
+           @click="login"
+         >
+           <v-icon>mdi-login</v-icon>
+         </v-btn>
         </template>
 
       </IfAuthenticated>
@@ -146,20 +153,21 @@
         <nuxt />
       </v-container>
     </v-main>
+    <popup/>
   </v-app>
 </template>
 
 <script>
 import {mapActions, mapGetters, mapState} from 'vuex'
-//import Upload from '../components/Upload.vue'
-import ContentCreationDialog from "../components/content-creation/ContentCreationDialog.vue";
-import IfAuthenticated from "../components/auth/IfAuthenticated";
+import Popup from '@/components/Popup'
+import ContentCreationDialog from "@/components/content-creation/ContentCreationDialog.vue";
+import IfAuthenticated from "@/components/auth/IfAuthenticated";
 
 export default {
   name:'default',
   components: {
     IfAuthenticated,
-    //Upload,
+    Popup,
     ContentCreationDialog
   },
 

@@ -6,7 +6,7 @@ const initState = (active=false,component=null) => ({
     component: component,
     uploadCompleted: false,
     uploadCancelSource: null,
-    editing: false,
+    //editing: false,
     editPayload: null,
     setup: null,
 })
@@ -16,16 +16,11 @@ const initState = (active=false,component=null) => ({
 export const state = initState
 
 export const mutations = {
-    activate(state,{component, edit=false, editPayload=null, setup =null}){
+    activate(state,{component, editPayload=null, setup =null}){
       state.active = true
       state.component = component
-      if(edit){
-        state.editing = true
-        state.editPayload =editPayload
-      }
-      if(setup){
-        state.setup = setup
-      }
+      state.editPayload =editPayload
+      state.setup = setup
     },
 
     // toggleActive(state){

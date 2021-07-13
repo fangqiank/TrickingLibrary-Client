@@ -4,16 +4,28 @@
   WAITING: 2
 }
 
+export const MODERATION_TYPES = {
+  TRICK: 'trick',
+  CATEGORY: 'category',
+  DIFFICULTY: 'difficulty',
+}
+
+export const VERSION_STATE = {
+  LIVE: 0,
+  STAGED: 1,
+  OUTDATED: 2
+}
+
 const endpointResolver = (type) => {
-  if (type === "trick") {
+  if (type === MODERATION_TYPES.TRICK) {
     return "tricks";
   }
 
-  if (type === "category") {
+  if (type === MODERATION_TYPES.CATEGORY) {
     return "categories";
   }
 
-  if (type === "difficulty") {
+  if (type === MODERATION_TYPES.DIFFICULTY) {
     return "difficulties";
   }
 };

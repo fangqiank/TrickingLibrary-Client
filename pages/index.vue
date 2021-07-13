@@ -130,7 +130,7 @@ export default {
   //...mapState('submissions',['submissions']),
 
   // async fetch(){
-  //    await this.$store.dispatch('tricks/fetchTricks',null,{root:true})
+  //    await this.$store.dispatch('tricks/loadContents',null,{root:true})
   // }
 };
 </script>

@@ -32,11 +32,12 @@ export const feed = (order, /*waitAuth = false*/) =>({
 
   watch:{
     'order': function (){
-      this.content= []
-      this.cursor= 0
-      this.finished= false
-      this.started= false
-      this.loadContentsHandler()
+      // this.content= []
+      // this.cursor= 0
+      // this.finished= false
+      // this.started= false
+      // this.loadContentsHandler()
+      this.reloadContentHandler()
     }
   },
 
@@ -73,6 +74,14 @@ export const feed = (order, /*waitAuth = false*/) =>({
           this.cursor += content.length
         })
         .finally(()=>this.loading = false)
+    },
+
+    reloadContentHandler(){
+      this.content= []
+      this.cursor= 0
+      this.finished= false
+      this.started= false
+      return this.loadContentsHandler()
     },
 
     parseContentHandler(content){

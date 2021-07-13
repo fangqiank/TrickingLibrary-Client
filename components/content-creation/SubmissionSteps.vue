@@ -160,7 +160,8 @@ export default {
     },
 
     handleSave() {
-      this.createSubmission({ form: this.form });
+      this.createSubmission({ form: this.form })
+        .then(this.notifyChangesHandler)
       // this.$axios.$post('/api/submissions',this.form, /* {httpsAgent: agent() }*/)
       this.hide();
 

@@ -7,7 +7,7 @@
         />
       <v-row>
         <v-col lg="3" v-for="(item, idx) in filteredTricks"  :key="idx">
-          <TrickInfoCard :trick="item"/>
+          <TrickInfoCard :trick="item" link/>
         </v-col>
       </v-row>
     </div>

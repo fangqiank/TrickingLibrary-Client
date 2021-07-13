@@ -38,6 +38,26 @@
       </div>
       <v-divider class="my-2"/>
       <ProfileWithCompletedTricks  :profile-submissions="profile.submissions"/>
+      <v-divider class="my-2"/>
+      <h5 class="text-h5">Chane Requests</h5>
+      <v-list>
+        <v-list-item
+          v-for="(item,idx) in modItems"
+          :key="idx"
+          :to="`/moderation/${item.id}`"
+        >
+<!--          {{item}}-->
+          <v-list-item-content>
+            <v-list-item-title v-if="item.currentObject">{{item.currentObject.name}}</v-list-item-title>
+            <v-list-item-title v-else-if="item.targetObject">{{item.targetObject.name}}</v-list-item-title>
+            <v-list-item-subtitle>
+              <span><strong>Type: </strong>{{item.type}}</span>
+              <span v-if="item.currentObject"><strong>Version: </strong>{{item.currentObject.version}}</span>
+              <span v-if="item.targetObject"><strong>Version: </strong>{{item.targetObject.version}}</span>
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
     </template>
   </ItemLayout>
 </template>
@@ -45,6 +65,7 @@
 <script>
 import ItemLayout from '@/components/ItemLayout'
 import {mapMutations, mapState} from "vuex";
+import agent from "@/store/httpsAgent";
 import Submission from "@/components/Submission";
 //import {guard, GUARD_LEVEL} from "@/components/auth/AuthMixings";
 import SubmissionFeed from "@/components/SubmissionFeed";
@@ -62,9 +83,15 @@ export default {
     ...mapState('auth', ['profile']),
   },
 
+  fetch() {
+    return this.$axios.$get(`/api/moderationitems?user=1`,{httpsAgent: agent()})
+    .then(modItems => this.modItems = modItems)
+  },
+
   data:() =>(
     {
-      uploadingImage: false
+      uploadingImage: false,
+      modItems:[],
     }
   ),
 

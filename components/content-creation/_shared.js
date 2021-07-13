@@ -1,4 +1,5 @@
 import {mapActions, mapState} from 'vuex'
+import {EVENTS} from "@/data/events";
 
 export const close = {
     methods:{
@@ -19,11 +20,21 @@ export const formPLus = (formFactory) => (
     ),
 
     created() {
-      this.setup(this.form)
+      if(this.setup)
+        this.setup(this.form)
     },
 
     computed:{
       ...mapState("contentUpdate", ["setup"]),
+    },
+
+    methods: {
+      ...mapActions('tricks',['loadContents']),
+
+      notifyChangesHandler(){
+        this.$nuxt.$emit(EVENTS.CONTENT_UPDATED)
+        this.loadContents()
+      }
     }
   }
 )

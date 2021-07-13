@@ -26,10 +26,10 @@ export const actions = {
         // const message = await this.$axios.$get('https://localhost:5001/api/home',{httpsAgent: agent })
         // // console.log(message)
         // // commit('setMessage', message)
-        // await dispatch('tricks/fetchTricks')
+        // await dispatch('tricks/loadContents')
         // await dispatch('submissions/fetchSubmissions')
         await dispatch('auth/initialize')
-        await dispatch('tricks/fetchTricks')
+        await dispatch('tricks/loadContents')
     },
 
     clientInit({dispatch}){

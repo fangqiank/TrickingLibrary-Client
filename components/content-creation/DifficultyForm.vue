@@ -12,6 +12,7 @@
         <v-form ref="form" v-model="validation.valid">
           <v-text-field
             label="Name"
+            :disabled="!!staged"
             :rules="validation.name"
             v-model='form.name'
           />
@@ -30,7 +31,7 @@
           @click="$refs.form.validate() ? handleSave() : 0"
           :disabled="!validation.valid"
         >
-          Create
+          {{ !!editPayload ? 'Update' : 'Create'  }}
         </v-btn>
       </v-card-actions>
   </v-card>
@@ -38,52 +39,61 @@
 </template>
 
 <script>
-  import {close} from './_shared'
+  import {close, formPLus} from './_shared'
   import {mapState} from "vuex";
+  import {VERSION_STATE} from "@/mixins/moderation";
   export default {
-      name:'DifficultyForm',
+    name:'DifficultyForm',
 
-      data: () =>(
-          {
-              form: {
-                  name:'',
-                  description:'',
-              },
-
-            validation:{
-              valid: false,
-              name: [v => !!v || 'Name is required'],
-              description: [v => !!v || 'Description is required'],
-            },
-          }
-      ),
+    data: () =>(
+        {
+          validation:{
+            valid: false,
+            name: [v => !!v || 'Name is required'],
+            description: [v => !!v || 'Description is required'],
+          },
+          staged: false
+        }
+    ),
 
     created() {
       if(this.editPayload){
-        const {id, name, description} = this.editPayload
+        const {id, name, description, state} = this.editPayload
 
         Object.assign(this.form,{id, name, description})
+
+        this.staged = state && state === VERSION_STATE.STAGED
       }
     },
 
-      mixins:[close],
-
-      computed:{
-        ...mapState('contentUpdate',['editPayload'])
-      },
-
-      methods:{
-          handleSave(){
-            if(this.form.id){
-              this.$axios.$put('/api/difficulties', this.form)
-            }else{
-              this.$axios.$post('/api/difficulties', this.form)
-            }
-            this.close()
-          }
+    mixins:[close, formPLus(() =>(
+      {
+        name:'',
+        description:'',
       }
+    ))],
 
+    computed:{
+      ...mapState('contentUpdate',['editPayload'])
+    },
+
+    methods:{
+        async handleSave(){
+          if(this.form.id){
+            if(this.staged) {
+              await this.$axios.$put('/api/difficulties/staged', this.form)
+            }else{
+              await this.$axios.$put('/api/difficulties', this.form)
+            }
+          }else{
+            await this.$axios.$post('/api/difficulties', this.form)
+          }
+          this.notifyChangesHandler()
+          this.close()
+        }
     }
+
+  }
 </script>
 
 <style>

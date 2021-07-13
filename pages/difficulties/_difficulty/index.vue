@@ -2,6 +2,7 @@
     <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
   <div>
     <div>
+<!--      <span>{{difficulty}}</span>-->
       <div class="text-h6 text-center">{{difficulty.name}}</div>
       <v-divider class="my-1" />
       <div class="text-body-2">{{difficulty.description}}</div>
@@ -13,8 +14,7 @@
 
 <script>
 import {mapState} from 'vuex'
-    // import trickList from '../../mixins/trickList'
-    import TrickList from '../../components/content-creation/TrickList.vue'
+    import TrickList from '@/components/content-creation/TrickList.vue'
 
     export default {
         //mixins:[trickList],
@@ -26,7 +26,7 @@ import {mapState} from 'vuex'
           tricks(){
             const difficultySlug =this.$route.params.difficulty
             const difficultyId =this.dictionaries.difficulties[difficultySlug].id
-            console.log(difficultyId)
+            //console.log(difficultyId)
             return this.lists.tricks.filter(x => x.difficulty === difficultyId)
           },
 

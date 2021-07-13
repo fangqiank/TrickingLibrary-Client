@@ -1,7 +1,14 @@
 ﻿<template>
-  <v-sheet class="pa-3" >
+  <v-sheet class="pa-3">
     <div class="text-h6 text-center">
-      <span>{{trick.name}}</span>
+      <nuxt-link
+        v-if="link"
+        :to="`/tricks/${trick.slug}`"
+        class="white--text text-decoration-none"
+      >
+        {{trick.name}}
+      </nuxt-link>
+      <span v-else>{{trick.name}}</span>
     </div>
     <v-alert
       outlined
@@ -14,21 +21,21 @@
         </v-chip>
       </div>
     </v-alert>
-    <div v-for="(rd,index) in getRelatedData" :key="index" v-if="rd.data.length > 0">
-      {{rd.title}}:
+    <div v-for="(rd,index) in getRelatedData" :key="index" v-if="rd.data.length > 0 && rd.data != null">
+<!--      <span>{{rd.data}}</span>-->
+      <div class="text-subtitle-1">{{ rd.title }}</div>
       <v-chip-group>
-        <!-- {{rd.title}} -->
-        <v-chip v-for="(c,index) in rd.data"
-                :key="index"
-                x-small
-                class="ma-2"
-                color="primary"
-                :to="rd.routeFactory(c)">
-          {{c.name}}
+        <v-chip
+          v-for="(d,idx) in rd.data"
+          :key="idx"
+          color="success"
+          small
+          :to="rd.routeFactory(d)"
+        >
+          {{ d.name }}
         </v-chip>
       </v-chip-group>
     </div>
-    <!-- </v-sheet> -->
     <v-divider class="my-2" />
 
     <IfAuthenticated>
@@ -91,6 +98,12 @@ export default {
       type: Object
     },
 
+    link:{
+      required: false,
+      type: Boolean,
+      default: false
+    },
+
     close:{
       required: false,
       type: Function,
@@ -117,12 +130,16 @@ export default {
 
     getRelatedData(){
       //console.log(this.getOneTrick.progressions)
+      for (const [key, value] of Object.entries(this.dictionaries.categories)) {
+        console.log('dict category',value);
+      }
+      this.trick.categories.map(x=>console.log('trick.categories',x))
       return [
         {
           title: "Categories",
           data: this.trick.categories.map(x=> this.dictionaries.categories[x]),
           idFactory: c => `category-${c.id}`,
-          routeFactory: c => `/category/${c.slug}`
+          routeFactory: c => `/categories/${c.slug}`
         },
         {
           title: "Prerequisites",
@@ -151,7 +168,7 @@ export default {
       this.activate(
         {
           component: TrickSteps,
-          edit: true,
+          //edit: true,
           editPayload: this.trick
         }
       )
