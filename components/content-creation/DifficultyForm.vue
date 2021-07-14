@@ -41,7 +41,7 @@
 <script>
   import {close, formPLus} from './_shared'
   import {mapState} from "vuex";
-  import {VERSION_STATE} from "@/mixins/moderation";
+  import {VERSION_STATE} from "@/components/moderation";
   export default {
     name:'DifficultyForm',
 
@@ -62,7 +62,8 @@
 
         Object.assign(this.form,{id, name, description})
 
-        this.staged = state && state === VERSION_STATE.STAGED
+        if(state)
+          this.staged = state === VERSION_STATE.STAGED
       }
     },
 

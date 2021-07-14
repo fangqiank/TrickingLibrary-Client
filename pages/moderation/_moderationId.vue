@@ -136,10 +136,10 @@ import IfAuthenticated from "@/components/auth/IfAuthenticated";
 import UserHeader from "@/components/UserHeader";
 //import {guard, GUARD_LEVEL} from "../../components/auth/AuthMixings";
 import {COMMENTS_PARENT_TYPE} from "@/components/comments/_share";
-import {modItemRender, REVIEW_STATUS, VERSION_STATE} from "@/mixins/moderation";
+import {modItemRender, REVIEW_STATUS, VERSION_STATE} from "@/components/moderation";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import {EVENTS} from "@/data/events";
-import {MODERATION_TYPES} from '@/mixins/moderation'
+import {MODERATION_TYPES} from '@/components/moderation'
 import CategoryForm from "@/components/content-creation/CategoryForm";
 import DifficultyForm from "@/components/content-creation/DifficultyForm";
 import {onContentUpdated} from "@/mixins/onContentUpdated";

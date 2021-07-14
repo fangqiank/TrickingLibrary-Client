@@ -38,7 +38,7 @@
 <script>
 import {mapState} from 'vuex'
 import {close, formPLus} from '@/components/content-creation/_shared'
-import {VERSION_STATE} from "@/mixins/moderation";
+import {VERSION_STATE} from "@/components/moderation";
 
 export default {
   name:'CategoryForm',
@@ -68,7 +68,8 @@ export default {
 
         Object.assign(this.form,{id, name, description})
 
-        this.staged = state && state === VERSION_STATE.STAGED
+        if(state)
+          this.staged = state === VERSION_STATE.STAGED
       }
   },
 

@@ -26,16 +26,16 @@
 
 
       <IfAuthenticated>
-        <template v-slot:allowed="{moderator}">
+        <template v-slot:allowed="{moderator,admin}">
           <div class="d-flex align-center">
-            <v-btn
-              v-if="moderator"
-              to="/moderation"
-              depressed
-              class="mx-2 d-none d-md-flex"
-            >
-              Moderation
-            </v-btn>
+<!--            <v-btn-->
+<!--              v-if="moderator"-->
+<!--              to="/moderation"-->
+<!--              depressed-->
+<!--              class="mx-2 d-none d-md-flex"-->
+<!--            >-->
+<!--              Moderation-->
+<!--            </v-btn>-->
             <ContentCreationDialog />
 
             <v-menu offset-y >
@@ -43,7 +43,6 @@
                 <v-btn
                   icon
                   color="primary"
-                  dark
                   v-bind="attrs"
                   v-on="on"
                 >
@@ -58,7 +57,13 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item to="/moderation" class="d-flex d-md-none">
+                <v-list-item to="/admin" v-if="admin">
+                  <v-list-item-title>
+                    <v-icon left>mdi-cogs</v-icon> Control Panel
+                  </v-list-item-title>
+                </v-list-item>
+
+                <v-list-item to="/moderation" v-if="moderator">
                   <v-list-item-title>
                     <v-icon left>mdi-clipboard</v-icon> Moderation
                   </v-list-item-title>
@@ -165,6 +170,7 @@ import IfAuthenticated from "@/components/auth/IfAuthenticated";
 
 export default {
   name:'default',
+
   components: {
     IfAuthenticated,
     Popup,

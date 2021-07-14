@@ -55,7 +55,7 @@
 
 <script>
 import {feed} from "@/mixins/feed";
-import {modItemRender, VERSION_STATE} from "@/mixins/moderation";
+import {modItemRender, VERSION_STATE} from "@/components/moderation";
 import {EVENTS} from "@/data/events";
 import {onContentUpdated} from "@/mixins/onContentUpdated";
 

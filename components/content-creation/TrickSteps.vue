@@ -127,7 +127,7 @@
 <script>
 import {mapState} from "vuex";
 import {close, formPLus} from "@/components/content-creation/_shared";
-import {VERSION_STATE} from "@/mixins/moderation";
+import {VERSION_STATE} from "@/components/moderation";
 
 export default {
   name: "TrickSteps",

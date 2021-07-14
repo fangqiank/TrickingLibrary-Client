@@ -8,17 +8,18 @@ const initState = () => ({
 })
 
 const ROLES = {
-    MODERATOR: 'mod'
+    MODERATOR: 'Mod',
+    ADMIN: 'Admin',
+
 }
 
 export const state = initState
 
 export const getters = {
-  //authenticated: state => !state.loading && state.user !=  null,
   authenticated: state => !state.loading && state.profile !=  null,
-  //moderator:  (state, getters) => getters.authenticated && state.user.profile === ROLES.MODERATOR
-  moderator:  (state, getters) => getters.authenticated && state.profile.isMod,
-  admin: (state, getters) => false
+  moderator: (state, getters) => getters.authenticated
+    && (getters.admin || state.profile.role === ROLES.MODERATOR),
+  admin: (state, getters) => getters.authenticated && state.profile.role === ROLES.ADMIN,
 }
 
 export const mutations = {

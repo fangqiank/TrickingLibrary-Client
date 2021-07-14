@@ -4,10 +4,10 @@
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
             <v-btn
-            depressed
-            v-bind="attrs"
-            v-on="on"
-            class="d-flex d-md-none"
+              depressed
+              v-bind="attrs"
+              v-on="on"
+              class="d-none d-md-flex"
             >
             Create
             </v-btn>
@@ -55,12 +55,8 @@ import DifficultyForm from './DifficultyForm.vue';
 
 export default {
    name:'ContentCreationDialog',
-   components:{TrickSteps,SubmissionSteps,CategoryForm,DifficultyForm},
-   data() {
-      return {
 
-      }
-   },
+   components:{TrickSteps,SubmissionSteps,CategoryForm,DifficultyForm},
 
    computed:{
     ...mapState('contentUpdate',['active','component']),
