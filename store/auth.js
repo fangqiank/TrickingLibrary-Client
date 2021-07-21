@@ -45,7 +45,7 @@ export const actions = {
       //console.log('agent: ',agent())
       return this.$axios.$get('/api/users/whoami',{httpsAgent: agent() })
         .then(profile => {
-          console.log('profile: ', profile)
+          //console.log('profile: ', profile)
           commit('saveProfile', {profile})
         })
         .catch(e => {

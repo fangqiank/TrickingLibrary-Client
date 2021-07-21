@@ -68,7 +68,7 @@
 
 <script>
 import ItemLayout from '@/components/ItemLayout'
-import {mapMutations, mapState} from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 import agent from "@/store/httpsAgent";
 import Submission from "@/components/Submission";
 //import {guard, GUARD_LEVEL} from "@/components/auth/AuthMixings";
@@ -113,14 +113,15 @@ export default {
       //console.log(inputFile)
 
       return this.$axios.$put('/api/users/whoami/image', formData)
-       .then(profile =>{
-         this.saveProfile({profile})
+       .then(() =>{
+         this.initialize()
          inputFile.value= ''
          this.uploadingImage = false
        })
     },
 
     ...mapMutations('auth',['saveProfile']),
+    ...mapActions('auth',['initialize'])
   },
 
   // mounted(){

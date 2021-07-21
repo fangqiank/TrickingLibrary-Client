@@ -11,8 +11,8 @@ export default {
     },
 
     axios:{
-      baseURL: "https://localhost:5001",
-      https:true
+      baseURL: process.env.BROWSER_SIDE_URL,
+      https: true
     }
   },
 
@@ -73,10 +73,6 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    baseURL:'https://localhost:5001',
-    https: true
-  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -99,5 +95,19 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    // extend(config,ctx){
+    //   if(ctx.isDev){
+    //     config.server = {
+    //       https:{
+    //         key: fs.readFileSync(path.relative(__dirname,'server.key')),
+    //         cert: fs.readFileSync(path.relative(__dirname,'server.cert'))
+    //       }
+    //     }
+    //   }
+    // }
   }
 }
+
+
+
+
