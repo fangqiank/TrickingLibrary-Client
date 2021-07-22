@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 import path from 'path'
 import fs from 'fs'
 
-export default {
+const config = {
   // Global page headers: https://go.nuxtjs.dev/config-head
   publicRuntimeConfig:{
     auth:{
@@ -95,18 +95,22 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    // extend(config,ctx){
-    //   if(ctx.isDev){
-    //     config.server = {
-    //       https:{
-    //         key: fs.readFileSync(path.relative(__dirname,'server.key')),
-    //         cert: fs.readFileSync(path.relative(__dirname,'server.cert'))
-    //       }
-    //     }
-    //   }
-    // }
+    extend(config,ctx){
+
+    }
   }
 }
+
+if(process.env.NODE_ENV === 'development'){
+  config.server = {
+    https:{
+      key: fs.readFileSync(path.relative(__dirname,'server.key')),
+      cert: fs.readFileSync(path.relative(__dirname,'server.cert'))
+    }
+  }
+}
+
+export default config
 
 
 
